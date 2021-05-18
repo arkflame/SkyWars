@@ -13,22 +13,23 @@ public class BukkitUtil {
     player.setTitleTimes(fadeIn, stay, fadeOut);
     player.sendTitle(title, subtitle);
   }
-  
+
   public static void sendSound(Player player, String soundName, int i, int i1) {
     try {
       Sound sound = Sound.valueOf(soundName);
       player.playSound(player.getLocation(), sound, i, i1);
-    } catch (Exception exception) {}
+    } catch (Exception exception) {
+    }
   }
-  
+
   public static Player getPlayerExact(UUID uuid) {
     for (Player player : Bukkit.getOnlinePlayers()) {
       if (player.getUniqueId() == uuid)
-        return player; 
-    } 
+        return player;
+    }
     return null;
   }
-  
+
   public static void runSync(Plugin plugin, Runnable runnable) {
     Server server = plugin.getServer();
     if (plugin.isEnabled() && !server.isPrimaryThread()) {
@@ -36,16 +37,20 @@ public class BukkitUtil {
       server.getScheduler().runTask(plugin, runnable::run);
     } else {
       runnable.run();
-    } 
+    }
   }
-  
+
   public static void runAsync(Plugin plugin, Runnable runnable) {
+    if (runnable == null) {
+      return;
+    }
+
     Server server = plugin.getServer();
+
     if (plugin.isEnabled() && server.isPrimaryThread()) {
-      Objects.requireNonNull(runnable);
       server.getScheduler().runTaskAsynchronously(plugin, runnable::run);
     } else {
       runnable.run();
-    } 
+    }
   }
 }

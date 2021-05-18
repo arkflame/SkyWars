@@ -36,7 +36,7 @@ public class ArenaKills {
   }
 
   public PlayerKills getKills(int i) {
-    if (playerKillsList.size() < i) {
+    if (i < playerKillsList.size()) {
       return playerKillsList.get(i);
     }
 

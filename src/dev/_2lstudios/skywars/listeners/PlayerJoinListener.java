@@ -29,11 +29,9 @@ public class PlayerJoinListener implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onPlayerJoin(PlayerJoinEvent event) {
     Player player = event.getPlayer();
-    if (!player.isOnline())
-      return; 
     GamePlayer gamePlayer = this.playerManager.addGamePlayer(player);
     PlayerInventory playerInventory = player.getInventory();
-    player.teleport(((World)this.skywars.getServer().getWorlds().get(0)).getSpawnLocation());
+    player.teleport(this.skywars.getServer().getWorlds().get(0).getSpawnLocation());
     gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
     playerInventory.setItem(0, this.menuManager.getMenu(MenuType.MAP).getOpenItem());
     playerInventory.setItem(1, SkyWars.getRandomMapItem());

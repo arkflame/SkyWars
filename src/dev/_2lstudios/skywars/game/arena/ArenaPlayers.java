@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.bukkit.Server;
 
+import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
 import dev._2lstudios.skywars.events.PlayerQuitArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorJoinArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorQuitArenaEvent;
@@ -30,7 +31,7 @@ public class ArenaPlayers {
   }
 
   public void addPlayer(GamePlayer gamePlayer) {
-
+    server.getPluginManager().callEvent(new PlayerJoinArenaEvent(gamePlayer, arena));
   }
 
   public void addSpectator(GamePlayer gamePlayer) {

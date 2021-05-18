@@ -22,7 +22,9 @@ public class PlayerManager {
   public GamePlayer addGamePlayer(Player player) {
     UUID uuid = player.getUniqueId();
     GamePlayer gamePlayer = new GamePlayer(player);
+    
     this.gamePlayers.put(uuid, gamePlayer);
+
     return gamePlayer;
   }
   

@@ -139,7 +139,7 @@ public class GameArena {
 
   public void tickArena() {
     if (this.state == GameState.WAITING) {
-      if (!arenaPlayers.isEmpty()) {
+      if (arenaPlayers.size() > 1) {
         if (this.seconds < START_SECONDS) {
           final World world = arenaWorld.getWorld();
           int timeLeft = START_SECONDS - this.seconds;

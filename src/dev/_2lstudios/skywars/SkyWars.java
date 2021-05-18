@@ -5,7 +5,6 @@ import java.io.File;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +16,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
+import dev._2lstudios.skywars.game.GameScoreboard;
 import dev._2lstudios.skywars.game.arena.GameArena;
 import dev._2lstudios.skywars.listeners.BlockBreakListener;
 import dev._2lstudios.skywars.listeners.BlockPlaceListener;
@@ -27,11 +27,12 @@ import dev._2lstudios.skywars.listeners.InventoryDragListener;
 import dev._2lstudios.skywars.listeners.PlayerDeathListener;
 import dev._2lstudios.skywars.listeners.PlayerDropItemListener;
 import dev._2lstudios.skywars.listeners.PlayerInteractListener;
+import dev._2lstudios.skywars.listeners.PlayerJoinArenaListener;
 import dev._2lstudios.skywars.listeners.PlayerJoinListener;
 import dev._2lstudios.skywars.listeners.PlayerQuitArenaListener;
 import dev._2lstudios.skywars.listeners.PlayerQuitListener;
 import dev._2lstudios.skywars.listeners.PlayerRespawnListener;
-import dev._2lstudios.skywars.listeners.QuitArenaListener;
+import dev._2lstudios.skywars.listeners.SpectatorJoinArenaListener;
 import dev._2lstudios.skywars.listeners.SpectatorQuitArenaListener;
 import dev._2lstudios.skywars.listeners.WorldUnloadListener;
 import dev._2lstudios.skywars.managers.ArenaManager;
@@ -43,57 +44,57 @@ import dev._2lstudios.skywars.utils.WorldUtil;
 
 public class SkyWars extends JavaPlugin {
   private static SkyWars plugin;
-  
+
   private static MainManager mainManager;
-  
+
   private static ConfigurationUtil configurationUtil;
-  
+
   private static WorldUtil worldUtil;
-  
+
   private static final ItemStack randomMapItem = new ItemStack(Material.ARROW, 1);
-  
+
   private static final ItemStack leaveItem = new ItemStack(Material.REDSTONE, 1);
-  
+
   public static SkyWars getPlugin() {
     return plugin;
   }
-  
+
   private static void setPlugin(SkyWars plugin) {
     SkyWars.plugin = plugin;
   }
-  
+
   public static MainManager getMainManager() {
     return mainManager;
   }
-  
+
   private static void setMainManager(MainManager mainManager) {
     SkyWars.mainManager = mainManager;
   }
-  
+
   public static ConfigurationUtil getConfigurationUtil() {
     return configurationUtil;
   }
-  
+
   private static void setConfigurationUtil(ConfigurationUtil configurationUtil) {
     SkyWars.configurationUtil = configurationUtil;
   }
-  
+
   public static WorldUtil getWorldUtil() {
     return worldUtil;
   }
-  
+
   private static void setWorldUtil(WorldUtil worldUtil) {
     SkyWars.worldUtil = worldUtil;
   }
-  
+
   public static ItemStack getRandomMapItem() {
     return randomMapItem;
   }
-  
+
   public static ItemStack getLeaveItem() {
     return leaveItem;
   }
-  
+
   public void onEnable() {
     setPlugin(this);
     setWorldUtil(new WorldUtil(this));
@@ -108,7 +109,7 @@ public class SkyWars extends JavaPlugin {
     ItemMeta randomMapItemMeta = randomMapItem.getItemMeta();
     ItemMeta leaveItemMeta = leaveItem.getItemMeta();
     for (Player player : server.getOnlinePlayers())
-      playerManager.addGamePlayer(player); 
+      playerManager.addGamePlayer(player);
     randomMapItemMeta.setDisplayName(ChatColor.YELLOW + "Mapa Aleatorio");
     randomMapItem.setItemMeta(randomMapItemMeta);
     leaveItemMeta.setDisplayName(ChatColor.RED + "Salir");
@@ -121,12 +122,13 @@ public class SkyWars extends JavaPlugin {
       byte b;
       int i;
       File[] arrayOfFile;
-      for (i = (arrayOfFile = mapsDataFolder.listFiles()).length, b = 0; b < i; ) {
+      for (i = (arrayOfFile = mapsDataFolder.listFiles()).length, b = 0; b < i;) {
         File dataFile = arrayOfFile[b];
         arenaManager.addGameArena(null, dataFile.getName().replace(".yml", ""));
         b++;
-      } 
-    } 
+      }
+    }
+
     pluginManager.registerEvents(new BlockBreakListener(playerManager), this);
     pluginManager.registerEvents(new BlockPlaceListener(playerManager), this);
     pluginManager.registerEvents(new EntityDamageByEntityListener(playerManager), this);
@@ -136,27 +138,35 @@ public class SkyWars extends JavaPlugin {
     pluginManager.registerEvents(new PlayerDeathListener(playerManager), this);
     pluginManager.registerEvents(new PlayerDropItemListener(playerManager), this);
     pluginManager.registerEvents(new PlayerInteractListener(menuManager, arenaManager, playerManager), this);
+    pluginManager.registerEvents(new PlayerJoinArenaListener(), this);
     pluginManager.registerEvents(new PlayerJoinListener(this, menuManager, playerManager), this);
     pluginManager.registerEvents(new PlayerQuitArenaListener(), this);
     pluginManager.registerEvents(new PlayerQuitListener(playerManager), this);
     pluginManager.registerEvents(new PlayerRespawnListener(), this);
-    pluginManager.registerEvents(new QuitArenaListener(), this);
+    pluginManager.registerEvents(new SpectatorJoinArenaListener(), this);
     pluginManager.registerEvents(new SpectatorQuitArenaListener(), this);
     pluginManager.registerEvents(new WorldUnloadListener(), this);
-    getCommand("skywars").setExecutor((CommandExecutor)new SkyWarsCommand(server, this, arenaManager, playerManager));
-    getCommand("leave").setExecutor((CommandExecutor)new LeaveCommand(playerManager));
-    getCommand("party").setExecutor((CommandExecutor)new PartyCommand(server, playerManager));
+
+    getCommand("skywars").setExecutor((CommandExecutor) new SkyWarsCommand(server, this, arenaManager, playerManager));
+    getCommand("leave").setExecutor((CommandExecutor) new LeaveCommand(playerManager));
+    getCommand("party").setExecutor((CommandExecutor) new PartyCommand(server, playerManager));
+
+    new GameScoreboard(plugin, configurationUtil, playerManager);
+
     bukkitScheduler.runTaskTimer(this, () -> {
-          for (GameArena gameArena : arenaManager.getGameArenasAsSet())
-            gameArena.tickArena(); 
-        }, 20L, 20L);
+      for (GameArena gameArena : arenaManager.getGameArenasAsSet()) {
+        gameArena.tickArena();
+      }
+    }, 20L, 20L);
   }
-  
+
   public void onDisable() {
     Server server = getServer();
-    if (mainManager != null)
-      for (GameArena gameArena : mainManager.getArenaManager().getGameArenasAsSet())
-        worldUtil.delete(null, gameArena.getWorld(), ((World)server.getWorlds().get(0)).getSpawnLocation());  
-    server.getScheduler().cancelTasks(this);
+
+    if (mainManager != null) {
+      for (GameArena gameArena : mainManager.getArenaManager().getGameArenasAsSet()) {
+        worldUtil.delete(null, gameArena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
+      }
+    }
   }
 }

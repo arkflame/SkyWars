@@ -12,23 +12,27 @@ import dev._2lstudios.skywars.managers.PlayerManager;
 
 public class PlayerDeathListener implements Listener {
   private final PlayerManager playerManager;
-  
+
   public PlayerDeathListener(PlayerManager playerManager) {
     this.playerManager = playerManager;
   }
-  
+
   @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
   public void onPlayerDeath(PlayerDeathEvent event) {
     Player player = event.getEntity();
     if (player != null) {
-      Player killer = player.getKiller();
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
       GameArena gameArena = gamePlayer.getArena();
+
       if (gameArena != null) {
-        if (killer != null)
-          gameArena.addKill(killer.getName()); 
+        Player killer = player.getKiller();
+
+        if (killer != null) {
+          gameArena.addKill(killer.getName());
+        }
+
         gameArena.addSpectator(gamePlayer);
-      } 
-    } 
+      }
+    }
   }
 }

@@ -17,25 +17,24 @@ import dev._2lstudios.skywars.utils.ConfigurationUtil;
 
 public class GameScoreboard implements Listener {
   private final PlayerManager playerManager;
-
   private final Collection<String> lobbyScoreboard;
-
   private final Collection<String> spectatorScoreboard;
-
   private final Collection<String> pregameScoreboard;
-
   private final Collection<String> ingameScoreboard;
 
   public GameScoreboard(Plugin plugin, ConfigurationUtil configurationUtil, PlayerManager playerManager) {
     YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/scoreboards.yml");
     Server server = plugin.getServer();
+
     this.playerManager = playerManager;
     this.lobbyScoreboard = yamlConfiguration.getStringList("scoreboards.lobby");
     this.spectatorScoreboard = yamlConfiguration.getStringList("scoreboards.spectator");
     this.pregameScoreboard = yamlConfiguration.getStringList("scoreboards.pregame");
     this.ingameScoreboard = yamlConfiguration.getStringList("scoreboards.ingame");
-    server.getScheduler().runTaskTimer(plugin, () -> {
+
+    server.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
       SidebarManager sidebarManager = Main.getEssentialsManager().getVariableManager().getSidebarManager();
+
       for (Player player : server.getOnlinePlayers()) {
         update(player, sidebarManager);
       }

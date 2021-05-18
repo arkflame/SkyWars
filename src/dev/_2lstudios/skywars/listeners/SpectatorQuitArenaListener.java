@@ -9,7 +9,7 @@ import dev._2lstudios.skywars.game.GamePlayer;
 
 public class SpectatorQuitArenaListener implements Listener {
   @EventHandler
-  public void onPlayerQuit(SpectatorQuitArenaEvent event) {
+  public void onSpectatorQuitArena(SpectatorQuitArenaEvent event) {
     GamePlayer gamePlayer = event.getGamePlayer();
     if (gamePlayer != null) {
       Player player = gamePlayer.getPlayer();

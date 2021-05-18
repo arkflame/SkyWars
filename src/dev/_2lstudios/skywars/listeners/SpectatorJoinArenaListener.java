@@ -22,14 +22,15 @@ public class SpectatorJoinArenaListener implements Listener {
       return;
     }
 
-    if (arena.getPlayers().getPlayers().contains(gamePlayer)
-        || arena.getPlayers().getSpectators().contains(gamePlayer)) {
+    if (arena.getPlayers().getSpectators().contains(gamePlayer)) {
       gamePlayer.sendMessage(ChatColor.RED + "Ya estas espectando esa arena!");
       return;
     }
 
-    if (gamePlayer.getArena() != null) {
-      gamePlayer.getArena().getPlayers().getPlayers().remove(gamePlayer);
+    final GameArena lastArena = gamePlayer.getArena();
+
+    if (lastArena != null) {
+      lastArena.remove(gamePlayer);
     }
 
     gamePlayer.setArena(arena);
