@@ -139,7 +139,7 @@ public class SkyWars extends JavaPlugin {
     pluginManager.registerEvents(new PlayerDropItemListener(playerManager), this);
     pluginManager.registerEvents(new PlayerInteractListener(menuManager, arenaManager, playerManager), this);
     pluginManager.registerEvents(new PlayerJoinArenaListener(), this);
-    pluginManager.registerEvents(new PlayerJoinListener(this, menuManager, playerManager), this);
+    pluginManager.registerEvents(new PlayerJoinListener(this, playerManager), this);
     pluginManager.registerEvents(new PlayerQuitArenaListener(), this);
     pluginManager.registerEvents(new PlayerQuitListener(playerManager), this);
     pluginManager.registerEvents(new PlayerRespawnListener(), this);

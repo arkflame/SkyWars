@@ -38,26 +38,27 @@ public class ArenaPlayers {
     server.getPluginManager().callEvent(new SpectatorJoinArenaEvent(gamePlayer, arena));
   }
 
-  public void remove(GamePlayer gamePlayer) {
+  public void removePlayer(GamePlayer gamePlayer) {
     if (this.players.remove(gamePlayer)) {
       server.getPluginManager().callEvent(new PlayerQuitArenaEvent(gamePlayer, arena));
     }
+  }
 
+  public void removeSpectator(GamePlayer gamePlayer) {
     if (this.spectators.remove(gamePlayer)) {
-      server.getPluginManager()
-          .callEvent(new SpectatorQuitArenaEvent(gamePlayer, arena));
+      server.getPluginManager().callEvent(new SpectatorQuitArenaEvent(gamePlayer, arena));
     }
   }
 
   public void removePlayers() {
-    for (GamePlayer gamePlayer : getPlayers()) {
-      remove(gamePlayer);
+    for (GamePlayer gamePlayer : new HashSet<>(getPlayers())) {
+      removePlayer(gamePlayer);
     }
   }
 
   public void removeSpectators() {
-    for (GamePlayer gamePlayer : getSpectators()) {
-      remove(gamePlayer);
+    for (GamePlayer gamePlayer : new HashSet<>(getSpectators())) {
+      removeSpectator(gamePlayer);
     }
   }
 
@@ -75,5 +76,10 @@ public class ArenaPlayers {
     }
 
     return null;
+  }
+
+  public void remove(GamePlayer gamePlayer) {
+    removePlayer(gamePlayer);
+    removeSpectator(gamePlayer);
   }
 }

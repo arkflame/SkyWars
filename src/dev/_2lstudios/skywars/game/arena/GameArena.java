@@ -202,10 +202,6 @@ public class GameArena {
     arenaPlayers.addSpectator(gamePlayer);
   }
 
-  public void remove(final GamePlayer gamePlayer) {
-    arenaPlayers.remove(gamePlayer);
-  }
-
   private void populateChests(ChestType chestType) {
     Collection<GameItem> gameItems;
     int chanceIndex;
@@ -328,6 +324,7 @@ public class GameArena {
                 + gamePlayerKills3.getName() + "&7 - " + gamePlayerKills3.amount() + "\n\n"));
       }
       removePlayers();
+      removeSpectators();
       resetArena(null);
     }
     if (callback != null)
@@ -373,5 +370,9 @@ public class GameArena {
 
   public ArenaPlayers getPlayers() {
     return arenaPlayers;
+  }
+
+  public void remove(GamePlayer gamePlayer) {
+    arenaPlayers.remove(gamePlayer);
   }
 }

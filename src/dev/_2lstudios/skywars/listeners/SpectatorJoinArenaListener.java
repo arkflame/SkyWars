@@ -33,10 +33,6 @@ public class SpectatorJoinArenaListener implements Listener {
       lastArena.remove(gamePlayer);
     }
 
-    gamePlayer.setArena(arena);
-    arena.getPlayers().getSpectators().add(gamePlayer);
-    gamePlayer.clear(GameMode.ADVENTURE, false, true, true);
-
     Player player = gamePlayer.getPlayer();
 
     if (player.getWorld() != arena.getWorld()) {
@@ -44,7 +40,8 @@ public class SpectatorJoinArenaListener implements Listener {
     }
 
     gamePlayer.giveItems(0);
-
-    player.sendMessage(ChatColor.RED + "Puedes salir del modo espectador con /salir!");
+    gamePlayer.setArena(arena);
+    arena.getPlayers().getSpectators().add(gamePlayer);
+    gamePlayer.clear(GameMode.ADVENTURE, false, true, true);
   }
 }
