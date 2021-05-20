@@ -1,7 +1,9 @@
 package dev._2lstudios.skywars.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -14,6 +16,9 @@ public class SpectatorQuitArenaListener implements Listener {
     GamePlayer gamePlayer = event.getGamePlayer();
 
     if (gamePlayer != null) {
+      Server server = Bukkit.getServer();
+
+      gamePlayer.getPlayer().teleport(server.getWorlds().get(0).getSpawnLocation());
       gamePlayer.setArena(null);
       gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
       gamePlayer.giveItems(0);
