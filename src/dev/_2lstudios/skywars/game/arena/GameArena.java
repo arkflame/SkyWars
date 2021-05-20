@@ -280,23 +280,33 @@ public class GameArena {
       arenaWorld.setTime(timeType);
 
       populateChests(chestType);
-      for (GamePlayer gamePlayer : arenaPlayers.getPlayers()) {
-        if (gamePlayer != null) {
-          Player player = gamePlayer.getPlayer();
-          if (player != null) {
-            String kitName = gamePlayer.getSelectedKit();
-            PlayerInventory inventory = player.getInventory();
-            gamePlayer.clear(GameMode.SURVIVAL, true, false, false);
-            if (kitName != null)
-              kitManager.getKit(kitName).giveItems(inventory);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 10));
-            player.sendMessage(ChatColor.GREEN + "El juego ha comenzado!");
-            BukkitUtil.sendTitle(player,
-                ChatColor.translateAlternateColorCodes('&', "&c&lMODO " + chestType.getName().toUpperCase()),
-                ChatColor.translateAlternateColorCodes('&', "&7El team no esta permitido!"), 20, 20, 20);
-          }
+
+      final String title = ChatColor.translateAlternateColorCodes('&', "&c&lMODO " + chestType.getName().toUpperCase());
+      final String subtitle = ChatColor.translateAlternateColorCodes('&', "&7El team no esta permitido!");
+
+      for (final GamePlayer gamePlayer : arenaPlayers.getPlayers()) {
+        Player player = gamePlayer.getPlayer();
+        String kitName = gamePlayer.getSelectedKit();
+        PlayerInventory inventory = player.getInventory();
+
+        gamePlayer.clear(GameMode.SURVIVAL, true, false, false);
+
+        if (kitName != null) {
+          kitManager.getKit(kitName).giveItems(inventory);
         }
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 10));
+        BukkitUtil.sendTitle(player, title, subtitle, 20, 20, 20);
       }
+
+      for (final GamePlayer gamePlayer : arenaPlayers.getSpectators()) {
+        final Player player = gamePlayer.getPlayer();
+
+        player.setLevel(0);
+
+        BukkitUtil.sendTitle(player, title, subtitle, 20, 20, 20);
+      }
+
       addChestVote(null, chestType);
       sendSound("ENDERDRAGON_GROWL", 1.0F);
     } else if (newState == GameState.WAITING) {
