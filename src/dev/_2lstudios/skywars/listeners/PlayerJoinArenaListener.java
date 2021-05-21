@@ -51,7 +51,7 @@ public class PlayerJoinArenaListener implements Listener {
       gamePlayer.setArena(arena);
       arena.getPlayers().getPlayers().add(gamePlayer);
       gamePlayer.setGameSpawn(arenaSpawn);
-      gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
+      gamePlayer.clear(GameMode.ADVENTURE);
       gamePlayer.giveItems(1);
 
       arenaSpawn.createCage(cageManager.getCage(gamePlayer.getSelectedCage()));
@@ -64,6 +64,10 @@ public class PlayerJoinArenaListener implements Listener {
           gamePlayer1.getPlayer().sendMessage(ChatColor.GOLD + "Ingresando al mapa del owner de la party...");
           arena.addPlayer(gamePlayer1);
         }
+      }
+
+      for (final GamePlayer spectator : arena.getPlayers().getSpectators()) {
+        spectator.update();
       }
     }
   }

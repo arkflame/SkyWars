@@ -31,7 +31,7 @@ public class PlayerDeathListener implements Listener {
           gameArena.addKill(killer.getName());
         }
 
-        gameArena.addSpectator(gamePlayer);
+        gameArena.remove(gamePlayer);
       }
     }
   }

@@ -289,7 +289,7 @@ public class GameArena {
         String kitName = gamePlayer.getSelectedKit();
         PlayerInventory inventory = player.getInventory();
 
-        gamePlayer.clear(GameMode.SURVIVAL, true, false, false);
+        gamePlayer.clear(GameMode.SURVIVAL);
 
         if (kitName != null) {
           kitManager.getKit(kitName).giveItems(inventory);
@@ -314,6 +314,7 @@ public class GameArena {
 
       if (winner != null) {
         Player player = winner.getPlayer();
+        
         if (player != null) {
           BukkitUtil.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&6&lVICTORIA"),
               ChatColor.GRAY + "Has sido el ultimo superviviente", 20, 20, 20);

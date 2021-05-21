@@ -39,9 +39,10 @@ public class SpectatorJoinArenaListener implements Listener {
       player.teleport(arena.getSpectatorSpawn(gamePlayer));
     }
 
-    gamePlayer.giveItems(0);
     gamePlayer.setArena(arena);
     arena.getPlayers().getSpectators().add(gamePlayer);
-    gamePlayer.clear(GameMode.ADVENTURE, false, true, true);
+    gamePlayer.clear(GameMode.ADVENTURE);
+    gamePlayer.update();
+    gamePlayer.giveItems(0);
   }
 }

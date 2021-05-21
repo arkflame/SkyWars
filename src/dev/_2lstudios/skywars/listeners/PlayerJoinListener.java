@@ -25,7 +25,7 @@ public class PlayerJoinListener implements Listener {
     GamePlayer gamePlayer = this.playerManager.addGamePlayer(player);
 
     player.teleport(this.skywars.getServer().getWorlds().get(0).getSpawnLocation());
-    gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
+    gamePlayer.clear(GameMode.ADVENTURE);
     gamePlayer.giveItems(0);
   }
 }

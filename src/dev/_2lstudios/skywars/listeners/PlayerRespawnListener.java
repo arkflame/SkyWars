@@ -16,12 +16,12 @@ public class PlayerRespawnListener implements Listener {
   public void onPlayerRespawn(PlayerRespawnEvent event) {
     Player player = event.getPlayer();
     final GamePlayer gamePlayer = SkyWars.getMainManager().getPlayerManager().getPlayer(player);
-    final GameArena arena = gamePlayer.getArena();
+    final GameArena arena = gamePlayer.getLastArena();
 
     event.setRespawnLocation(player.getLocation());
 
-    if (arena != null && arena.getPlayers().getSpectators().contains(gamePlayer)) {
-      gamePlayer.giveItems(0);
+    if (arena != null) {
+      arena.addSpectator(gamePlayer);
       player.sendMessage(ChatColor.RED + "Puedes salir del modo espectador con /salir!");
     }
   }

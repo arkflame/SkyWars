@@ -20,7 +20,8 @@ public class SpectatorQuitArenaListener implements Listener {
 
       gamePlayer.getPlayer().teleport(server.getWorlds().get(0).getSpawnLocation());
       gamePlayer.setArena(null);
-      gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
+      gamePlayer.clear(GameMode.ADVENTURE);
+      gamePlayer.update();
       gamePlayer.giveItems(0);
       gamePlayer.sendMessage(ChatColor.GREEN + "Saliste del modo espectador!");
     }

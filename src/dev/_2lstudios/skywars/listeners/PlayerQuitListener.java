@@ -14,29 +14,34 @@ import dev._2lstudios.skywars.managers.PlayerManager;
 
 public class PlayerQuitListener implements Listener {
   private final PlayerManager playerManager;
-  
+
   public PlayerQuitListener(PlayerManager playerManager) {
     this.playerManager = playerManager;
   }
-  
+
   @EventHandler(ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     Player player = event.getPlayer();
     GamePlayer gamePlayer = this.playerManager.getPlayer(player);
     GameArena gameArena = gamePlayer.getArena();
     GameParty gameParty = gamePlayer.getParty();
-    if (gameArena != null)
-      gameArena.remove(gamePlayer); 
-    if (gameParty != null)
+
+    if (gameArena != null) {
+      gameArena.remove(gamePlayer);
+    }
+
+    if (gameParty != null) {
       if (gameParty.getOwner() != gamePlayer) {
         gameParty.sendMessage(ChatColor.RED + player.getName() + " salio de la party!");
         gamePlayer.setParty(null);
       } else {
-        gameParty.sendMessage(
-            ChatColor.RED + "La party fue eliminada por que " + player.getName() + " salio del servidor!");
+        gameParty
+            .sendMessage(ChatColor.RED + "La party fue eliminada por que " + player.getName() + " salio del servidor!");
         gameParty.disband();
-      }  
-    gamePlayer.clear(GameMode.ADVENTURE, true, false, true);
+      }
+    }
+
+    gamePlayer.clear(GameMode.ADVENTURE);
     this.playerManager.removeGamePlayer(player);
   }
 }
