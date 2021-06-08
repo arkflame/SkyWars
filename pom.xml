@@ -44,14 +44,14 @@
       <artifactId>sportpaper</artifactId>
       <version>1.8.8-R0.1-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>/home/linsaftw/Jars/sportpaper-1.8.8.jar</systemPath>
+      <systemPath>C:\Users\LinsaFTW\Documents\Jars\sportpaper-1.8.8.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>dev._2lstudios</groupId>
       <artifactId>scoreboard</artifactId>
       <version>SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>/home/linsaftw/Jars/Scoreboard.jar</systemPath>
+      <systemPath>C:\Users\LinsaFTW\Documents\Jars\Scoreboard.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

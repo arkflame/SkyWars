@@ -147,9 +147,9 @@ public class SkyWars extends JavaPlugin {
     pluginManager.registerEvents(new SpectatorQuitArenaListener(), this);
     pluginManager.registerEvents(new WorldUnloadListener(), this);
 
-    getCommand("skywars").setExecutor((CommandExecutor) new SkyWarsCommand(server, this, arenaManager, playerManager));
-    getCommand("leave").setExecutor((CommandExecutor) new LeaveCommand(playerManager));
-    getCommand("party").setExecutor((CommandExecutor) new PartyCommand(server, playerManager));
+    getCommand("skywars").setExecutor(new SkyWarsCommand(server, this, arenaManager, playerManager));
+    getCommand("leave").setExecutor(new LeaveCommand(playerManager));
+    getCommand("party").setExecutor(new PartyCommand(server, playerManager));
 
     new GameScoreboard(plugin, configurationUtil, playerManager);
 

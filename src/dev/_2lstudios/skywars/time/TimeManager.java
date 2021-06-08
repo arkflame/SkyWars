@@ -23,7 +23,7 @@ public class TimeManager {
     ItemMeta dayOpenItemMeta = dayOpenItem.getItemMeta();
     ItemMeta noonOpenItemMeta = noonOpenItem.getItemMeta();
     ItemMeta nightOpenItemMeta = nightOpenItem.getItemMeta();
-    morningOpenItemMeta.setDisplayName(ChatColor.RED + "Mañana");
+    morningOpenItemMeta.setDisplayName(ChatColor.RED + "Manana");
     dayOpenItemMeta.setDisplayName(ChatColor.YELLOW + "Dia");
     noonOpenItemMeta.setDisplayName(ChatColor.GOLD + "Tarde");
     nightOpenItemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Noche");
@@ -31,7 +31,7 @@ public class TimeManager {
     dayOpenItem.setItemMeta(dayOpenItemMeta);
     noonOpenItem.setItemMeta(noonOpenItemMeta);
     nightOpenItem.setItemMeta(nightOpenItemMeta);
-    this.openItems.put(TimeType.MAÑANA, morningOpenItem);
+    this.openItems.put(TimeType.MANANA, morningOpenItem);
     this.openItems.put(TimeType.DIA, dayOpenItem);
     this.openItems.put(TimeType.TARDE, noonOpenItem);
     this.openItems.put(TimeType.NOCHE, nightOpenItem);

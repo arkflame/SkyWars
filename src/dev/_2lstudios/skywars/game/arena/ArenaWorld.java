@@ -118,7 +118,7 @@ public class ArenaWorld {
     }
 
     public void setTime(TimeType timeType) {
-        if (timeType == TimeType.MAÑANA) {
+        if (timeType == TimeType.MANANA) {
             world.setTime(22009L);
         } else if (timeType == TimeType.DIA) {
             world.setTime(24000L);

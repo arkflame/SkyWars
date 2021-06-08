@@ -5,6 +5,7 @@ author: 2LS
 softdepend:
   - PlaceholderAPI
   - Vault
+  - Scoreboard
 commands:
   skywars:
     description: Main SkyWars command

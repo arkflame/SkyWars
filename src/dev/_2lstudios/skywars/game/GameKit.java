@@ -3,6 +3,8 @@ package dev._2lstudios.skywars.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -12,11 +14,8 @@ import dev._2lstudios.skywars.SkyWars;
 
 public class GameKit {
   private final String name;
-  
   private final ItemStack icon = new ItemStack(Material.STONE);
-  
   private final Collection<ItemStack> items = new ArrayList<>();
-  
   private Collection<String> lore = new ArrayList<>();
   
   public GameKit(String name) {
@@ -30,7 +29,7 @@ public class GameKit {
       this.icon.setType(Material.getMaterial(kitsYml.getString(this.name + ".icon"))); 
     this.lore.clear();
     for (String line : kitsYml.getStringList(this.name + ".lore")) {
-      line = line.replace("%price%", "GRATIS").replace('&', '§');
+      line = ChatColor.translateAlternateColorCodes('&', line.replace("%price%", "GRATIS"));
       this.lore.add(line);
     } 
     for (String itemDataString : kitsYml.getStringList(this.name + ".items")) {

@@ -2,6 +2,7 @@ package dev._2lstudios.skywars.game;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,8 +47,8 @@ public class GameScoreboard implements Listener {
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
       if (gamePlayer != null) {
         Collection<String> list;
-        GameArena gameArena = gamePlayer.getArena();
-        Collection<String> newList = new ArrayList<>();
+        final GameArena gameArena = gamePlayer.getArena();
+        final List<String> newList = new ArrayList<>();
 
         if (gameArena == null) {
           list = this.lobbyScoreboard;
