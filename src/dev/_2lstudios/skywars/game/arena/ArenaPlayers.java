@@ -2,18 +2,23 @@ package dev._2lstudios.skywars.game.arena;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Server;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
 import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
 import dev._2lstudios.skywars.events.PlayerQuitArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorJoinArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorQuitArenaEvent;
 import dev._2lstudios.skywars.game.GamePlayer;
+import dev._2lstudios.skywars.game.GamePlayerMode;
 
 public class ArenaPlayers {
-  private final Collection<GamePlayer> players = new HashSet<>();
-  private final Collection<GamePlayer> spectators = new HashSet<>();
+  private final Map<UUID, GamePlayer> players = new ConcurrentHashMap<>();
   private final Server server;
   private final GameArena arena;
 
@@ -22,30 +27,63 @@ public class ArenaPlayers {
     this.arena = arena;
   }
 
+  private Collection<GamePlayer> getPlayers(GamePlayerMode filterMode) {
+    final Collection<GamePlayer> filteredPlayers = new HashSet<>();
+
+    for (final GamePlayer gamePlayer : players.values()) {
+      if (gamePlayer.getPlayerMode() == filterMode) {
+        filteredPlayers.add(gamePlayer);
+      }
+    }
+
+    return filteredPlayers;
+  }
+
   public Collection<GamePlayer> getPlayers() {
-    return this.players;
+    return getPlayers(GamePlayerMode.PLAYER);
   }
 
   public Collection<GamePlayer> getSpectators() {
-    return this.spectators;
+    return getPlayers(GamePlayerMode.SPECTATOR);
+  }
+
+  public void add(GamePlayer gamePlayer) {
+    final Event event;
+
+    if (gamePlayer.getPlayerMode() == GamePlayerMode.PLAYER) {
+      event = new PlayerJoinArenaEvent(gamePlayer, arena);
+    } else if (gamePlayer.getPlayerMode() == GamePlayerMode.SPECTATOR) {
+      event = new SpectatorJoinArenaEvent(gamePlayer, arena);
+    } else {
+      event = null;
+    }
+
+    if (event instanceof Cancellable && !((Cancellable) event).isCancelled()) {
+      server.getPluginManager().callEvent(event);
+      players.put(gamePlayer.getUUID(), gamePlayer);
+    }
   }
 
   public void addPlayer(GamePlayer gamePlayer) {
-    server.getPluginManager().callEvent(new PlayerJoinArenaEvent(gamePlayer, arena));
+    gamePlayer.setPlayerMode(GamePlayerMode.PLAYER);
+
+    add(gamePlayer);
   }
 
   public void addSpectator(GamePlayer gamePlayer) {
-    server.getPluginManager().callEvent(new SpectatorJoinArenaEvent(gamePlayer, arena));
+    gamePlayer.setPlayerMode(GamePlayerMode.SPECTATOR);
+
+    add(gamePlayer);
   }
 
   public void removePlayer(GamePlayer gamePlayer) {
-    if (this.players.remove(gamePlayer)) {
+    if (players.remove(gamePlayer.getUUID()) != null) {
       server.getPluginManager().callEvent(new PlayerQuitArenaEvent(gamePlayer, arena));
     }
   }
 
   public void removeSpectator(GamePlayer gamePlayer) {
-    if (this.spectators.remove(gamePlayer)) {
+    if (players.remove(gamePlayer.getUUID()) != null) {
       server.getPluginManager().callEvent(new SpectatorQuitArenaEvent(gamePlayer, arena));
     }
   }
@@ -71,7 +109,7 @@ public class ArenaPlayers {
   }
 
   public GamePlayer getFirstPlayer() {
-    for (final GamePlayer gamePlayer : players) {
+    for (final GamePlayer gamePlayer : players.values()) {
       return gamePlayer;
     }
 

@@ -17,16 +17,28 @@ import dev._2lstudios.skywars.menus.MenuType;
 
 public class GamePlayer {
   private final Player player;
+
+  private GamePlayerMode playerMode = null;
   private GameParty party = null;
   private ArenaSpawn spawn = null;
   private GameArena arena = null;
   private GameArena lastArena = null;
+
   private String selectedKit = null;
   private String selectedCage = null;
+
   private int wins;
 
   public GamePlayer(Player player) {
     this.player = player;
+  }
+
+  public GamePlayerMode getPlayerMode() {
+    return playerMode;
+  }
+
+  public void setPlayerMode(GamePlayerMode playerMode) {
+    this.playerMode = playerMode;
   }
 
   public UUID getUUID() {
@@ -80,14 +92,6 @@ public class GamePlayer {
 
   public void setSelectedCage(String cage) {
     this.selectedCage = cage;
-  }
-
-  public boolean isSpectating() {
-    if (arena != null) {
-      return arena.getPlayers().getSpectators().contains(this);
-    }
-
-    return false;
   }
 
   public ArenaSpawn getGameSpawn() {
@@ -184,4 +188,8 @@ public class GamePlayer {
       inventory.setItem(8, SkyWars.getLeaveItem());
     }
   }
+
+public boolean isSpectating() {
+    return playerMode == GamePlayerMode.SPECTATOR;
+}
 }

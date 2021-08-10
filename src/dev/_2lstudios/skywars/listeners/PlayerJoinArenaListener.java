@@ -27,10 +27,12 @@ public class PlayerJoinArenaListener implements Listener {
       gamePlayer.sendMessage(ChatColor.RED + "Ya estas dentro de la arena que intentas acceder!");
       return;
     }
+    
     if (arena.getState() != GameState.WAITING) {
       gamePlayer.sendMessage(ChatColor.RED + "La arena que intentas acceder esta en juego!");
       return;
     }
+
     if (arena.getPlayers().size() >= arena.getArenaWorld().getSpawns().size()) {
       gamePlayer.sendMessage(ChatColor.RED + "La arena que intentas acceder esta llena!");
       return;
@@ -49,7 +51,6 @@ public class PlayerJoinArenaListener implements Listener {
       }
 
       gamePlayer.setArena(arena);
-      arena.getPlayers().getPlayers().add(gamePlayer);
       gamePlayer.setGameSpawn(arenaSpawn);
       gamePlayer.clear(GameMode.ADVENTURE);
       gamePlayer.giveItems(1);

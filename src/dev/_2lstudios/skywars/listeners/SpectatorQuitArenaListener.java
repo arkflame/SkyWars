@@ -18,6 +18,7 @@ public class SpectatorQuitArenaListener implements Listener {
     if (gamePlayer != null) {
       Server server = Bukkit.getServer();
 
+      gamePlayer.setPlayerMode(null);
       gamePlayer.getPlayer().teleport(server.getWorlds().get(0).getSpawnLocation());
       gamePlayer.setArena(null);
       gamePlayer.clear(GameMode.ADVENTURE);

@@ -71,6 +71,7 @@ public class PlayerQuitArenaListener implements Listener {
 
     gameArena.removeChestVote(uuid);
     gameArena.removeTimeVote(uuid);
+    gamePlayer.setPlayerMode(null);
     gamePlayer.setGameSpawn(null);
     gamePlayer.setArena(null);
 

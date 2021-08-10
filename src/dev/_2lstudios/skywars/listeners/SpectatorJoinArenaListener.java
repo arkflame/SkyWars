@@ -40,7 +40,6 @@ public class SpectatorJoinArenaListener implements Listener {
     }
 
     gamePlayer.setArena(arena);
-    arena.getPlayers().getSpectators().add(gamePlayer);
     gamePlayer.clear(GameMode.ADVENTURE);
     gamePlayer.update();
     gamePlayer.giveItems(0);
