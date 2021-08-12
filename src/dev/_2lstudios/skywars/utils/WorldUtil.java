@@ -64,7 +64,7 @@ public class WorldUtil {
           BukkitUtil.runAsync(this.plugin, () -> {
             final String worldsFolder = Bukkit.getServer().getWorldContainer().getPath();
 
-            new File(worldsFolder + "/" + worldName + "/").delete();
+            FileUtils.deleteQuietly(new File(worldsFolder + "/" + worldName + "/"));
 
             if (callback != null) {
               callback.run();

@@ -1,16 +1,17 @@
 package dev._2lstudios.skywars.game.arena;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.utils.WorldUtil;
@@ -66,13 +67,10 @@ public class ArenaManager {
       arena.removeSpectators();
       this.arenasMap.remove(arenaName);
       worldUtil.delete(() -> {
-            try {
               File dataFolder = SkyWars.getPlugin().getDataFolder();
-              FileUtils.deleteDirectory(new File(dataFolder + "/maps/worlds/" + arenaName));
-              (new File(dataFolder + "/maps/data/" + arenaName + ".yml")).delete();
-            } catch (IOException e) {
-              e.printStackTrace();
-            } 
+
+              FileUtils.deleteQuietly(new File(dataFolder + "/maps/worlds/" + arenaName));
+              FileUtils.deleteQuietly(new File(dataFolder + "/maps/data/" + arenaName + ".yml"));
           },arena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
     } 
   }
