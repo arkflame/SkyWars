@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import dev._2lstudios.skywars.SkyWars;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.ArenaManager;
 import dev._2lstudios.skywars.managers.PlayerManager;
 import dev._2lstudios.skywars.utils.BukkitUtil;
@@ -153,18 +153,18 @@ public class SkyWarsCommand implements CommandExecutor {
           if (args.length > 1) {
             if (args[1].equalsIgnoreCase("add")) {
               // TODO: Add GameSign
-              player.sendMessage(ChatColor.GREEN + "Se agrego el bloque como cartel de Skywars!")
+              player.sendMessage(ChatColor.GREEN + "Se agrego el bloque como cartel de Skywars!");
             } else if (args[1].equalsIgnoreCase("remove")) {
               // TODO: Remove GameSign
               player.sendMessage(ChatColor.RED + "Se elimino el bloque como cartel de SkyWars!");
             } else {
-              player.sendMessage(ChatColor.RED + args[1] " no es un argumento valido!");
+              player.sendMessage(ChatColor.RED + args[1] + " no es un argumento valido!");
             }
           } else {
             player.sendMessage(ChatColor.RED + "/" + label + " " + args[0] + " add/remove");
           }
         } else {
-          player.sendMessage(ChatColor.RED + args[0] " no es un argumento valido!");
+          player.sendMessage(ChatColor.RED + args[0] + " no es un argumento valido!");
         } 
       } else {
         player.sendMessage(ChatColor.RED + "Comando de SkyWars incorrecto!");

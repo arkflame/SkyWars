@@ -10,11 +10,11 @@ import org.bukkit.event.Listener;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
-import dev._2lstudios.skywars.game.GameParty;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.ArenaSpawn;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.CageManager;
 
 public class PlayerJoinArenaListener implements Listener {

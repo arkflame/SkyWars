@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import dev._2lstudios.skywars.events.SpectatorQuitArenaEvent;
-import dev._2lstudios.skywars.game.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class SpectatorQuitArenaListener implements Listener {
   @EventHandler

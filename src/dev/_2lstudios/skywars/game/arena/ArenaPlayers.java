@@ -14,8 +14,8 @@ import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
 import dev._2lstudios.skywars.events.PlayerQuitArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorJoinArenaEvent;
 import dev._2lstudios.skywars.events.SpectatorQuitArenaEvent;
-import dev._2lstudios.skywars.game.GamePlayer;
-import dev._2lstudios.skywars.game.GamePlayerMode;
+import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerMode;
 
 public class ArenaPlayers {
   private final Map<UUID, GamePlayer> players = new ConcurrentHashMap<>();

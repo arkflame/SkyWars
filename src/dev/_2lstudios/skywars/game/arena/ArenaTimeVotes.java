@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import dev._2lstudios.skywars.SkyWars;
-import dev._2lstudios.skywars.game.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.time.TimeType;
 import dev._2lstudios.skywars.time.TimeVote;
 

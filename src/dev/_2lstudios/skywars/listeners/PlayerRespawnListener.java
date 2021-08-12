@@ -8,8 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import dev._2lstudios.skywars.SkyWars;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class PlayerRespawnListener implements Listener {
   @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

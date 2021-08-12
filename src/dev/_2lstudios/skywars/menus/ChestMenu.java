@@ -10,8 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev._2lstudios.skywars.chest.ChestManager;
 import dev._2lstudios.skywars.chest.ChestType;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ChestMenu implements GameMenu {
   private final String title = ChatColor.DARK_GRAY + "Votacion de Cofres";

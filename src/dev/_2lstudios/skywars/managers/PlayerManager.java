@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import dev._2lstudios.skywars.game.GamePlayer;
+
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class PlayerManager {
   private final Map<UUID, GamePlayer> gamePlayers = new HashMap<>();

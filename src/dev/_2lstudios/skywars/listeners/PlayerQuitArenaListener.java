@@ -12,10 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.events.PlayerQuitArenaEvent;
-import dev._2lstudios.skywars.game.GameParty;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class PlayerQuitArenaListener implements Listener {

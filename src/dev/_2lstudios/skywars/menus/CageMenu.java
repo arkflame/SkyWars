@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import dev._2lstudios.skywars.game.GameCage;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.arena.ArenaSpawn;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.CageManager;
 
 public class CageMenu implements GameMenu {

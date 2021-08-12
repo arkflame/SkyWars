@@ -6,8 +6,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import dev._2lstudios.skywars.game.GameParty;
-import dev._2lstudios.skywars.game.GamePlayer;
+
+import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.PlayerManager;
 
 public class PartyCommand implements CommandExecutor {

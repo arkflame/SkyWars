@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.time.TimeManager;
 import dev._2lstudios.skywars.time.TimeType;
 

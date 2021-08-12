@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 import dev._2lstudios.scoreboard.Main;
 import dev._2lstudios.scoreboard.managers.SidebarManager;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.PlayerManager;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 

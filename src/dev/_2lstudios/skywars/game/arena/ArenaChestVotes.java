@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import dev._2lstudios.skywars.chest.ChestType;
-import dev._2lstudios.skywars.game.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ArenaChestVotes {
     private final GameArena arena;

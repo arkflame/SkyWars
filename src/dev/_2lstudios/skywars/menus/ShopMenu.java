@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ShopMenu implements GameMenu {
   private final MenuManager menuManager;

@@ -14,9 +14,9 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.GamePlayer;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.ArenaManager;
 
 public class MapMenu implements GameMenu {
