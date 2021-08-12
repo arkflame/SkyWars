@@ -5,7 +5,6 @@ import java.io.File;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,7 +16,9 @@ import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
 import dev._2lstudios.skywars.game.GameScoreboard;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
+import dev._2lstudios.skywars.game.arena.Arena;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.listeners.BlockBreakListener;
 import dev._2lstudios.skywars.listeners.BlockPlaceListener;
 import dev._2lstudios.skywars.listeners.EntityDamageByEntityListener;
@@ -35,24 +36,16 @@ import dev._2lstudios.skywars.listeners.PlayerRespawnListener;
 import dev._2lstudios.skywars.listeners.SpectatorJoinArenaListener;
 import dev._2lstudios.skywars.listeners.SpectatorQuitArenaListener;
 import dev._2lstudios.skywars.listeners.WorldUnloadListener;
-import dev._2lstudios.skywars.managers.ArenaManager;
-import dev._2lstudios.skywars.managers.MainManager;
-import dev._2lstudios.skywars.managers.PlayerManager;
 import dev._2lstudios.skywars.menus.MenuManager;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 import dev._2lstudios.skywars.utils.WorldUtil;
 
 public class SkyWars extends JavaPlugin {
   private static SkyWars plugin;
-
-  private static MainManager mainManager;
-
+  private static SkyWarsManager skyWarsManager;
   private static ConfigurationUtil configurationUtil;
-
   private static WorldUtil worldUtil;
-
   private static final ItemStack randomMapItem = new ItemStack(Material.ARROW, 1);
-
   private static final ItemStack leaveItem = new ItemStack(Material.REDSTONE, 1);
 
   public static SkyWars getPlugin() {
@@ -63,12 +56,12 @@ public class SkyWars extends JavaPlugin {
     SkyWars.plugin = plugin;
   }
 
-  public static MainManager getMainManager() {
-    return mainManager;
+  public static SkyWarsManager getSkyWarsManager() {
+    return skyWarsManager;
   }
 
-  private static void setMainManager(MainManager mainManager) {
-    SkyWars.mainManager = mainManager;
+  private static void setSkyWarsManager(SkyWarsManager skyWarsManager) {
+    SkyWars.skyWarsManager = skyWarsManager;
   }
 
   public static ConfigurationUtil getConfigurationUtil() {
@@ -99,10 +92,10 @@ public class SkyWars extends JavaPlugin {
     setPlugin(this);
     setWorldUtil(new WorldUtil(this));
     setConfigurationUtil(new ConfigurationUtil(this));
-    setMainManager(new MainManager());
-    ArenaManager arenaManager = mainManager.getArenaManager();
-    MenuManager menuManager = mainManager.getMenuManager();
-    PlayerManager playerManager = mainManager.getPlayerManager();
+    setSkyWarsManager(new SkyWarsManager());
+    ArenaManager arenaManager = skyWarsManager.getArenaManager();
+    MenuManager menuManager = skyWarsManager.getMenuManager();
+    GamePlayerManager playerManager = skyWarsManager.getPlayerManager();
     Server server = getServer();
     BukkitScheduler bukkitScheduler = server.getScheduler();
     PluginManager pluginManager = server.getPluginManager();
@@ -154,8 +147,8 @@ public class SkyWars extends JavaPlugin {
     new GameScoreboard(plugin, configurationUtil, playerManager);
 
     bukkitScheduler.runTaskTimer(this, () -> {
-      for (GameArena gameArena : arenaManager.getGameArenasAsSet()) {
-        gameArena.tickArena();
+      for (Arena arena : arenaManager.getGameArenasAsSet()) {
+        arena.tickArena();
       }
     }, 20L, 20L);
   }
@@ -163,9 +156,9 @@ public class SkyWars extends JavaPlugin {
   public void onDisable() {
     Server server = getServer();
 
-    if (mainManager != null) {
-      for (GameArena gameArena : mainManager.getArenaManager().getGameArenasAsSet()) {
-        worldUtil.delete(null, gameArena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
+    if (skyWarsManager != null) {
+      for (Arena arena : skyWarsManager.getArenaManager().getGameArenasAsSet()) {
+        worldUtil.delete(null, arena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
       }
     }
   }

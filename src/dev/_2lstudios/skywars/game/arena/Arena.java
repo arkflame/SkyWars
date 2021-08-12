@@ -37,7 +37,7 @@ import dev._2lstudios.skywars.time.TimeType;
 import dev._2lstudios.skywars.utils.BukkitUtil;
 import dev._2lstudios.skywars.utils.WorldUtil;
 
-public class GameArena {
+public class Arena {
   private static final int START_SECONDS = 20;
 
   private final ArenaChestVotes chestVotes;
@@ -52,7 +52,7 @@ public class GameArena {
 
   private int seconds = 0;
 
-  public GameArena(String arenaName) {
+  Arena(String arenaName) {
     this.arenaName = arenaName;
     this.chestVotes = new ArenaChestVotes(this);
     this.timeVotes = new ArenaTimeVotes(this);
@@ -205,7 +205,7 @@ public class GameArena {
   private void populateChests(ChestType chestType) {
     Collection<GameItem> gameItems;
     int chanceIndex;
-    ChestManager chestManager = SkyWars.getMainManager().getChestManager();
+    ChestManager chestManager = SkyWars.getSkyWarsManager().getChestManager();
     if (chestType == ChestType.INSANE) {
       chanceIndex = chestManager.getInsaneChanceIndex();
       gameItems = chestManager.getInsaneGameItems();
@@ -271,8 +271,8 @@ public class GameArena {
       worldUtil.delete(() -> worldUtil.create(null, this.arenaName, atomicWorld), arenaWorld.getWorld(),
           server.getWorlds().get(0).getSpawnLocation());
     } else if (newState == GameState.PLAYING) {
-      CageManager cageManager = SkyWars.getMainManager().getCageManager();
-      KitManager kitManager = SkyWars.getMainManager().getKitManager();
+      CageManager cageManager = SkyWars.getSkyWarsManager().getCageManager();
+      KitManager kitManager = SkyWars.getSkyWarsManager().getKitManager();
       ChestType chestType = getMostVotedChest();
       TimeType timeType = getMostVotedTime();
 

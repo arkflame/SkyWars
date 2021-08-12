@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffect;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.arena.ArenaSpawn;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.menus.MenuManager;
 import dev._2lstudios.skywars.menus.MenuType;
 
@@ -19,17 +19,17 @@ public class GamePlayer {
   private final Player player;
 
   private GamePlayerMode playerMode = null;
-  private GameParty party = null;
+  private GamePlayerParty party = null;
   private ArenaSpawn spawn = null;
-  private GameArena arena = null;
-  private GameArena lastArena = null;
+  private Arena arena = null;
+  private Arena lastArena = null;
 
   private String selectedKit = null;
   private String selectedCage = null;
 
   private int wins;
 
-  public GamePlayer(Player player) {
+  GamePlayer(Player player) {
     this.player = player;
   }
 
@@ -57,23 +57,23 @@ public class GamePlayer {
     return this.player;
   }
 
-  public GameArena getArenaName() {
+  public Arena getArenaName() {
     return this.arena;
   }
 
-  public GameArena getLastArenaName() {
+  public Arena getLastArenaName() {
     return this.lastArena;
   }
 
-  public GameArena getArena() {
+  public Arena getArena() {
     return arena;
   }
 
-  public GameArena getLastArena() {
+  public Arena getLastArena() {
     return lastArena;
   }
 
-  public void setArena(final GameArena arena) {
+  public void setArena(final Arena arena) {
     this.lastArena = this.arena;
     this.arena = arena;
   }
@@ -115,16 +115,20 @@ public class GamePlayer {
     this.wins++;
   }
 
-  public GameParty getParty() {
+  public GamePlayerParty getParty() {
     return this.party;
   }
 
-  public void setParty(GameParty gameParty) {
-    if (this.party != null)
+  public GamePlayerParty setParty(GamePlayerParty gameParty) {
+    if (this.party != null) {
       this.party.remove(this);
-    if (gameParty != null)
+    }
+
+    if (gameParty != null) {
       gameParty.add(this);
-    this.party = gameParty;
+    }
+
+    return this.party = gameParty;
   }
 
   public void clear(GameMode gameMode) {
@@ -175,7 +179,7 @@ public class GamePlayer {
 
   public void giveItems(final int type) {
     final Inventory inventory = player.getInventory();
-    final MenuManager menuManager = SkyWars.getMainManager().getMenuManager();
+    final MenuManager menuManager = SkyWars.getSkyWarsManager().getMenuManager();
 
     if (type == 0) {
       inventory.setItem(0, menuManager.getMenu(MenuType.MAP).getOpenItem());
@@ -189,7 +193,11 @@ public class GamePlayer {
     }
   }
 
-public boolean isSpectating() {
+  public boolean isSpectating() {
     return playerMode == GamePlayerMode.SPECTATOR;
-}
+  }
+
+  public GamePlayerParty createParty() {
+    return setParty(new GamePlayerParty(this));
+  }
 }

@@ -8,13 +8,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class PlayerJoinListener implements Listener {
   private final SkyWars skywars;
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
 
-  public PlayerJoinListener(SkyWars skywars, PlayerManager playerManager) {
+  public PlayerJoinListener(SkyWars skywars, GamePlayerManager playerManager) {
     this.skywars = skywars;
     this.playerManager = playerManager;
   }

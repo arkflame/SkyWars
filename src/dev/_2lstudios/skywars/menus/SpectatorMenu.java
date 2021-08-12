@@ -15,9 +15,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.ArenaManager;
 
 public class SpectatorMenu implements GameMenu {
   private static final int INVENTORY_SIZE = 54;
@@ -58,20 +58,20 @@ public class SpectatorMenu implements GameMenu {
     double currentTimeMillis = System.currentTimeMillis();
     if (currentTimeMillis - this.lastTimeMillis > 2000.0D) {
       int index = 0;
-      for (GameArena gameArena : this.arenaManager.getGameArenasAsSet()) {
+      for (Arena arena : this.arenaManager.getGameArenasAsSet()) {
         FireworkEffect fireworkEffect;
-        Collection<GamePlayer> players = gameArena.getPlayers().getPlayers();
+        Collection<GamePlayer> players = arena.getPlayers().getPlayers();
         int size = players.size();
         if (size == 0)
           size = 1; 
         this.itemStack.setAmount(size);
         FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta)this.itemStack.getItemMeta();
-        String arenaName = gameArena.getName();
-        if (gameArena.getState() == GameState.WAITING && players.size() > 0) {
+        String arenaName = arena.getName();
+        if (arena.getState() == GameState.WAITING && players.size() > 0) {
           fireworkEffect = FireworkEffect.builder().withColor(Color.YELLOW).build();
           fireworkEffectMeta.setDisplayName(ChatColor.GREEN + arenaName
               .substring(0, 1).toUpperCase() + arenaName.substring(1));
-        } else if (gameArena.getState() == GameState.WAITING && gameArena.getSpawns().size() > 1) {
+        } else if (arena.getState() == GameState.WAITING && arena.getSpawns().size() > 1) {
           fireworkEffect = FireworkEffect.builder().withColor(Color.LIME).build();
           fireworkEffectMeta.setDisplayName(ChatColor.GREEN + arenaName
               .substring(0, 1).toUpperCase() + arenaName.substring(1));
@@ -81,9 +81,9 @@ public class SpectatorMenu implements GameMenu {
               .substring(0, 1).toUpperCase() + arenaName.substring(1));
         } 
         fireworkEffectMeta.setEffect(fireworkEffect);
-        fireworkEffectMeta.setLore(Arrays.asList(new String[] { ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN + gameArena
+        fireworkEffectMeta.setLore(Arrays.asList(new String[] { ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN + arena
                 
-                .getPlayers().size() + "/" + gameArena.getSpawns().size(), "", ChatColor.GREEN + "Click para unirte!" }));
+                .getPlayers().size() + "/" + arena.getSpawns().size(), "", ChatColor.GREEN + "Click para unirte!" }));
         this.itemStack.setItemMeta((ItemMeta)fireworkEffectMeta);
         if (index < this.slots.length) {
           int slot = this.slots[index];
@@ -114,9 +114,9 @@ public class SpectatorMenu implements GameMenu {
           } 
         } 
         if (isInSlot) {
-          GameArena gameArena1 = this.arenaManager.getArena(ChatColor.stripColor(itemStack.getItemMeta().getDisplayName().toLowerCase()));
-          if (gameArena1 != null) {
-            gameArena1.addSpectator(gamePlayer);
+          Arena arena1 = this.arenaManager.getArena(ChatColor.stripColor(itemStack.getItemMeta().getDisplayName().toLowerCase()));
+          if (arena1 != null) {
+            arena1.addSpectator(gamePlayer);
             gamePlayer.getPlayer().closeInventory();
           } 
         } 

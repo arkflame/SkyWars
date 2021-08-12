@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.time.TimeManager;
 import dev._2lstudios.skywars.time.TimeType;
@@ -44,13 +44,13 @@ public class TimeMenu implements GameMenu {
       if (itemMeta != null) {
         String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          GameArena gameArena = gamePlayer.getArena();
-          if (gameArena != null) {
+          Arena arena = gamePlayer.getArena();
+          if (arena != null) {
             Player player = gamePlayer.getPlayer();
             if (player.hasPermission("skywars.votetime")) {
               for (TimeType timeType : TimeType.values()) {
                 if (this.timeManager.isOpenItem(timeType, itemStack)) {
-                  gameArena.addTimeVote(player.getUniqueId(), timeType);
+                  arena.addTimeVote(player.getUniqueId(), timeType);
                   break;
                 } 
               } 

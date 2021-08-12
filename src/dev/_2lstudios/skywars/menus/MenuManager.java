@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+
+import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.managers.MainManager;
 
 public class MenuManager {
   private Map<String, GameMenu> gMenusByTitle = new HashMap<>();
@@ -17,13 +18,13 @@ public class MenuManager {
     this.gMenusByTitle.put(gameMenu.getTitle(), gameMenu);
   }
   
-  public MenuManager(MainManager mainManager) {
-    addMenu(new CageMenu(mainManager.getCageManager()));
-    addMenu(new ChestMenu(mainManager.getChestManager()));
-    addMenu(new TimeMenu(mainManager.getTimeManager()));
-    addMenu(new KitMenu(mainManager.getKitManager()));
-    addMenu(new MapMenu(mainManager.getArenaManager()));
-    addMenu(new SpectatorMenu(mainManager.getArenaManager()));
+  public MenuManager(SkyWarsManager skyWarsManager) {
+    addMenu(new CageMenu(skyWarsManager.getCageManager()));
+    addMenu(new ChestMenu(skyWarsManager.getChestManager()));
+    addMenu(new TimeMenu(skyWarsManager.getTimeManager()));
+    addMenu(new KitMenu(skyWarsManager.getKitManager()));
+    addMenu(new MapMenu(skyWarsManager.getArenaManager()));
+    addMenu(new SpectatorMenu(skyWarsManager.getArenaManager()));
     addMenu(new VoteMenu(this));
     addMenu(new ShopMenu(this));
   }

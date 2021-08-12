@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import dev._2lstudios.skywars.chest.ChestManager;
 import dev._2lstudios.skywars.chest.ChestType;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ChestMenu implements GameMenu {
@@ -42,16 +42,16 @@ public class ChestMenu implements GameMenu {
       if (itemMeta != null) {
         String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          GameArena gameArena = gamePlayer.getArena();
-          if (gameArena != null) {
+          Arena arena = gamePlayer.getArena();
+          if (arena != null) {
             Player player = gamePlayer.getPlayer();
             if (player.hasPermission("skywars.votechest")) {
               if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.BASIC))) {
-                gameArena.addChestVote(gamePlayer, ChestType.BASIC);
+                arena.addChestVote(gamePlayer, ChestType.BASIC);
               } else if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.NORMAL))) {
-                gameArena.addChestVote(gamePlayer, ChestType.NORMAL);
+                arena.addChestVote(gamePlayer, ChestType.NORMAL);
               } else if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
-                gameArena.addChestVote(gamePlayer, ChestType.INSANE);
+                arena.addChestVote(gamePlayer, ChestType.INSANE);
               } 
             } else {
               player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &lTITAN&c para votar cofres!"));

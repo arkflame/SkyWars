@@ -6,14 +6,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class PlayerDeathListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
 
-  public PlayerDeathListener(PlayerManager playerManager) {
+  public PlayerDeathListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
 
@@ -22,16 +22,16 @@ public class PlayerDeathListener implements Listener {
     Player player = event.getEntity();
     if (player != null) {
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
-      GameArena gameArena = gamePlayer.getArena();
+      Arena arena = gamePlayer.getArena();
 
-      if (gameArena != null) {
+      if (arena != null) {
         Player killer = player.getKiller();
 
         if (killer != null) {
-          gameArena.addKill(killer.getName());
+          arena.addKill(killer.getName());
         }
 
-        gameArena.remove(gamePlayer);
+        arena.remove(gamePlayer);
       }
     }
   }

@@ -16,10 +16,10 @@ import dev._2lstudios.skywars.time.TimeType;
 import dev._2lstudios.skywars.time.TimeVote;
 
 public class ArenaTimeVotes {
-    private final GameArena arena;
+    private final Arena arena;
     private final Collection<TimeVote> timeVotes = new HashSet<>();
 
-    public ArenaTimeVotes(final GameArena arena) {
+    public ArenaTimeVotes(final Arena arena) {
         this.arena = arena;
     }
 
@@ -53,7 +53,7 @@ public class ArenaTimeVotes {
             }
         }
         if (timeTypeNow != timeType) {
-            GamePlayer gamePlayer = SkyWars.getMainManager().getPlayerManager().getPlayer(uuid);
+            GamePlayer gamePlayer = SkyWars.getSkyWarsManager().getPlayerManager().getPlayer(uuid);
             this.timeVotes.add(new TimeVote(uuid, timeType));
             if (gamePlayer != null) {
                 Player player = gamePlayer.getPlayer();

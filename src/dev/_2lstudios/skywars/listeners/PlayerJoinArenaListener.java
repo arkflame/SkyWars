@@ -12,8 +12,8 @@ import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
 import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.ArenaSpawn;
-import dev._2lstudios.skywars.game.arena.GameArena;
-import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.arena.Arena;
+import dev._2lstudios.skywars.game.player.GamePlayerParty;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.managers.CageManager;
 
@@ -21,7 +21,7 @@ public class PlayerJoinArenaListener implements Listener {
   @EventHandler
   public void onPlayerJoinArena(PlayerJoinArenaEvent event) {
     final GamePlayer gamePlayer = event.getGamePlayer();
-    final GameArena arena = event.getArena();
+    final Arena arena = event.getArena();
 
     if (arena.getPlayers().getPlayers().contains(gamePlayer)) {
       gamePlayer.sendMessage(ChatColor.RED + "Ya estas dentro de la arena que intentas acceder!");
@@ -41,9 +41,9 @@ public class PlayerJoinArenaListener implements Listener {
     final ArenaSpawn arenaSpawn = arena.getArenaWorld().getFirstSpawn();
 
     if (arenaSpawn != null) {
-      GameParty gameParty = gamePlayer.getParty();
-      CageManager cageManager = SkyWars.getMainManager().getCageManager();
-      GameArena lastGameArena = gamePlayer.getArena();
+      GamePlayerParty gameParty = gamePlayer.getParty();
+      CageManager cageManager = SkyWars.getSkyWarsManager().getCageManager();
+      Arena lastGameArena = gamePlayer.getArena();
       Player player = gamePlayer.getPlayer();
 
       if (lastGameArena != null) {

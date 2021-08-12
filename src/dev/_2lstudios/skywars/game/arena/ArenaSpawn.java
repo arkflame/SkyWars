@@ -15,8 +15,8 @@ public class ArenaSpawn {
   
   private UUID playerUUID;
   
-  ArenaSpawn(GameArena gameArena, Vector vector) {
-    this.arenaName = gameArena.getName();
+  ArenaSpawn(Arena arena, Vector vector) {
+    this.arenaName = arena.getName();
     this.vector = vector.add(new Vector(0.5D, 0.5D, 0.5D));
   }
   
@@ -31,7 +31,7 @@ public class ArenaSpawn {
   }
   
   private Location getLocation() {
-    return this.vector.toLocation(SkyWars.getMainManager().getArenaManager().getArena(this.arenaName).getWorld());
+    return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld());
   }
   
   public void createCage(GameCage gameCage) {

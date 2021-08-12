@@ -20,9 +20,9 @@ import dev._2lstudios.skywars.game.player.GamePlayerMode;
 public class ArenaPlayers {
   private final Map<UUID, GamePlayer> players = new ConcurrentHashMap<>();
   private final Server server;
-  private final GameArena arena;
+  private final Arena arena;
 
-  ArenaPlayers(final Server server, final GameArena arena) {
+  ArenaPlayers(final Server server, final Arena arena) {
     this.server = server;
     this.arena = arena;
   }

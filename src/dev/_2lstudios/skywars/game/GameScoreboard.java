@@ -12,19 +12,19 @@ import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.scoreboard.Main;
 import dev._2lstudios.scoreboard.managers.SidebarManager;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 
 public class GameScoreboard implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   private final Collection<String> lobbyScoreboard;
   private final Collection<String> spectatorScoreboard;
   private final Collection<String> pregameScoreboard;
   private final Collection<String> ingameScoreboard;
 
-  public GameScoreboard(Plugin plugin, ConfigurationUtil configurationUtil, PlayerManager playerManager) {
+  public GameScoreboard(Plugin plugin, ConfigurationUtil configurationUtil, GamePlayerManager playerManager) {
     YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/scoreboards.yml");
     Server server = plugin.getServer();
 
@@ -48,23 +48,23 @@ public class GameScoreboard implements Listener {
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
       if (gamePlayer != null) {
         Collection<String> list;
-        final GameArena gameArena = gamePlayer.getArena();
+        final Arena arena = gamePlayer.getArena();
         final List<String> newList = new ArrayList<>();
 
-        if (gameArena == null) {
+        if (arena == null) {
           list = this.lobbyScoreboard;
         } else if (gamePlayer.isSpectating()) {
           list = this.spectatorScoreboard;
-        } else if (gameArena.getState() == GameState.WAITING) {
+        } else if (arena.getState() == GameState.WAITING) {
           list = this.pregameScoreboard;
-        } else if (gameArena.getState() == GameState.PLAYING) {
+        } else if (arena.getState() == GameState.PLAYING) {
           list = this.ingameScoreboard;
         } else {
           list = this.lobbyScoreboard;
         }
 
         for (String line : list) {
-          newList.add(replacePlaceholders(gameArena, gamePlayer, line));
+          newList.add(replacePlaceholders(arena, gamePlayer, line));
         }
 
         sidebarManager.setCustomSidebar(player, newList);
@@ -72,13 +72,13 @@ public class GameScoreboard implements Listener {
     }
   }
 
-  private String replacePlaceholders(GameArena gameArena, GamePlayer gamePlayer, String message) {
-    if (gameArena != null && gamePlayer != null) {
-      message = message.replace("%players%", String.valueOf(gameArena.getPlayers().size()))
-          .replace("%maxplayers%", String.valueOf(gameArena.getSpawns().size()))
-          .replace("%mostvotedchest%", gameArena.getMostVotedChest().toString()).replace("%map%", gameArena.getName())
+  private String replacePlaceholders(Arena arena, GamePlayer gamePlayer, String message) {
+    if (arena != null && gamePlayer != null) {
+      message = message.replace("%players%", String.valueOf(arena.getPlayers().size()))
+          .replace("%maxplayers%", String.valueOf(arena.getSpawns().size()))
+          .replace("%mostvotedchest%", arena.getMostVotedChest().toString()).replace("%map%", arena.getName())
           .replace("%wins%", String.valueOf(gamePlayer.getWins()))
-          .replace("%kills%", String.valueOf(gameArena.getKills(gamePlayer.getPlayer().getName()).amount()));
+          .replace("%kills%", String.valueOf(arena.getKills(gamePlayer.getPlayer().getName()).amount()));
     } else if (gamePlayer != null) {
       message = message.replace("%wins%", String.valueOf(gamePlayer.getWins()));
     }

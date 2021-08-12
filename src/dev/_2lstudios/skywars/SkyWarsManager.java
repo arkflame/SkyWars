@@ -1,22 +1,20 @@
-package dev._2lstudios.skywars.managers;
+package dev._2lstudios.skywars;
 
 import dev._2lstudios.skywars.chest.ChestManager;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
+import dev._2lstudios.skywars.managers.CageManager;
+import dev._2lstudios.skywars.managers.KitManager;
 import dev._2lstudios.skywars.menus.MenuManager;
 import dev._2lstudios.skywars.time.TimeManager;
 
-public class MainManager {
+public class SkyWarsManager {
   private final CageManager cageManager = new CageManager();
-  
   private final ChestManager chestManager = new ChestManager();
-  
   private final KitManager kitManager = new KitManager();
-  
   private final TimeManager timeManager = new TimeManager();
-  
-  private final PlayerManager playerManager = new PlayerManager();
-  
+  private final GamePlayerManager playerManager = new GamePlayerManager();
   private final ArenaManager arenaManager = new ArenaManager();
-  
   private final MenuManager menuManager = new MenuManager(this);
   
   public ArenaManager getArenaManager() {
@@ -43,7 +41,7 @@ public class MainManager {
     return this.menuManager;
   }
   
-  public PlayerManager getPlayerManager() {
+  public GamePlayerManager getPlayerManager() {
     return this.playerManager;
   }
 }

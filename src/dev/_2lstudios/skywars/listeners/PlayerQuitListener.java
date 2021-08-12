@@ -7,15 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import dev._2lstudios.skywars.game.arena.GameArena;
-import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.arena.Arena;
+import dev._2lstudios.skywars.game.player.GamePlayerParty;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
 
 public class PlayerQuitListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
 
-  public PlayerQuitListener(PlayerManager playerManager) {
+  public PlayerQuitListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
 
@@ -23,11 +23,11 @@ public class PlayerQuitListener implements Listener {
   public void onPlayerQuit(PlayerQuitEvent event) {
     Player player = event.getPlayer();
     GamePlayer gamePlayer = this.playerManager.getPlayer(player);
-    GameArena gameArena = gamePlayer.getArena();
-    GameParty gameParty = gamePlayer.getParty();
+    Arena arena = gamePlayer.getArena();
+    GamePlayerParty gameParty = gamePlayer.getParty();
 
-    if (gameArena != null) {
-      gameArena.remove(gamePlayer);
+    if (arena != null) {
+      arena.remove(gamePlayer);
     }
 
     if (gameParty != null) {

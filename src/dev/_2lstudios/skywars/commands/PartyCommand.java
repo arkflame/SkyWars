@@ -7,18 +7,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import dev._2lstudios.skywars.game.player.GameParty;
+import dev._2lstudios.skywars.game.player.GamePlayerParty;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
 
 public class PartyCommand implements CommandExecutor {
   private final Server server;
 
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
 
   private final String helpMessage;
 
-  public PartyCommand(Server server, PlayerManager playerManager) {
+  public PartyCommand(Server server, GamePlayerManager playerManager) {
     this.server = server;
     this.playerManager = playerManager;
     this.helpMessage = ChatColor.GREEN + "Comandos de party:\n" + ChatColor.YELLOW + "/%label%" + " invite <jugador>"
@@ -43,7 +43,7 @@ public class PartyCommand implements CommandExecutor {
           GamePlayer gamePlayer1 = this.playerManager.getPlayer(this.server.getPlayer(args[1]));
           if (gamePlayer1 != null) {
             if (gamePlayer1 != gamePlayer) {
-              GameParty party = gamePlayer.getParty();
+              GamePlayerParty party = gamePlayer.getParty();
               if (party != null) {
                 if (party.getOwner() == gamePlayer) {
                   if (party.invite(gamePlayer1)) {
@@ -57,8 +57,8 @@ public class PartyCommand implements CommandExecutor {
                   sender.sendMessage(ChatColor.RED + "No eres el lider de la party!");
                 }
               } else {
-                GameParty newParty = new GameParty(gamePlayer);
-                gamePlayer.setParty(newParty);
+                GamePlayerParty newParty = gamePlayer.createParty();
+
                 if (newParty.invite(gamePlayer1)) {
                   gamePlayer1.sendMessage(ChatColor.GREEN + "Fuiste invitado a la party de " + sender.getName()
                       + "! Usa /party para ver comandos!");
@@ -82,7 +82,7 @@ public class PartyCommand implements CommandExecutor {
           GamePlayer gamePlayer1 = this.playerManager.getPlayer(this.server.getPlayer(args[1]));
           if (gamePlayer1 != null) {
             if (gamePlayer1 != gamePlayer) {
-              GameParty party = gamePlayer.getParty();
+              GamePlayerParty party = gamePlayer.getParty();
               if (party != null) {
                 if (party.getOwner() == gamePlayer) {
                   if (party.deinvite(gamePlayer)) {
@@ -110,7 +110,7 @@ public class PartyCommand implements CommandExecutor {
           GamePlayer gamePlayer = this.playerManager.getPlayer((Player) sender);
           GamePlayer gamePlayer1 = this.playerManager.getPlayer(this.server.getPlayer(args[1]));
           if (gamePlayer1 != null) {
-            GameParty party = gamePlayer.getParty();
+            GamePlayerParty party = gamePlayer.getParty();
             if (party != null) {
               if (party.getOwner() == gamePlayer) {
                 party.remove(gamePlayer1);
@@ -133,7 +133,7 @@ public class PartyCommand implements CommandExecutor {
           GamePlayer gamePlayer = this.playerManager.getPlayer((Player) sender);
           GamePlayer gamePlayer1 = this.playerManager.getPlayer(this.server.getPlayer(args[1]));
           if (gamePlayer != gamePlayer1) {
-            GameParty playerParty = gamePlayer.getParty();
+            GamePlayerParty playerParty = gamePlayer.getParty();
             if (playerParty != null) {
               playerParty.remove(gamePlayer);
               playerParty
@@ -141,7 +141,7 @@ public class PartyCommand implements CommandExecutor {
               playerParty.disband();
               sender.sendMessage(ChatColor.GREEN + "Eliminaste tu party correctamente!");
             }
-            GameParty party = gamePlayer1.getParty();
+            GamePlayerParty party = gamePlayer1.getParty();
             if (party != null) {
               if (party.getInvited().contains(gamePlayer)) {
                 gamePlayer.setParty(party);
@@ -168,7 +168,7 @@ public class PartyCommand implements CommandExecutor {
           gamePlayer = this.playerManager.getPlayer((Player) sender);
         }
         if (gamePlayer != null) {
-          GameParty party = gamePlayer.getParty();
+          GamePlayerParty party = gamePlayer.getParty();
           if (party != null) {
             StringBuilder partyPlayersString = new StringBuilder();
 
@@ -185,7 +185,7 @@ public class PartyCommand implements CommandExecutor {
         }
       } else if (args[0].equals("leave")) {
         GamePlayer gamePlayer = this.playerManager.getPlayer((Player) sender);
-        GameParty party = gamePlayer.getParty();
+        GamePlayerParty party = gamePlayer.getParty();
         if (party != null) {
           party.remove(gamePlayer);
           if (party.getOwner() == gamePlayer) {
@@ -202,7 +202,7 @@ public class PartyCommand implements CommandExecutor {
         }
       } else if (args[0].equals("disband")) {
         GamePlayer gamePlayer = this.playerManager.getPlayer((Player) sender);
-        GameParty party = gamePlayer.getParty();
+        GamePlayerParty party = gamePlayer.getParty();
         if (party != null) {
           if (party.getOwner() == gamePlayer) {
             party.remove(gamePlayer);

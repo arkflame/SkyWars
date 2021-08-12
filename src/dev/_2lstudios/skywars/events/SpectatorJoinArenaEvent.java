@@ -2,14 +2,14 @@ package dev._2lstudios.skywars.events;
 
 import org.bukkit.event.Cancellable;
 
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class SpectatorJoinArenaEvent extends PlayerArenaEvent implements Cancellable {
   private boolean cancelled = false;
 
-  public SpectatorJoinArenaEvent(GamePlayer gamePlayer, GameArena gameArena) {
-    super(gamePlayer, gameArena);
+  public SpectatorJoinArenaEvent(GamePlayer gamePlayer, Arena arena) {
+    super(gamePlayer, arena);
   }
 
   @Override

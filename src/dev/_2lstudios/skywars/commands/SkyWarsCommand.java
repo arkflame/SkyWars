@@ -11,19 +11,19 @@ import org.bukkit.entity.Player;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.ArenaManager;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class SkyWarsCommand implements CommandExecutor {
   private final Server server;
   private final SkyWars skywars;
   private final ArenaManager arenaManager;
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
 
-  public SkyWarsCommand(Server server, SkyWars skywars, ArenaManager arenaManager, PlayerManager playerManager) {
+  public SkyWarsCommand(Server server, SkyWars skywars, ArenaManager arenaManager, GamePlayerManager playerManager) {
     this.server = server;
     this.skywars = skywars;
     this.arenaManager = arenaManager;
@@ -43,24 +43,24 @@ public class SkyWarsCommand implements CommandExecutor {
       } else if (args[0].equalsIgnoreCase("join")) {
         if (args.length == 2) {
           String arenaName = args[1];
-          GameArena gameArena = this.arenaManager.getArena(arenaName);
-          if (gameArena != null) {
-            gameArena.addPlayer(gamePlayer);
+          Arena arena = this.arenaManager.getArena(arenaName);
+          if (arena != null) {
+            arena.addPlayer(gamePlayer);
           } else {
             player.sendMessage(ChatColor.RED + "La arena especificada no existe!");
           } 
         } else {
-          GameArena gameArena = this.arenaManager.getMaxPlayerAvailableArena();
-          if (gameArena != null) {
+          Arena arena = this.arenaManager.getMaxPlayerAvailableArena();
+          if (arena != null) {
             player.sendMessage(ChatColor.GREEN + "Entrando a una partida al azar!");
-            gameArena.addPlayer(gamePlayer);
+            arena.addPlayer(gamePlayer);
           } else {
             player.sendMessage(ChatColor.RED + "No hay arenas configuradas!");
           } 
         } 
       } else if (args[0].equalsIgnoreCase("spec") && args.length == 2) {
         String arenaName = args[1];
-        GameArena specGameArena = this.arenaManager.getArena(arenaName);
+        Arena specGameArena = this.arenaManager.getArena(arenaName);
         if (specGameArena != null) {
           if (gamePlayer.getArena() == null) {
             specGameArena.addSpectator(gamePlayer);
@@ -86,20 +86,20 @@ public class SkyWarsCommand implements CommandExecutor {
           } 
         } 
       } else if (args[0].equalsIgnoreCase("leave")) {
-        GameArena gameArena = gamePlayer.getArena();
-        if (gameArena != null) {
-          gameArena.remove(gamePlayer);
+        Arena arena = gamePlayer.getArena();
+        if (arena != null) {
+          arena.remove(gamePlayer);
         } else {
           player.sendMessage(ChatColor.RED + "No estas en ninguna arena!");
         } 
       } else if (args[0].equalsIgnoreCase("list")) {
         player.sendMessage(ChatColor.BLUE + "Arenas Creadas:");
-        for (GameArena gameArena : this.arenaManager.getGameArenasAsList()) {
-          if (gameArena.getState() == GameState.EDITING || gameArena.getSpawns().size() == 0) {
-            player.sendMessage(ChatColor.RED + gameArena.getName());
+        for (Arena arena : this.arenaManager.getGameArenasAsList()) {
+          if (arena.getState() == GameState.EDITING || arena.getSpawns().size() == 0) {
+            player.sendMessage(ChatColor.RED + arena.getName());
             continue;
           } 
-          player.sendMessage(ChatColor.GREEN + gameArena.getName());
+          player.sendMessage(ChatColor.GREEN + arena.getName());
         } 
       } else if (player.hasPermission("skywars.admin")) {
         if (args[0].equalsIgnoreCase("create") && args.length == 2) {
@@ -124,11 +124,11 @@ public class SkyWarsCommand implements CommandExecutor {
             player.sendMessage(ChatColor.RED + "La arena no existe!");
           } 
         } else if (args[0].equalsIgnoreCase("edit")) {
-          String arena = args[1];
-          GameArena gameArena = this.arenaManager.getArena(arena);
-          if (gameArena != null) {
-            gameArena.setState(() -> {
-                  World world = gameArena.getWorld();
+          String arenaName = args[1];
+          Arena arena = this.arenaManager.getArena(arenaName);
+          if (arena != null) {
+            arena.setState(() -> {
+                  World world = arena.getWorld();
                   if (world != null) {
                     Location location = world.getSpawnLocation();
                     player.teleport(location.add(0.0D, 1.0D, 0.0D));

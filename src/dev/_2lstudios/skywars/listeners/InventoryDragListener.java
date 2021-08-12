@@ -9,17 +9,17 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.menus.MenuManager;
 
 public class InventoryDragListener implements Listener {
   private final MenuManager menuManager;
   
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
-  public InventoryDragListener(MenuManager menuManager, PlayerManager playerManager) {
+  public InventoryDragListener(MenuManager menuManager, GamePlayerManager playerManager) {
     this.menuManager = menuManager;
     this.playerManager = playerManager;
   }
@@ -39,9 +39,9 @@ public class InventoryDragListener implements Listener {
         GamePlayer gamePlayer = this.playerManager.getPlayer(player);
 
         if (gamePlayer != null) {
-          GameArena gameArena = gamePlayer.getArena();
+          Arena arena = gamePlayer.getArena();
           
-          if (gamePlayer.isSpectating() || gameArena == null || gameArena.getState() != GameState.PLAYING)
+          if (gamePlayer.isSpectating() || arena == null || arena.getState() != GameState.PLAYING)
             event.setCancelled(true); 
         } 
       } 

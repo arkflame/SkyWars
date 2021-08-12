@@ -12,10 +12,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.GameMenu;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.ArenaManager;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.menus.MenuManager;
 
 public class PlayerInteractListener implements Listener {
@@ -23,9 +23,9 @@ public class PlayerInteractListener implements Listener {
   
   private final ArenaManager arenaManager;
   
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
-  public PlayerInteractListener(MenuManager menuManager, ArenaManager arenaManager, PlayerManager playerManager) {
+  public PlayerInteractListener(MenuManager menuManager, ArenaManager arenaManager, GamePlayerManager playerManager) {
     this.menuManager = menuManager;
     this.arenaManager = arenaManager;
     this.playerManager = playerManager;
@@ -58,17 +58,17 @@ public class PlayerInteractListener implements Listener {
             String displayName = itemMeta.getDisplayName();
             if (displayName != null && !displayName.isEmpty())
               if (itemStack.isSimilar(SkyWars.getRandomMapItem())) {
-                GameArena gameArena = this.arenaManager.getMaxPlayerAvailableArena();
-                if (gameArena != null) {
+                Arena arena = this.arenaManager.getMaxPlayerAvailableArena();
+                if (arena != null) {
                   player.sendMessage(ChatColor.GREEN + "Entrando a una partida al azar!");
-                  gameArena.addPlayer(gamePlayer);
+                  arena.addPlayer(gamePlayer);
                 } else {
                   player.sendMessage(ChatColor.RED + "No se encontro una arena disponible!");
                 } 
               } else if (itemStack.isSimilar(SkyWars.getLeaveItem())) {
-                GameArena gameArena = gamePlayer.getArena();
-                if (gameArena != null)
-                  gameArena.remove(gamePlayer); 
+                Arena arena = gamePlayer.getArena();
+                if (arena != null)
+                  arena.remove(gamePlayer); 
               } else {
                 for (GameMenu gameMenu : this.menuManager.getGameMenus()) {
                   if (itemStack.isSimilar(gameMenu.getOpenItem())) {

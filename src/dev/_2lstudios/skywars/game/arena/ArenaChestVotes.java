@@ -12,10 +12,10 @@ import dev._2lstudios.skywars.chest.ChestType;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ArenaChestVotes {
-    private final GameArena arena;
+    private final Arena arena;
     private final Map<UUID, ChestType> chestVotes = new HashMap<>();
 
-    ArenaChestVotes(final GameArena arena) {
+    ArenaChestVotes(final Arena arena) {
         this.arena = arena;
     }
 

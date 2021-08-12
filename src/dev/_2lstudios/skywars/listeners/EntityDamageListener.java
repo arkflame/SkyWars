@@ -7,14 +7,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class EntityDamageListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
-  public EntityDamageListener(PlayerManager playerManager) {
+  public EntityDamageListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
   
@@ -25,8 +25,8 @@ public class EntityDamageListener implements Listener {
       Player player = (Player)entity;
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
       if (gamePlayer != null) {
-        GameArena gameArena = gamePlayer.getArena();
-        if (gamePlayer.isSpectating() || gameArena == null || gameArena.getState() != GameState.PLAYING)
+        Arena arena = gamePlayer.getArena();
+        if (gamePlayer.isSpectating() || arena == null || arena.getState() != GameState.PLAYING)
           event.setCancelled(true); 
       } 
     } 

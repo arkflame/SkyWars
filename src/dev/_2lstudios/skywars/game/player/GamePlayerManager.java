@@ -1,13 +1,11 @@
-package dev._2lstudios.skywars.managers;
+package dev._2lstudios.skywars.game.player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 
-import dev._2lstudios.skywars.game.player.GamePlayer;
-
-public class PlayerManager {
+public class GamePlayerManager {
   private final Map<UUID, GamePlayer> gamePlayers = new HashMap<>();
   
   public GamePlayer getPlayer(UUID uuid) {

@@ -8,17 +8,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.menus.MenuManager;
 
 public class InventoryClickListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
   private final MenuManager menuManager;
   
-  public InventoryClickListener(PlayerManager playerManager, MenuManager menuManager) {
+  public InventoryClickListener(GamePlayerManager playerManager, MenuManager menuManager) {
     this.playerManager = playerManager;
     this.menuManager = menuManager;
   }
@@ -36,8 +36,8 @@ public class InventoryClickListener implements Listener {
         gameMenu.runAction(event.getSlot(), event.getCurrentItem(), gamePlayer);
         event.setCancelled(true);
       } else {
-        GameArena gameArena = gamePlayer.getArena();
-        if (gameArena == null || gamePlayer.isSpectating() || gameArena.getState() != GameState.PLAYING)
+        Arena arena = gamePlayer.getArena();
+        if (arena == null || gamePlayer.isSpectating() || arena.getState() != GameState.PLAYING)
           event.setCancelled(true); 
       } 
     } 

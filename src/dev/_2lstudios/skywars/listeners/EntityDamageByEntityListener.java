@@ -7,12 +7,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class EntityDamageByEntityListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
-  public EntityDamageByEntityListener(PlayerManager playerManager) {
+  public EntityDamageByEntityListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
   

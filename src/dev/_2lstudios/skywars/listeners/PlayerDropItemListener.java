@@ -5,14 +5,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
-import dev._2lstudios.skywars.managers.PlayerManager;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class PlayerDropItemListener implements Listener {
-  private final PlayerManager playerManager;
+  private final GamePlayerManager playerManager;
   
-  public PlayerDropItemListener(PlayerManager playerManager) {
+  public PlayerDropItemListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
   
@@ -21,8 +21,8 @@ public class PlayerDropItemListener implements Listener {
     if (event.getItemDrop() != null) {
       GamePlayer gamePlayer = this.playerManager.getPlayer(event.getPlayer());
       if (gamePlayer != null) {
-        GameArena gameArena = gamePlayer.getArena();
-        if (gameArena == null || gameArena.getState() != GameState.PLAYING || gamePlayer.isSpectating())
+        Arena arena = gamePlayer.getArena();
+        if (arena == null || arena.getState() != GameState.PLAYING || gamePlayer.isSpectating())
           event.setCancelled(true); 
       } else {
         event.setCancelled(true);

@@ -28,12 +28,12 @@ import dev._2lstudios.skywars.utils.WorldUtil;
 public class ArenaWorld {
     private final Collection<Vector> chests = new HashSet<>();
     private final Collection<ArenaSpawn> spawns = new HashSet<>();
-    private final GameArena arena;
+    private final Arena arena;
     private Vector spectatorSpawn = null;
     private World world;
 
-    public ArenaWorld(final GameArena gameArena) {
-        this.arena = gameArena;
+    public ArenaWorld(final Arena arena) {
+        this.arena = arena;
     }
 
     public World getWorld() {
@@ -97,7 +97,7 @@ public class ArenaWorld {
     }
 
     public void resetArena(Runnable callback) {
-        final CageManager cageManager = SkyWars.getMainManager().getCageManager();
+        final CageManager cageManager = SkyWars.getSkyWarsManager().getCageManager();
         WorldUtil worldUtil = SkyWars.getWorldUtil();
         Server server = Bukkit.getServer();
 

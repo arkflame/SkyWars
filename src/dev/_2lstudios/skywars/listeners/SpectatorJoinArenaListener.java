@@ -8,13 +8,13 @@ import org.bukkit.event.Listener;
 
 import dev._2lstudios.skywars.events.SpectatorJoinArenaEvent;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.GameArena;
+import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class SpectatorJoinArenaListener implements Listener {
   @EventHandler
   public void onSpectatorJoinArena(SpectatorJoinArenaEvent event) {
-    final GameArena arena = event.getArena();
+    final Arena arena = event.getArena();
     final GamePlayer gamePlayer = event.getGamePlayer();
 
     if (arena.getState() == GameState.EDITING) {
@@ -27,7 +27,7 @@ public class SpectatorJoinArenaListener implements Listener {
       return;
     }
 
-    final GameArena lastArena = gamePlayer.getArena();
+    final Arena lastArena = gamePlayer.getArena();
 
     if (lastArena != null) {
       lastArena.remove(gamePlayer);
