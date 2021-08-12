@@ -19,11 +19,8 @@ import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class SkyWarsCommand implements CommandExecutor {
   private final Server server;
-
   private final SkyWars skywars;
-
   private final ArenaManager arenaManager;
-
   private final PlayerManager playerManager;
 
   public SkyWarsCommand(Server server, SkyWars skywars, ArenaManager arenaManager, PlayerManager playerManager) {
@@ -40,11 +37,8 @@ public class SkyWarsCommand implements CommandExecutor {
       if (args.length == 0) {
         player.sendMessage(ChatColor.GREEN + "Comandos de SkyWars:"
             .concat(System.lineSeparator() + ChatColor.YELLOW + "/" + label + " join [mapa]" + ChatColor.GRAY + " - " + ChatColor.AQUA + "Unete a una partida al azar!")
-            
             .concat(System.lineSeparator() + ChatColor.YELLOW + "/" + label + " spec <mapa>" + ChatColor.GRAY + " - " + ChatColor.AQUA + "Espectea un mapa que especifiques!")
-            
             .concat(System.lineSeparator() + ChatColor.YELLOW + "/" + label + " leave" + ChatColor.GRAY + " - " + ChatColor.AQUA + "Sal del mapa que estas jugando!")
-            
             .concat(System.lineSeparator() + ChatColor.YELLOW + "/" + label + " list" + ChatColor.GRAY + " - " + ChatColor.AQUA + "Muestra una lista de mapas!"));
       } else if (args[0].equalsIgnoreCase("join")) {
         if (args.length == 2) {
@@ -155,8 +149,22 @@ public class SkyWarsCommand implements CommandExecutor {
           } else {
             player.sendMessage(ChatColor.RED + "La arena no esta en modo edicion!");
           } 
+        } else if (args[0].equalsIgnoreCase("sign")) {
+          if (args.length > 1) {
+            if (args[1].equalsIgnoreCase("add")) {
+              // TODO: Add GameSign
+              player.sendMessage(ChatColor.GREEN + "Se agrego el bloque como cartel de Skywars!")
+            } else if (args[1].equalsIgnoreCase("remove")) {
+              // TODO: Remove GameSign
+              player.sendMessage(ChatColor.RED + "Se elimino el bloque como cartel de SkyWars!");
+            } else {
+              player.sendMessage(ChatColor.RED + args[1] " no es un argumento valido!");
+            }
+          } else {
+            player.sendMessage(ChatColor.RED + "/" + label + " " + args[0] + " add/remove");
+          }
         } else {
-          player.sendMessage(ChatColor.RED + "Comando de SkyWars incorrecto!");
+          player.sendMessage(ChatColor.RED + args[0] " no es un argumento valido!");
         } 
       } else {
         player.sendMessage(ChatColor.RED + "Comando de SkyWars incorrecto!");
