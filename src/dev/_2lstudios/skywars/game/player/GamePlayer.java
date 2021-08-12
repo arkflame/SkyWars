@@ -200,4 +200,8 @@ public class GamePlayer {
   public GamePlayerParty createParty() {
     return setParty(new GamePlayerParty(this));
   }
+
+  public String getName() {
+    return player.getName();
+  }
 }

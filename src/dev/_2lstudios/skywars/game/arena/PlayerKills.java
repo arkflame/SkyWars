@@ -1,22 +1,24 @@
 package dev._2lstudios.skywars.game.arena;
 
+import dev._2lstudios.skywars.game.player.GamePlayer;
+
 public class PlayerKills {
-  private final String name;
+  private final GamePlayer gamePlayer;
   private int amount;
-  
-  PlayerKills(final String name, final int kills) {
-    this.name = name;
+
+  PlayerKills(final GamePlayer gamePlayer, final int kills) {
+    this.gamePlayer = gamePlayer;
     this.amount = kills;
   }
-  
+
   String getName() {
-    return name;
+    return gamePlayer == null ? "N/A" : gamePlayer.getName();
   }
-  
-  void add() {
-    this.amount++;
+
+  int add() {
+    return ++this.amount;
   }
-  
+
   public int amount() {
     return this.amount;
   }

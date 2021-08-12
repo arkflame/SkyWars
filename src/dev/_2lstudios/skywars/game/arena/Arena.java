@@ -343,12 +343,8 @@ public class Arena {
     this.state = newState;
   }
 
-  public void addKill(String playerName) {
-    arenaKills.addKill(playerName);
-  }
-
-  public PlayerKills getKills(String playerName) {
-    return arenaKills.getKills(playerName);
+  public ArenaKills getKills() {
+    return arenaKills;
   }
 
   public Location getSpectatorSpawn(GamePlayer gamePlayer) {

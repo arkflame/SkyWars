@@ -28,7 +28,7 @@ public class PlayerDeathListener implements Listener {
         Player killer = player.getKiller();
 
         if (killer != null) {
-          arena.addKill(killer.getName());
+          arena.getKills().addKill(this.playerManager.getPlayer(killer));
         }
 
         arena.remove(gamePlayer);
