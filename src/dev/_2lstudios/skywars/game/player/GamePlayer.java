@@ -102,11 +102,14 @@ public class GamePlayer {
   }
 
   public void setGameSpawn(ArenaSpawn gameSpawn) {
-    if (gameSpawn == null && this.spawn != null) {
+    if (this.spawn != null) {
       this.spawn.setPlayer(null);
-    } else if (gameSpawn != null) {
+    }
+    
+    if (gameSpawn != null) {
       gameSpawn.setPlayer(this);
     }
+    
     this.spawn = gameSpawn;
   }
 

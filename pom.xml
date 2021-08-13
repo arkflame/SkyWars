@@ -45,5 +45,12 @@
       <scope>system</scope>
       <systemPath>C:\Users\LinsaFTW\Documents\Jars\Scoreboard.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>dev._2lstudios</groupId>
+      <artifactId>inventoryapi</artifactId>
+      <version>SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>C:\Users\LinsaFTW\Documents\Jars\InventoryAPI.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>

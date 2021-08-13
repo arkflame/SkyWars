@@ -15,14 +15,11 @@ import dev._2lstudios.skywars.game.player.GamePlayer;
 
 public class ChestMenu implements GameMenu {
   private final String title = ChatColor.DARK_GRAY + "Votacion de Cofres";
-  
   private final Inventory inventory = Bukkit.createInventory(null, 36, this.title);
-  
   private final ItemStack openItem = new ItemStack(Material.CHEST);
-  
   private final ChestManager chestManager;
-  
-  public ChestMenu(ChestManager chestManager) {
+
+  ChestMenu(ChestManager chestManager) {
     this.chestManager = chestManager;
     ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Cofres");
@@ -31,11 +28,11 @@ public class ChestMenu implements GameMenu {
     this.inventory.setItem(13, chestManager.getOpenItem(ChestType.NORMAL));
     this.inventory.setItem(16, chestManager.getOpenItem(ChestType.INSANE));
   }
-  
+
   public Inventory getInventory(GamePlayer gamePlayer) {
     return this.inventory;
   }
-  
+
   public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
     if (itemStack != null) {
       ItemMeta itemMeta = itemStack.getItemMeta();
@@ -52,25 +49,26 @@ public class ChestMenu implements GameMenu {
                 arena.addChestVote(gamePlayer, ChestType.NORMAL);
               } else if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
                 arena.addChestVote(gamePlayer, ChestType.INSANE);
-              } 
+              }
             } else {
-              player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &lTITAN&c para votar cofres!"));
-            } 
+              player.sendMessage(
+                  ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &lTITAN&c para votar cofres!"));
+            }
             player.closeInventory();
-          } 
-        } 
-      } 
-    } 
+          }
+        }
+      }
+    }
   }
-  
+
   public String getTitle() {
     return this.title;
   }
-  
+
   public ItemStack getOpenItem() {
     return this.openItem;
   }
-  
+
   public MenuType getType() {
     return MenuType.CHEST;
   }

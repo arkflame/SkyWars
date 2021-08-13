@@ -16,14 +16,11 @@ import dev._2lstudios.skywars.time.TimeType;
 
 public class TimeMenu implements GameMenu {
   private final String title = ChatColor.DARK_GRAY + "Votacion de Tiempo";
-  
   private final Inventory inventory = Bukkit.createInventory(null, 36, this.title);
-  
   private final ItemStack openItem = new ItemStack(Material.WATCH);
-  
   private final TimeManager timeManager;
-  
-  public TimeMenu(TimeManager timeManager) {
+
+  TimeMenu(TimeManager timeManager) {
     this.timeManager = timeManager;
     ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
@@ -33,11 +30,11 @@ public class TimeMenu implements GameMenu {
     this.inventory.setItem(14, timeManager.getOpenItem(TimeType.NOON));
     this.inventory.setItem(16, timeManager.getOpenItem(TimeType.NIGHT));
   }
-  
+
   public Inventory getInventory(GamePlayer gamePlayer) {
     return this.inventory;
   }
-  
+
   public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
     if (itemStack != null) {
       ItemMeta itemMeta = itemStack.getItemMeta();
@@ -52,26 +49,27 @@ public class TimeMenu implements GameMenu {
                 if (this.timeManager.isOpenItem(timeType, itemStack)) {
                   arena.addTimeVote(player.getUniqueId(), timeType);
                   break;
-                } 
-              } 
+                }
+              }
             } else {
-              player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &d&lMEGA&c para votar cofres!"));
-            } 
+              player.sendMessage(
+                  ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &d&lMEGA&c para votar cofres!"));
+            }
             player.closeInventory();
-          } 
-        } 
-      } 
-    } 
+          }
+        }
+      }
+    }
   }
-  
+
   public String getTitle() {
     return this.title;
   }
-  
+
   public ItemStack getOpenItem() {
     return this.openItem;
   }
-  
+
   public MenuType getType() {
     return MenuType.TIME;
   }

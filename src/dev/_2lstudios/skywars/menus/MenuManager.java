@@ -10,33 +10,37 @@ import dev._2lstudios.skywars.game.GameMenu;
 
 public class MenuManager {
   private Map<String, GameMenu> gMenusByTitle = new HashMap<>();
-  
   private Map<MenuType, GameMenu> gMenusByType = new EnumMap<>(MenuType.class);
-  
+
   public void addMenu(GameMenu gameMenu) {
     this.gMenusByType.put(gameMenu.getType(), gameMenu);
     this.gMenusByTitle.put(gameMenu.getTitle(), gameMenu);
   }
-  
+
+  public void addMenuNew(GameMenu gameMenu) {
+    this.gMenusByType.put(gameMenu.getType(), gameMenu);
+  }
+
   public MenuManager(SkyWarsManager skyWarsManager) {
     addMenu(new CageMenu(skyWarsManager.getCageManager()));
     addMenu(new ChestMenu(skyWarsManager.getChestManager()));
     addMenu(new TimeMenu(skyWarsManager.getTimeManager()));
     addMenu(new KitMenu(skyWarsManager.getKitManager()));
-    addMenu(new MapMenu(skyWarsManager.getArenaManager()));
     addMenu(new SpectatorMenu(skyWarsManager.getArenaManager()));
     addMenu(new VoteMenu(this));
     addMenu(new ShopMenu(this));
+
+    addMenuNew(new MapMenu(skyWarsManager));
   }
-  
+
   public Collection<GameMenu> getGameMenus() {
     return this.gMenusByType.values();
   }
-  
+
   public GameMenu getMenu(MenuType menuType) {
     return this.gMenusByType.getOrDefault(menuType, null);
   }
-  
+
   public GameMenu getMenu(String title) {
     return this.gMenusByTitle.getOrDefault(title, null);
   }
