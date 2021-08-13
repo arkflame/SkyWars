@@ -16,19 +16,19 @@ import dev._2lstudios.skywars.utils.BukkitUtil;
 public class PlayerDeathListener implements Listener {
   private final GamePlayerManager playerManager;
 
-  public PlayerDeathListener(GamePlayerManager playerManager) {
+  public PlayerDeathListener(final GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
 
   @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-  public void onPlayerDeath(PlayerDeathEvent event) {
-    Player player = event.getEntity();
+  public void onPlayerDeath(final PlayerDeathEvent event) {
+    final Player player = event.getEntity();
     if (player != null) {
-      GamePlayer gamePlayer = this.playerManager.getPlayer(player);
-      Arena arena = gamePlayer.getArena();
+      final GamePlayer gamePlayer = this.playerManager.getPlayer(player);
+      final Arena arena = gamePlayer.getArena();
 
       if (arena != null) {
-        Player killer = player.getKiller();
+        final Player killer = player.getKiller();
         final int playersSize = arena.getPlayers().getPlayers().size() - 1;
 
         if (killer != null) {
