@@ -224,9 +224,9 @@ public class GamePlayer {
 
     if (newArena != null) {
       if (newMode == GamePlayerMode.SPECTATOR) {
-        if (player.getWorld() != arena.getArenaWorld() || player.getLastDamageCause() == null
+        if (player.getWorld() != newArena.getArenaWorld() || player.getLastDamageCause() == null
             || player.getLastDamageCause().getCause() == DamageCause.VOID) {
-          player.teleport(arena.getArenaWorld().getSpectatorSpawn(this));
+          player.teleport(newArena.getArenaWorld().getSpectatorSpawn(this));
         }
 
         clear(GameMode.ADVENTURE);
