@@ -25,12 +25,10 @@ public class ArenaSpawn {
   }
   
   public void setPlayer(GamePlayer gamePlayer) {
-    if (gamePlayer != null)
-      gamePlayer.getPlayer().teleport(getLocation()); 
     this.playerUUID = (gamePlayer == null) ? null : gamePlayer.getUUID();
   }
   
-  private Location getLocation() {
+  public Location getLocation() {
     return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld());
   }
   
@@ -38,7 +36,7 @@ public class ArenaSpawn {
     new CreateCageTask(gameCage, getLocation()).run();
   }
   
-  public Object getVector() {
+  public Vector getVector() {
     return this.vector;
   }
 }

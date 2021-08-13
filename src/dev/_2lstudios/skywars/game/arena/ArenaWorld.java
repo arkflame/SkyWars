@@ -2,13 +2,10 @@ package dev._2lstudios.skywars.game.arena;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.concurrent.atomic.AtomicReference;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -90,41 +87,49 @@ public class ArenaWorld {
     }
 
     public void generateCages(final GameCage gameCage) {
-        BukkitUtil.runSync(SkyWars.getPlugin(), () -> {
+        BukkitUtil.runSync(() -> {
             for (ArenaSpawn gameSpawn : getSpawns())
                 gameSpawn.createCage(gameCage);
         });
     }
 
-    public void resetArena(Runnable callback) {
+    public void reset(Runnable callback) {
         final CageManager cageManager = SkyWars.getSkyWarsManager().getCageManager();
         WorldUtil worldUtil = SkyWars.getWorldUtil();
-        Server server = Bukkit.getServer();
 
         arena.removePlayers();
         arena.removeSpectators();
         arena.clearChestVotes();
         arena.clearArenaKills();
 
-        worldUtil.delete(() -> {
-            AtomicReference<World> atomicWorld = new AtomicReference<>(null);
+        BukkitUtil.runSync(() -> {
+            worldUtil.kickPlayers(getWorld(), SkyWars.getSpawn());
 
-            worldUtil.create(() -> {
-                this.world = atomicWorld.get();
+            BukkitUtil.runAsync(() -> {
+                worldUtil.unload(getWorld());
+                worldUtil.delete(getWorld());
+                worldUtil.copyMapWorld(SkyWars.getInstance(), arena.getName());
 
-                generateCages(cageManager.getDefaultCage());
-            }, arena.getName(), atomicWorld);
-        }, arena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
+                BukkitUtil.runSync(() -> {
+                    this.world = worldUtil.create(arena.getName());
+                    generateCages(cageManager.getDefaultCage());
+
+                    if (callback != null) {
+                        callback.run();
+                    }
+                });
+            });
+        });
     }
 
     public void setTime(TimeType timeType) {
-        if (timeType == TimeType.MANANA) {
+        if (timeType == TimeType.MORNING) {
             world.setTime(22009L);
-        } else if (timeType == TimeType.DIA) {
+        } else if (timeType == TimeType.DAY) {
             world.setTime(24000L);
-        } else if (timeType == TimeType.TARDE) {
+        } else if (timeType == TimeType.NOON) {
             world.setTime(12000L);
-        } else if (timeType == TimeType.NOCHE) {
+        } else if (timeType == TimeType.NIGHT) {
             world.setTime(18000L);
         }
     }

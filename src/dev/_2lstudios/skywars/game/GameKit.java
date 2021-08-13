@@ -50,7 +50,7 @@ public class GameKit {
           } else {
             material = Material.getMaterial(itemDataArray[index].toUpperCase());
             if (material == null)
-              SkyWars.getPlugin().getLogger().info(itemDataArray[index] + " from kits.yml cannot be loaded!"); 
+              SkyWars.getInstance().getLogger().info(itemDataArray[index] + " from kits.yml cannot be loaded!"); 
           } 
         } else if (index == 1) {
           amount = Integer.parseInt(itemDataArray[index]);

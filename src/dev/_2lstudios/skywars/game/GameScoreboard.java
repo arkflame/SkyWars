@@ -74,9 +74,9 @@ public class GameScoreboard implements Listener {
 
   private String replacePlaceholders(Arena arena, GamePlayer gamePlayer, String message) {
     if (arena != null && gamePlayer != null) {
-      message = message.replace("%players%", String.valueOf(arena.getPlayers().size()))
+      message = message.replace("%players%", String.valueOf(arena.getPlayers().getPlayers().size()))
           .replace("%maxplayers%", String.valueOf(arena.getSpawns().size()))
-          .replace("%mostvotedchest%", arena.getMostVotedChest().toString()).replace("%map%", arena.getName())
+          .replace("%mostvotedchest%", arena.getMostVotedChest().getName()).replace("%map%", arena.getName())
           .replace("%wins%", String.valueOf(gamePlayer.getWins()))
           .replace("%kills%", String.valueOf(arena.getKills().getKills(gamePlayer).amount()));
     } else if (gamePlayer != null) {

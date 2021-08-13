@@ -15,27 +15,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.GameState;
-import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.arena.Arena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerMode;
 
 public class MapMenu implements GameMenu {
   private static final int INVENTORY_SIZE = 54;
-  
+
   private final String title = ChatColor.DARK_GRAY + "SkyWars - Mapas";
-  
+
   private final ArenaManager arenaManager;
-  
+
   private final Inventory inventory = Bukkit.createInventory(null, INVENTORY_SIZE, this.title);
-  
+
   private final ItemStack openItem = new ItemStack(Material.DAYLIGHT_DETECTOR);
-  
+
   private final ItemStack itemStack = new ItemStack(Material.FIREWORK_CHARGE, 0);
-  
+
   private final int[] slots = new int[28];
-  
+
   private double lastTimeMillis = 0.0D;
-  
+
   public MapMenu(ArenaManager arenaManager) {
     this.arenaManager = arenaManager;
     ItemMeta openItemMeta = this.openItem.getItemMeta();
@@ -43,17 +44,16 @@ public class MapMenu implements GameMenu {
     this.openItem.setItemMeta(openItemMeta);
     int index = 0;
     int slotCounter = 0;
-    for (int slot = 10; slot < INVENTORY_SIZE && 
-      this.slots.length > index; slot++) {
+    for (int slot = 10; slot < INVENTORY_SIZE && this.slots.length > index; slot++) {
       if (slotCounter++ < 7) {
         this.slots[index++] = slot;
       } else if (slotCounter > 8) {
         slotCounter = 0;
-      } 
-    } 
+      }
+    }
     updateInventory();
   }
-  
+
   private void updateInventory() {
     double currentTimeMillis = System.currentTimeMillis();
     if (currentTimeMillis - this.lastTimeMillis > 2000.0D) {
@@ -63,40 +63,46 @@ public class MapMenu implements GameMenu {
         Collection<GamePlayer> players = arena.getPlayers().getPlayers();
         int size = players.size();
         if (size == 0)
-          size = 1; 
+          size = 1;
         this.itemStack.setAmount(size);
-        FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta)this.itemStack.getItemMeta();
+        FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) this.itemStack.getItemMeta();
         String arenaName = arena.getName();
         if (arena.getState() == GameState.WAITING && !players.isEmpty()) {
           fireworkEffect = FireworkEffect.builder().withColor(Color.YELLOW).build();
-          fireworkEffectMeta.setDisplayName(ChatColor.GREEN + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
+          fireworkEffectMeta
+              .setDisplayName(ChatColor.GREEN + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
         } else if (arena.getState() == GameState.WAITING && arena.getSpawns().size() > 1) {
           fireworkEffect = FireworkEffect.builder().withColor(Color.LIME).build();
-          fireworkEffectMeta.setDisplayName(ChatColor.GREEN + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
+          fireworkEffectMeta
+              .setDisplayName(ChatColor.GREEN + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
         } else {
           fireworkEffect = FireworkEffect.builder().withColor(Color.RED).build();
-          fireworkEffectMeta.setDisplayName(ChatColor.RED + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
-        } 
+          fireworkEffectMeta
+              .setDisplayName(ChatColor.RED + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
+        }
         fireworkEffectMeta.setEffect(fireworkEffect);
-        fireworkEffectMeta.setLore(Arrays.asList(new String[] { ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN + arena.getPlayers().size() + "/" + arena.getSpawns().size(), "", ChatColor.GREEN + "Click para unirte!" }));
-        this.itemStack.setItemMeta((ItemMeta)fireworkEffectMeta);
+        fireworkEffectMeta.setLore(Arrays.asList(new String[] {
+            ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN
+                + arena.getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(),
+            "", ChatColor.GREEN + "Click para unirte!" }));
+        this.itemStack.setItemMeta((ItemMeta) fireworkEffectMeta);
         if (index < this.slots.length) {
           int slot = this.slots[index];
           ItemStack slotItem = this.inventory.getItem(slot);
           if (slotItem == null || !slotItem.isSimilar(this.itemStack))
-            this.inventory.setItem(slot, this.itemStack); 
+            this.inventory.setItem(slot, this.itemStack);
           index++;
-        } 
-      } 
+        }
+      }
       this.lastTimeMillis = currentTimeMillis;
-    } 
+    }
   }
-  
+
   public Inventory getInventory(GamePlayer gamePlayer) {
     updateInventory();
     return this.inventory;
   }
-  
+
   public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
     if (itemStack != null) {
       ItemMeta itemMeta = itemStack.getItemMeta();
@@ -106,27 +112,28 @@ public class MapMenu implements GameMenu {
           if (slot == slot1) {
             isInSlot = true;
             break;
-          } 
-        } 
+          }
+        }
         if (isInSlot) {
-          Arena arena1 = this.arenaManager.getArena(ChatColor.stripColor(itemStack.getItemMeta().getDisplayName().toLowerCase()));
+          Arena arena1 = this.arenaManager
+              .getArena(ChatColor.stripColor(itemStack.getItemMeta().getDisplayName().toLowerCase()));
           if (arena1 != null) {
-            arena1.addPlayer(gamePlayer);
+            gamePlayer.updateArena(arena1, GamePlayerMode.PLAYER);
             gamePlayer.getPlayer().closeInventory();
-          } 
-        } 
-      } 
-    } 
+          }
+        }
+      }
+    }
   }
-  
+
   public String getTitle() {
     return this.title;
   }
-  
+
   public ItemStack getOpenItem() {
     return this.openItem;
   }
-  
+
   public MenuType getType() {
     return MenuType.MAP;
   }

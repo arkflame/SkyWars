@@ -83,7 +83,7 @@ public class SpectatorMenu implements GameMenu {
         fireworkEffectMeta.setEffect(fireworkEffect);
         fireworkEffectMeta.setLore(Arrays.asList(new String[] { ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN + arena
                 
-                .getPlayers().size() + "/" + arena.getSpawns().size(), "", ChatColor.GREEN + "Click para unirte!" }));
+                .getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(), "", ChatColor.GREEN + "Click para unirte!" }));
         this.itemStack.setItemMeta((ItemMeta)fireworkEffectMeta);
         if (index < this.slots.length) {
           int slot = this.slots[index];

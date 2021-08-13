@@ -2,7 +2,9 @@ package dev._2lstudios.skywars;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -16,8 +18,8 @@ import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
 import dev._2lstudios.skywars.game.GameScoreboard;
-import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.arena.Arena;
+import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.listeners.BlockBreakListener;
 import dev._2lstudios.skywars.listeners.BlockPlaceListener;
@@ -28,56 +30,40 @@ import dev._2lstudios.skywars.listeners.InventoryDragListener;
 import dev._2lstudios.skywars.listeners.PlayerDeathListener;
 import dev._2lstudios.skywars.listeners.PlayerDropItemListener;
 import dev._2lstudios.skywars.listeners.PlayerInteractListener;
-import dev._2lstudios.skywars.listeners.PlayerJoinArenaListener;
 import dev._2lstudios.skywars.listeners.PlayerJoinListener;
-import dev._2lstudios.skywars.listeners.PlayerQuitArenaListener;
 import dev._2lstudios.skywars.listeners.PlayerQuitListener;
 import dev._2lstudios.skywars.listeners.PlayerRespawnListener;
-import dev._2lstudios.skywars.listeners.SpectatorJoinArenaListener;
-import dev._2lstudios.skywars.listeners.SpectatorQuitArenaListener;
 import dev._2lstudios.skywars.listeners.WorldUnloadListener;
 import dev._2lstudios.skywars.menus.MenuManager;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 import dev._2lstudios.skywars.utils.WorldUtil;
 
 public class SkyWars extends JavaPlugin {
-  private static SkyWars plugin;
+  private static SkyWars instance;
   private static SkyWarsManager skyWarsManager;
   private static ConfigurationUtil configurationUtil;
   private static WorldUtil worldUtil;
   private static final ItemStack randomMapItem = new ItemStack(Material.ARROW, 1);
   private static final ItemStack leaveItem = new ItemStack(Material.REDSTONE, 1);
 
-  public static SkyWars getPlugin() {
-    return plugin;
+  public static Location getSpawn() {
+    return Bukkit.getServer().getWorlds().get(0).getSpawnLocation();
   }
 
-  private static void setPlugin(SkyWars plugin) {
-    SkyWars.plugin = plugin;
+  public static SkyWars getInstance() {
+    return instance;
   }
 
   public static SkyWarsManager getSkyWarsManager() {
     return skyWarsManager;
   }
 
-  private static void setSkyWarsManager(SkyWarsManager skyWarsManager) {
-    SkyWars.skyWarsManager = skyWarsManager;
-  }
-
   public static ConfigurationUtil getConfigurationUtil() {
     return configurationUtil;
   }
 
-  private static void setConfigurationUtil(ConfigurationUtil configurationUtil) {
-    SkyWars.configurationUtil = configurationUtil;
-  }
-
   public static WorldUtil getWorldUtil() {
     return worldUtil;
-  }
-
-  private static void setWorldUtil(WorldUtil worldUtil) {
-    SkyWars.worldUtil = worldUtil;
   }
 
   public static ItemStack getRandomMapItem() {
@@ -88,11 +74,12 @@ public class SkyWars extends JavaPlugin {
     return leaveItem;
   }
 
+  @Override
   public void onEnable() {
-    setPlugin(this);
-    setWorldUtil(new WorldUtil(this));
-    setConfigurationUtil(new ConfigurationUtil(this));
-    setSkyWarsManager(new SkyWarsManager());
+    instance = this;
+    worldUtil = new WorldUtil(this);
+    configurationUtil = new ConfigurationUtil(this);
+    skyWarsManager = new SkyWarsManager();
     ArenaManager arenaManager = skyWarsManager.getArenaManager();
     MenuManager menuManager = skyWarsManager.getMenuManager();
     GamePlayerManager playerManager = skyWarsManager.getPlayerManager();
@@ -131,20 +118,16 @@ public class SkyWars extends JavaPlugin {
     pluginManager.registerEvents(new PlayerDeathListener(playerManager), this);
     pluginManager.registerEvents(new PlayerDropItemListener(playerManager), this);
     pluginManager.registerEvents(new PlayerInteractListener(menuManager, arenaManager, playerManager), this);
-    pluginManager.registerEvents(new PlayerJoinArenaListener(), this);
-    pluginManager.registerEvents(new PlayerJoinListener(this, playerManager), this);
-    pluginManager.registerEvents(new PlayerQuitArenaListener(), this);
+    pluginManager.registerEvents(new PlayerJoinListener(playerManager), this);
     pluginManager.registerEvents(new PlayerQuitListener(playerManager), this);
     pluginManager.registerEvents(new PlayerRespawnListener(), this);
-    pluginManager.registerEvents(new SpectatorJoinArenaListener(), this);
-    pluginManager.registerEvents(new SpectatorQuitArenaListener(), this);
     pluginManager.registerEvents(new WorldUnloadListener(), this);
 
-    getCommand("skywars").setExecutor(new SkyWarsCommand(server, this, arenaManager, playerManager));
+    getCommand("skywars").setExecutor(new SkyWarsCommand(server, arenaManager, playerManager));
     getCommand("leave").setExecutor(new LeaveCommand(playerManager));
     getCommand("party").setExecutor(new PartyCommand(server, playerManager));
 
-    new GameScoreboard(plugin, configurationUtil, playerManager);
+    new GameScoreboard(instance, configurationUtil, playerManager);
 
     bukkitScheduler.runTaskTimer(this, () -> {
       for (Arena arena : arenaManager.getGameArenasAsSet()) {
@@ -153,12 +136,13 @@ public class SkyWars extends JavaPlugin {
     }, 20L, 20L);
   }
 
+  @Override
   public void onDisable() {
-    Server server = getServer();
-
     if (skyWarsManager != null) {
       for (Arena arena : skyWarsManager.getArenaManager().getGameArenasAsSet()) {
-        worldUtil.delete(null, arena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
+        worldUtil.kickPlayers(arena.getWorld(), SkyWars.getSpawn());
+        worldUtil.unload(arena.getWorld());
+        worldUtil.delete(arena.getWorld());
       }
     }
   }

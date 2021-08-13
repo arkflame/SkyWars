@@ -3,18 +3,18 @@ package dev._2lstudios.skywars.utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.skywars.SkyWars;
-import dev._2lstudios.skywars.tasks.CopyMapTask;
-import dev._2lstudios.skywars.tasks.GenerateMapTask;
+import dev._2lstudios.skywars.generators.VoidGenerator;
 
 public class WorldUtil {
   private final Plugin plugin;
@@ -23,77 +23,106 @@ public class WorldUtil {
     this.plugin = plugin;
   }
 
-  public void create(Runnable callback, String worldName, AtomicReference<World> atomicWorld) {
-    World serverWorld = this.plugin.getServer().getWorld(worldName);
-    if (serverWorld == null) {
-      BukkitUtil.runAsync(this.plugin, () -> {
-        CopyMapTask copyMapTask = new CopyMapTask(this.plugin,
-            new GenerateMapTask(this.plugin, callback, worldName, atomicWorld), worldName);
-        copyMapTask.run();
-      });
-    } else {
-      atomicWorld.set(serverWorld);
+  /*
+   * Copies: Map folder -> World folder
+   */
+  public void copyMapWorld(Plugin plugin, String mapName) {
+    try {
+      File arenaWorldFolder = new File(mapName);
+      File arenaMapFolder = new File(this.plugin.getDataFolder() + "/maps/worlds/" + mapName);
 
-      if (callback != null) {
-        callback.run();
-      }
-
-      this.plugin.getLogger().info("Created world " + worldName + "!");
+      FileUtils.deleteQuietly(arenaWorldFolder);
+      FileUtils.copyDirectory(arenaMapFolder, arenaWorldFolder);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
-  public void delete(Runnable callback, World world, Location fallback) {
+  /*
+   * Copies: World folder -> Map folder
+   */
+  public void copyWorldMap(World world) {
     if (world == null) {
-      if (callback != null) {
-        callback.run();
-      }
-    } else {
-      BukkitUtil.runSync(this.plugin, () -> {
-        String worldName = world.getName();
-        Collection<Player> worldPlayers = world.getPlayers();
+      return;
+    }
 
-        for (Player player : worldPlayers) {
-          if (player.isDead())
-            player.spigot().respawn();
-          player.teleport(fallback);
-        }
+    final String dataFolder = SkyWars.getInstance().getDataFolder().getPath();
+    final File worldFolder = world.getWorldFolder();
+    final File mapFolder = new File(dataFolder + "/maps/worlds/" + world.getName() + "/");
 
-        Bukkit.unloadWorld(world, false);
-
-        if (callback != null)
-          BukkitUtil.runAsync(this.plugin, () -> {
-            final String worldsFolder = Bukkit.getServer().getWorldContainer().getPath();
-
-            FileUtils.deleteQuietly(new File(worldsFolder + "/" + worldName + "/"));
-
-            if (callback != null) {
-              callback.run();
-            }
-          });
-      });
+    try {
+      FileUtils.deleteDirectory(mapFolder);
+      FileUtils.copyDirectory(worldFolder, mapFolder);
+      FileUtils.deleteDirectory(new File(worldFolder.getAbsolutePath() + "/data"));
+      FileUtils.deleteDirectory(new File(worldFolder.getAbsolutePath() + "/playerdata"));
+    } catch (final IOException e) {
+      e.printStackTrace();
     }
   }
 
-  public void save(Runnable callback, World world) {
-    BukkitUtil.runSync(this.plugin, () -> {
-      world.save();
-      BukkitUtil.runAsync(this.plugin, () -> {
-        final String worldName = world.getName();
-        final String worldsFolder = Bukkit.getServer().getWorldContainer().getPath();
-        final String dataFolder = SkyWars.getPlugin().getDataFolder().getPath();
-        final String worldPath = new File(worldsFolder + "/" + worldName + "/").getPath();
-        final String mapPath = new File(dataFolder + "/maps/worlds/" + worldName + "/").getPath();
+  /*
+   * Creates/Loads an empty world
+   */
+  public World create(final String worldName) {
+    World world = new WorldCreator(worldName).generateStructures(false).generator(new VoidGenerator()).createWorld();
+    WorldBorder worldBorder = world.getWorldBorder();
 
-        try {
-          FileUtils.copyFile(new File(worldPath), new File(mapPath));
-        } catch (final IOException e) {
-          e.printStackTrace();
-        }
+    worldBorder.setCenter(0.0D, 0.0D);
+    worldBorder.setSize(300.0D);
+    worldBorder.setDamageAmount(2.0D);
+    worldBorder.setDamageBuffer(0.0D);
+    world.setThundering(false);
+    world.setStorm(false);
+    world.setTime(6000L);
+    world.setGameRuleValue("doMobSpawning", "false");
+    world.setGameRuleValue("mobGriefing", "false");
+    world.setGameRuleValue("doFireTick", "false");
+    world.setGameRuleValue("showDeathMessages", "false");
+    world.setGameRuleValue("doDaylightCycle", "false");
+    world.setGameRuleValue("sendCommandFeedback", "false");
+    world.setSpawnLocation(0, 63, 0);
 
-        if (callback != null) {
-          callback.run();
-        }
-      });
-    });
+    return world;
+  }
+
+  /*
+   * Kicks players from a world
+   */
+  public void kickPlayers(final World world, Location fallback) {
+    if (world == null) {
+      return;
+    }
+
+    Collection<Player> worldPlayers = world.getPlayers();
+
+    for (Player player : worldPlayers) {
+      if (player.isDead()) {
+        player.spigot().respawn();
+      }
+
+      player.teleport(fallback);
+    }
+  }
+
+  /*
+   * Unloads a currently loaded world
+   */
+  public void unload(World world) {
+    if (world == null) {
+      return;
+    }
+
+    Bukkit.unloadWorld(world, false);
+  }
+
+  /*
+   * Deletes a world folder
+   */
+  public void delete(World world) {
+    if (world == null) {
+      return;
+    }
+
+    FileUtils.deleteQuietly(world.getWorldFolder());
   }
 }

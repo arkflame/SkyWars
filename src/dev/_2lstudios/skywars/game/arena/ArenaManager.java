@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.GameState;
@@ -28,7 +26,7 @@ public class ArenaManager {
     Arena selectedGameArena = null;
     int lastArenaPlayers = -1;
     for (Arena arena : arenas) {
-      int arenaPlayers = arena.getPlayers().size();
+      int arenaPlayers = arena.getPlayers().getPlayers().size();
       if (arenaPlayers > lastArenaPlayers && arenaPlayers < arena.getSpawns().size() && arena
         .getState() == GameState.WAITING) {
         selectedGameArena = arena;
@@ -60,18 +58,18 @@ public class ArenaManager {
   
   public void removeGameArena(String arenaName) {
     if (this.arenasMap.containsKey(arenaName)) {
+      File dataFolder = SkyWars.getInstance().getDataFolder();
       WorldUtil worldUtil = SkyWars.getWorldUtil();
-      Server server = Bukkit.getServer();
       Arena arena = this.arenasMap.get(arenaName);
+      
       arena.removePlayers();
       arena.removeSpectators();
       this.arenasMap.remove(arenaName);
-      worldUtil.delete(() -> {
-              File dataFolder = SkyWars.getPlugin().getDataFolder();
-
-              FileUtils.deleteQuietly(new File(dataFolder + "/maps/worlds/" + arenaName));
-              FileUtils.deleteQuietly(new File(dataFolder + "/maps/data/" + arenaName + ".yml"));
-          },arena.getWorld(), server.getWorlds().get(0).getSpawnLocation());
+      worldUtil.kickPlayers(arena.getWorld(), SkyWars.getSpawn());
+      worldUtil.unload(arena.getWorld());
+      worldUtil.delete(arena.getWorld());
+      FileUtils.deleteQuietly(new File(dataFolder + "/maps/worlds/" + arenaName));
+      FileUtils.deleteQuietly(new File(dataFolder + "/maps/data/" + arenaName + ".yml"));
     } 
   }
 }

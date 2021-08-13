@@ -11,11 +11,9 @@ import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class PlayerJoinListener implements Listener {
-  private final SkyWars skywars;
   private final GamePlayerManager playerManager;
 
-  public PlayerJoinListener(SkyWars skywars, GamePlayerManager playerManager) {
-    this.skywars = skywars;
+  public PlayerJoinListener(GamePlayerManager playerManager) {
     this.playerManager = playerManager;
   }
 
@@ -24,7 +22,7 @@ public class PlayerJoinListener implements Listener {
     Player player = event.getPlayer();
     GamePlayer gamePlayer = this.playerManager.addGamePlayer(player);
 
-    player.teleport(this.skywars.getServer().getWorlds().get(0).getSpawnLocation());
+    player.teleport(SkyWars.getSpawn());
     gamePlayer.clear(GameMode.ADVENTURE);
     gamePlayer.giveItems(0);
   }

@@ -25,7 +25,7 @@ public class ArenaTimeVotes {
 
     public TimeType getMostVotedTime() {
         Map<TimeType, Integer> votes = new EnumMap<>(TimeType.class);
-        TimeType mostVoted = TimeType.DIA;
+        TimeType mostVoted = TimeType.DAY;
         int mostVotedNumber = 0;
         for (TimeVote timeVote : this.timeVotes)
             votes.put(timeVote.getType(), Integer
@@ -58,7 +58,7 @@ public class ArenaTimeVotes {
             if (gamePlayer != null) {
                 Player player = gamePlayer.getPlayer();
                 arena.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7" + player.getDisplayName()
-                        + "&a voto por tiempo &b" + timeType.name().toLowerCase() + "&a!"));
+                        + "&a voto por tiempo &b" + timeType.getName() + "&a!"));
             }
         }
     }

@@ -8,6 +8,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import dev._2lstudios.skywars.SkyWars;
+
 public class BukkitUtil {
   public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
     player.setTitleTimes(fadeIn, stay, fadeOut);
@@ -30,8 +32,10 @@ public class BukkitUtil {
     return null;
   }
 
-  public static void runSync(Plugin plugin, Runnable runnable) {
+  public static void runSync(Runnable runnable) {
+    Plugin plugin = SkyWars.getInstance();
     Server server = plugin.getServer();
+
     if (plugin.isEnabled() && !server.isPrimaryThread()) {
       Objects.requireNonNull(runnable);
       server.getScheduler().runTask(plugin, runnable::run);
@@ -40,11 +44,8 @@ public class BukkitUtil {
     }
   }
 
-  public static void runAsync(Plugin plugin, Runnable runnable) {
-    if (runnable == null) {
-      return;
-    }
-
+  public static void runAsync(Runnable runnable) {
+    Plugin plugin = SkyWars.getInstance();
     Server server = plugin.getServer();
 
     if (plugin.isEnabled() && server.isPrimaryThread()) {

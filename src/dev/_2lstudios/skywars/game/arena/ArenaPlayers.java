@@ -6,26 +6,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Server;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-
-import dev._2lstudios.skywars.events.PlayerJoinArenaEvent;
-import dev._2lstudios.skywars.events.PlayerQuitArenaEvent;
-import dev._2lstudios.skywars.events.SpectatorJoinArenaEvent;
-import dev._2lstudios.skywars.events.SpectatorQuitArenaEvent;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerMode;
 
 public class ArenaPlayers {
   private final Map<UUID, GamePlayer> players = new ConcurrentHashMap<>();
-  private final Server server;
-  private final Arena arena;
-
-  ArenaPlayers(final Server server, final Arena arena) {
-    this.server = server;
-    this.arena = arena;
-  }
 
   private Collection<GamePlayer> getPlayers(GamePlayerMode filterMode) {
     final Collection<GamePlayer> filteredPlayers = new HashSet<>();
@@ -48,20 +33,7 @@ public class ArenaPlayers {
   }
 
   public void add(GamePlayer gamePlayer) {
-    final Event event;
-
-    if (gamePlayer.getPlayerMode() == GamePlayerMode.PLAYER) {
-      event = new PlayerJoinArenaEvent(gamePlayer, arena);
-    } else if (gamePlayer.getPlayerMode() == GamePlayerMode.SPECTATOR) {
-      event = new SpectatorJoinArenaEvent(gamePlayer, arena);
-    } else {
-      event = null;
-    }
-
-    if (event instanceof Cancellable && !((Cancellable) event).isCancelled()) {
-      server.getPluginManager().callEvent(event);
-      players.put(gamePlayer.getUUID(), gamePlayer);
-    }
+    players.put(gamePlayer.getUUID(), gamePlayer);
   }
 
   public void addPlayer(GamePlayer gamePlayer) {
@@ -76,48 +48,27 @@ public class ArenaPlayers {
     add(gamePlayer);
   }
 
-  public void removePlayer(GamePlayer gamePlayer) {
-    if (players.remove(gamePlayer.getUUID()) != null) {
-      server.getPluginManager().callEvent(new PlayerQuitArenaEvent(gamePlayer, arena));
-    }
-  }
-
-  public void removeSpectator(GamePlayer gamePlayer) {
-    if (players.remove(gamePlayer.getUUID()) != null) {
-      server.getPluginManager().callEvent(new SpectatorQuitArenaEvent(gamePlayer, arena));
-    }
+  public void remove(GamePlayer gamePlayer) {
+    players.remove(gamePlayer.getUUID());
   }
 
   public void removePlayers() {
     for (GamePlayer gamePlayer : new HashSet<>(getPlayers())) {
-      removePlayer(gamePlayer);
+      gamePlayer.updateArena(null, null);
     }
   }
 
   public void removeSpectators() {
     for (GamePlayer gamePlayer : new HashSet<>(getSpectators())) {
-      removeSpectator(gamePlayer);
+      gamePlayer.updateArena(null, null);
     }
   }
 
-  public boolean isEmpty() {
-    return players.isEmpty();
-  }
-
-  public int size() {
-    return players.size();
-  }
-
   public GamePlayer getFirstPlayer() {
-    for (final GamePlayer gamePlayer : players.values()) {
+    for (final GamePlayer gamePlayer : getPlayers()) {
       return gamePlayer;
     }
 
     return null;
-  }
-
-  public void remove(GamePlayer gamePlayer) {
-    removePlayer(gamePlayer);
-    removeSpectator(gamePlayer);
   }
 }

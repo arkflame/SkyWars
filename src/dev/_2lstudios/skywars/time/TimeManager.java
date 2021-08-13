@@ -23,18 +23,18 @@ public class TimeManager {
     ItemMeta dayOpenItemMeta = dayOpenItem.getItemMeta();
     ItemMeta noonOpenItemMeta = noonOpenItem.getItemMeta();
     ItemMeta nightOpenItemMeta = nightOpenItem.getItemMeta();
-    morningOpenItemMeta.setDisplayName(ChatColor.RED + "Manana");
-    dayOpenItemMeta.setDisplayName(ChatColor.YELLOW + "Dia");
-    noonOpenItemMeta.setDisplayName(ChatColor.GOLD + "Tarde");
-    nightOpenItemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + "Noche");
+    morningOpenItemMeta.setDisplayName(ChatColor.RED + TimeType.MORNING.getName());
+    dayOpenItemMeta.setDisplayName(ChatColor.YELLOW + TimeType.DAY.getName());
+    noonOpenItemMeta.setDisplayName(ChatColor.GOLD + TimeType.NOON.getName());
+    nightOpenItemMeta.setDisplayName(ChatColor.LIGHT_PURPLE + TimeType.NIGHT.getName());
     morningOpenItem.setItemMeta(morningOpenItemMeta);
     dayOpenItem.setItemMeta(dayOpenItemMeta);
     noonOpenItem.setItemMeta(noonOpenItemMeta);
     nightOpenItem.setItemMeta(nightOpenItemMeta);
-    this.openItems.put(TimeType.MANANA, morningOpenItem);
-    this.openItems.put(TimeType.DIA, dayOpenItem);
-    this.openItems.put(TimeType.TARDE, noonOpenItem);
-    this.openItems.put(TimeType.NOCHE, nightOpenItem);
+    this.openItems.put(TimeType.MORNING, morningOpenItem);
+    this.openItems.put(TimeType.DAY, dayOpenItem);
+    this.openItems.put(TimeType.NOON, noonOpenItem);
+    this.openItems.put(TimeType.NIGHT, nightOpenItem);
   }
   
   public ItemStack getOpenItem(TimeType timeType) {

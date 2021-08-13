@@ -75,7 +75,7 @@ public class ChestManager {
             } else {
               material = Material.getMaterial(itemDataArray[index].toUpperCase());
               if (material == null)
-                SkyWars.getPlugin().getLogger()
+                SkyWars.getInstance().getLogger()
                   .info(itemDataArray[index] + " from " + chestType + ".yml cannot be loaded!"); 
             } 
           } else if (index == 2) {

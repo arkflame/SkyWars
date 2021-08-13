@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class ArenaChestVotes {
         for (ChestType chestType : chestVotes.values())
             votes.put(chestType,
                     Integer.valueOf(((Integer) votes.getOrDefault(chestType, Integer.valueOf(0))).intValue() + 1));
-        for (Map.Entry<ChestType, Integer> entry : votes.entrySet()) {
+        for (Entry<ChestType, Integer> entry : votes.entrySet()) {
             ChestType chestType = entry.getKey();
             int number = ((Integer) entry.getValue()).intValue();
             if (number > mostVotedNumber) {
@@ -35,11 +36,6 @@ public class ArenaChestVotes {
             }
         }
         if (mostVotedNumber == 0) {
-            int random = (int) (Math.random() * 3.0D);
-            if (random == 0)
-                return ChestType.INSANE;
-            if (random == 1)
-                return ChestType.BASIC;
             return ChestType.NORMAL;
         }
         return mostVoted;

@@ -28,10 +28,10 @@ public class TimeMenu implements GameMenu {
     ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
     this.openItem.setItemMeta(openItemMeta);
-    this.inventory.setItem(10, timeManager.getOpenItem(TimeType.MANANA));
-    this.inventory.setItem(12, timeManager.getOpenItem(TimeType.DIA));
-    this.inventory.setItem(14, timeManager.getOpenItem(TimeType.TARDE));
-    this.inventory.setItem(16, timeManager.getOpenItem(TimeType.NOCHE));
+    this.inventory.setItem(10, timeManager.getOpenItem(TimeType.MORNING));
+    this.inventory.setItem(12, timeManager.getOpenItem(TimeType.DAY));
+    this.inventory.setItem(14, timeManager.getOpenItem(TimeType.NOON));
+    this.inventory.setItem(16, timeManager.getOpenItem(TimeType.NIGHT));
   }
   
   public Inventory getInventory(GamePlayer gamePlayer) {

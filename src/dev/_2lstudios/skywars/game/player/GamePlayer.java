@@ -3,14 +3,17 @@ package dev._2lstudios.skywars.game.player;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.arena.ArenaSpawn;
+import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.menus.MenuManager;
 import dev._2lstudios.skywars.menus.MenuType;
@@ -18,7 +21,7 @@ import dev._2lstudios.skywars.menus.MenuType;
 public class GamePlayer {
   private final Player player;
 
-  private GamePlayerMode playerMode = null;
+  private GamePlayerMode mode = null;
   private GamePlayerParty party = null;
   private ArenaSpawn spawn = null;
   private Arena arena = null;
@@ -34,11 +37,11 @@ public class GamePlayer {
   }
 
   public GamePlayerMode getPlayerMode() {
-    return playerMode;
+    return mode;
   }
 
   public void setPlayerMode(GamePlayerMode playerMode) {
-    this.playerMode = playerMode;
+    this.mode = playerMode;
   }
 
   public UUID getUUID() {
@@ -73,7 +76,7 @@ public class GamePlayer {
     return lastArena;
   }
 
-  public void setArena(final Arena arena) {
+  private void setArena(final Arena arena) {
     this.lastArena = this.arena;
     this.arena = arena;
   }
@@ -193,8 +196,83 @@ public class GamePlayer {
     }
   }
 
+  public void updateArena(final Arena newArena, final GamePlayerMode newMode) {
+    if (this.arena != null) {
+      if (this.arena.getPlayers().getPlayers().size() > 1) {
+        if (arena.getState() == GameState.PLAYING && this.mode == GamePlayerMode.PLAYER && !player.isDead()
+            && player.getHealth() > 0) {
+          player.setHealth(0);
+        } else {
+          if (arena.getState() == GameState.WAITING) {
+            final GamePlayerParty party = getParty();
+
+            if (party != null && party.getOwner() == this) {
+              party.updateArena(newArena, newMode);
+            }
+
+            arena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " salio de la partida ("
+                + ChatColor.AQUA + (arena.getPlayers().getPlayers().size() - 1) + ChatColor.YELLOW + "/"
+                + ChatColor.AQUA + arena.getSpawns().size() + ChatColor.YELLOW + ")!");
+          }
+        }
+      }
+
+      this.arena.getPlayers().remove(this);
+      this.arena.removeChestVote(getUUID());
+      this.arena.removeTimeVote(getUUID());
+    }
+
+    if (newArena != null) {
+      if (newMode == GamePlayerMode.SPECTATOR) {
+        if (player.getWorld() != arena.getArenaWorld() || player.getLastDamageCause() == null
+            || player.getLastDamageCause().getCause() == DamageCause.VOID) {
+          player.teleport(arena.getArenaWorld().getSpectatorSpawn(this));
+        }
+
+        clear(GameMode.ADVENTURE);
+        update();
+        giveItems(0);
+        newArena.getPlayers().add(this);
+
+        setArena(newArena);
+        this.mode = newMode;
+      } else {
+        if (newArena.getState() == GameState.WAITING) {
+          final ArenaSpawn arenaSpawn = newArena.getArenaWorld().getFirstSpawn();
+
+          if (arenaSpawn != null) {
+            setGameSpawn(arenaSpawn);
+            arenaSpawn.createCage(SkyWars.getSkyWarsManager().getCageManager().getCage(getSelectedCage()));
+            player.teleport(arenaSpawn.getLocation());
+            newArena.getPlayers().add(this);
+            clear(GameMode.ADVENTURE);
+            update();
+            giveItems(1);
+            setArena(newArena);
+            this.mode = newMode;
+
+            newArena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " entro a la partida ("
+                + ChatColor.AQUA + newArena.getPlayers().getPlayers().size() + ChatColor.YELLOW + "/" + ChatColor.AQUA
+                + newArena.getSpawns().size() + ChatColor.YELLOW + ")!");
+          } else {
+            player.sendMessage(ChatColor.RED + "La arena esta llena!");
+          }
+        } else {
+          player.sendMessage(ChatColor.RED + "La arena esta en juego!");
+        }
+      }
+    } else {
+      player.teleport(SkyWars.getSpawn());
+      setArena(newArena);
+      this.mode = null;
+      clear(GameMode.ADVENTURE);
+      update();
+      giveItems(0);
+    }
+  }
+
   public boolean isSpectating() {
-    return playerMode == GamePlayerMode.SPECTATOR;
+    return mode == GamePlayerMode.SPECTATOR;
   }
 
   public GamePlayerParty createParty() {

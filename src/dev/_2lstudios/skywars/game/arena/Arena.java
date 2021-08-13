@@ -2,14 +2,12 @@ package dev._2lstudios.skywars.game.arena;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -57,7 +55,7 @@ public class Arena {
     this.chestVotes = new ArenaChestVotes(this);
     this.timeVotes = new ArenaTimeVotes(this);
     this.arenaWorld = new ArenaWorld(this);
-    this.arenaPlayers = new ArenaPlayers(Bukkit.getServer(), this);
+    this.arenaPlayers = new ArenaPlayers();
   }
 
   public void load(Runnable callback) {
@@ -106,7 +104,7 @@ public class Arena {
 
     config.set("spectator_spawn", arenaWorld.getSpectatorVector());
     SkyWars.getConfigurationUtil().saveConfiguration(config, "%datafolder%/maps/data/" + this.arenaName + ".yml");
-    SkyWars.getWorldUtil().save(callback, world);
+    SkyWars.getWorldUtil().copyWorldMap(world);
   }
 
   public void setWorld(World world) {
@@ -139,7 +137,7 @@ public class Arena {
 
   public void tickArena() {
     if (this.state == GameState.WAITING) {
-      if (arenaPlayers.size() > 1) {
+      if (arenaPlayers.getPlayers().size() > 1) {
         if (this.seconds < START_SECONDS) {
           final World world = arenaWorld.getWorld();
           int timeLeft = START_SECONDS - this.seconds;
@@ -164,7 +162,7 @@ public class Arena {
       } else if (this.seconds != 0) {
         this.seconds = 0;
       }
-    } else if (this.state == GameState.PLAYING && arenaPlayers.size() < 2) {
+    } else if (this.state == GameState.PLAYING && arenaPlayers.getPlayers().size() < 2) {
       setState(null, GameState.WAITING);
     }
   }
@@ -182,7 +180,7 @@ public class Arena {
       Sound sound = Sound.valueOf(soundString);
       world.playSound(world.getSpawnLocation(), sound, 300.0F, pitch);
     } catch (Exception ignored) {
-      SkyWars.getPlugin().getLogger().info("The sound ".concat(soundString).concat(" wasn't found!"));
+      SkyWars.getInstance().getLogger().info("The sound ".concat(soundString).concat(" wasn't found!"));
     }
   }
 
@@ -262,14 +260,30 @@ public class Arena {
   public void setState(Runnable callback, GameState newState) {
     if (this.state == GameState.EDITING && newState != GameState.EDITING) {
       save(() -> resetArena(null));
+
+      this.state = newState;
     } else if (newState == GameState.EDITING && this.state != GameState.EDITING) {
-      Server server = Bukkit.getServer();
+      WorldUtil worldUtil = SkyWars.getWorldUtil();
+
       removePlayers();
       removeSpectators();
-      AtomicReference<World> atomicWorld = new AtomicReference<>(null);
-      WorldUtil worldUtil = SkyWars.getWorldUtil();
-      worldUtil.delete(() -> worldUtil.create(null, this.arenaName, atomicWorld), arenaWorld.getWorld(),
-          server.getWorlds().get(0).getSpawnLocation());
+
+      BukkitUtil.runSync(() -> {
+        worldUtil.kickPlayers(getWorld(), SkyWars.getSpawn());
+        BukkitUtil.runAsync(() -> {
+          worldUtil.unload(getWorld());
+          worldUtil.delete(getWorld());
+
+          BukkitUtil.runSync(() -> {
+            worldUtil.create(arenaName);
+
+            if (callback != null)
+              callback.run();
+          });
+        });
+      });
+
+      this.state = newState;
     } else if (newState == GameState.PLAYING) {
       CageManager cageManager = SkyWars.getSkyWarsManager().getCageManager();
       KitManager kitManager = SkyWars.getSkyWarsManager().getKitManager();
@@ -309,12 +323,14 @@ public class Arena {
 
       addChestVote(null, chestType);
       sendSound("ENDERDRAGON_GROWL", 1.0F);
+
+      this.state = newState;
     } else if (newState == GameState.WAITING) {
       final GamePlayer winner = arenaPlayers.getFirstPlayer();
 
       if (winner != null) {
         Player player = winner.getPlayer();
-        
+
         if (player != null) {
           BukkitUtil.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&6&lVICTORIA"),
               ChatColor.GRAY + "Has sido el ultimo superviviente", 20, 20, 20);
@@ -336,11 +352,14 @@ public class Arena {
       }
       removePlayers();
       removeSpectators();
-      resetArena(null);
+
+      resetArena(() -> {
+        this.state = newState;
+  
+        if (callback != null)
+          callback.run();
+      });
     }
-    if (callback != null)
-      callback.run();
-    this.state = newState;
   }
 
   public ArenaKills getKills() {
@@ -352,7 +371,7 @@ public class Arena {
   }
 
   public void resetArena(Runnable callback) {
-    arenaWorld.resetArena(callback);
+    arenaWorld.reset(callback);
   }
 
   public void clearChestVotes() {
