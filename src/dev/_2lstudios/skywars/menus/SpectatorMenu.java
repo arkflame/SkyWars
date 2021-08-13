@@ -18,6 +18,7 @@ import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerMode;
 
 public class SpectatorMenu implements GameMenu {
   private static final int INVENTORY_SIZE = 54;
@@ -116,7 +117,7 @@ public class SpectatorMenu implements GameMenu {
         if (isInSlot) {
           Arena arena1 = this.arenaManager.getArena(ChatColor.stripColor(itemStack.getItemMeta().getDisplayName().toLowerCase()));
           if (arena1 != null) {
-            arena1.addSpectator(gamePlayer);
+            gamePlayer.updateArena(arena1, GamePlayerMode.SPECTATOR);
             gamePlayer.getPlayer().closeInventory();
           } 
         } 

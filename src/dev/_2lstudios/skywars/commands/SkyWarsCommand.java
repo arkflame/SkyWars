@@ -67,7 +67,7 @@ public class SkyWarsCommand implements CommandExecutor {
         Arena specGameArena = this.arenaManager.getArena(arenaName);
         if (specGameArena != null) {
           if (gamePlayer.getArena() == null) {
-            specGameArena.addSpectator(gamePlayer);
+            gamePlayer.updateArena(specGameArena, GamePlayerMode.SPECTATOR);
           } else {
             player.sendMessage(ChatColor.RED + "No puedes espectar estando en juego!");
           }
@@ -78,7 +78,7 @@ public class SkyWarsCommand implements CommandExecutor {
             if (specGamePlayer != null) {
               specGameArena = specGamePlayer.getArena();
               if (specGameArena != null) {
-                specGameArena.addSpectator(gamePlayer);
+                gamePlayer.updateArena(specGameArena, GamePlayerMode.SPECTATOR);
               } else {
                 player.sendMessage(ChatColor.RED + "El jugador no esta en juego!");
               }

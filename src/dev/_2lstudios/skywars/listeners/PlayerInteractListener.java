@@ -56,7 +56,7 @@ public class PlayerInteractListener implements Listener {
           ItemMeta itemMeta = itemStack.getItemMeta();
           if (itemMeta != null && itemMeta.hasDisplayName()) {
             String displayName = itemMeta.getDisplayName();
-            if (displayName != null && !displayName.isEmpty())
+            if (displayName != null && !displayName.isEmpty()) {
               if (itemStack.isSimilar(SkyWars.getRandomMapItem())) {
                 Arena arena = this.arenaManager.getMaxPlayerAvailableArena();
                 if (arena != null) {
@@ -80,6 +80,7 @@ public class PlayerInteractListener implements Listener {
                   }
                 }
               }
+            }
           }
         }
       }
