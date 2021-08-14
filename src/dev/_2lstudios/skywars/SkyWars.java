@@ -14,6 +14,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import dev._2lstudios.scoreboard.Main;
+import dev._2lstudios.scoreboard.managers.SidebarManager;
 import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
@@ -109,6 +111,9 @@ public class SkyWars extends JavaPlugin {
       }
     }
 
+    final SidebarManager sidebarManager = Main.getMainManager().getVariableManager().getSidebarManager();
+    new GameScoreboard(instance, configurationUtil, playerManager, sidebarManager);
+
     pluginManager.registerEvents(new BlockBreakListener(playerManager), this);
     pluginManager.registerEvents(new BlockPlaceListener(playerManager), this);
     pluginManager.registerEvents(new EntityDamageByEntityListener(playerManager), this);
@@ -126,8 +131,6 @@ public class SkyWars extends JavaPlugin {
     getCommand("skywars").setExecutor(new SkyWarsCommand(server, arenaManager, playerManager));
     getCommand("leave").setExecutor(new LeaveCommand(playerManager));
     getCommand("party").setExecutor(new PartyCommand(server, playerManager));
-
-    new GameScoreboard(instance, configurationUtil, playerManager);
 
     bukkitScheduler.runTaskTimer(this, () -> {
       for (Arena arena : arenaManager.getGameArenasAsSet()) {
