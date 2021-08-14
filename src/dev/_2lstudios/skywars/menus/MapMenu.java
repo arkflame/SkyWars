@@ -112,13 +112,19 @@ public class MapMenu implements GameMenu, Listener {
     // TODO Fix how menus are structured
   }
 
-  @Override
-  public Inventory getInventory(GamePlayer gamePlayer) {
+  public Inventory getInventory(GamePlayer gamePlayer, final int page) {
     final Collection<Arena> arenas = this.arenaManager.getGameArenasAsSet();
     final Collection<ItemStack> arenaItems = generateItems(arenas);
     
     InventoryAPI.getInstance().getInventoryUtil()
-        .createDisplayInventory(TITLE, gamePlayer.getPlayer(), 1, ID, arenaItems);
+        .createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID, arenaItems);
+
+    return null;
+  }
+
+  @Override
+  public Inventory getInventory(GamePlayer gamePlayer) {
+    getInventory(gamePlayer, 1);
 
     return null;
   }
@@ -137,10 +143,10 @@ public class MapMenu implements GameMenu, Listener {
         final ItemMeta itemMeta = item.getItemMeta();
 
         if (itemMeta != null && itemMeta.hasDisplayName()) {
-          if (item.isSimilar(inventoryUtil.getBackItem(page - 1))) {
-            inventoryWrapper.setPage(page - 1);
-          } else if (item.isSimilar(inventoryUtil.getNextItem(page + 1))) {
-            inventoryWrapper.setPage(page + 1);
+          if (item.isSimilar(inventoryUtil.getBackItem(page))) {
+            getInventory(gamePlayer, page - 1);
+          } else if (item.isSimilar(inventoryUtil.getNextItem(page))) {
+            getInventory(gamePlayer, page + 1);
           } else if (item.isSimilar(inventoryUtil.getCloseItem())) {
             player.closeInventory();
           } else {

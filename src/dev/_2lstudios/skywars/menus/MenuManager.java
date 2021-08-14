@@ -26,11 +26,11 @@ public class MenuManager {
     addMenu(new ChestMenu(skyWarsManager.getChestManager()));
     addMenu(new TimeMenu(skyWarsManager.getTimeManager()));
     addMenu(new KitMenu(skyWarsManager.getKitManager()));
-    addMenu(new SpectatorMenu(skyWarsManager.getArenaManager()));
     addMenu(new VoteMenu(this));
     addMenu(new ShopMenu(this));
 
     addMenuNew(new MapMenu(skyWarsManager));
+    addMenuNew(new SpectatorMenu(skyWarsManager));
   }
 
   public Collection<GameMenu> getGameMenus() {
