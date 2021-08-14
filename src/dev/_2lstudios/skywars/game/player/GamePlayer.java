@@ -227,6 +227,8 @@ public class GamePlayer {
 
     if (newArena != null) {
       if (newMode == GamePlayerMode.SPECTATOR) {
+        this.mode = newMode;
+
         if (player.getWorld() != newArena.getArenaWorld() || player.getLastDamageCause() == null
             || player.getLastDamageCause().getCause() == DamageCause.VOID) {
           player.teleport(newArena.getArenaWorld().getSpectatorSpawn(this));
@@ -238,12 +240,13 @@ public class GamePlayer {
         newArena.getPlayers().add(this);
 
         setArena(newArena);
-        this.mode = newMode;
       } else {
         if (newArena.getState() == GameState.WAITING) {
           final ArenaSpawn arenaSpawn = newArena.getArenaWorld().getFirstSpawn();
 
           if (arenaSpawn != null) {
+            this.mode = newMode;
+
             setGameSpawn(arenaSpawn);
             arenaSpawn.createCage(SkyWars.getSkyWarsManager().getCageManager().getCage(getSelectedCage()));
             player.teleport(arenaSpawn.getLocation());
@@ -252,7 +255,6 @@ public class GamePlayer {
             update();
             giveItems(1);
             setArena(newArena);
-            this.mode = newMode;
 
             newArena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " entro a la partida ("
                 + ChatColor.AQUA + newArena.getPlayers().getPlayers().size() + ChatColor.YELLOW + "/" + ChatColor.AQUA
@@ -265,9 +267,9 @@ public class GamePlayer {
         }
       }
     } else {
+      this.mode = null;
       player.teleport(SkyWars.getSpawn());
       setArena(newArena);
-      this.mode = null;
       clear(GameMode.ADVENTURE);
       update();
       giveItems(0);
