@@ -174,7 +174,7 @@ public class SkyWarsCommand implements CommandExecutor {
             this.arenaManager.getArena(arena).setState(null, GameState.PLAYING);
             player.sendMessage(ChatColor.GREEN + "Comenzaste la arena forzosamente!");
           } else {
-            player.sendMessage(ChatColor.RED + "La arena no esta en modo edicion!");
+            player.sendMessage(ChatColor.RED + "La arena no esta en espera!");
           }
         } else {
           player.sendMessage(ChatColor.RED + args[0] + " no es un argumento valido!");
