@@ -167,11 +167,20 @@ public class SkyWarsCommand implements CommandExecutor {
           } else {
             player.sendMessage(ChatColor.RED + "/" + label + " " + args[0] + " add/remove");
           }
+        } else if (args[0].equalsIgnoreCase("start")) {
+          String arena = player.getWorld().getName();
+          if (this.arenaManager.getArena(arena) != null
+              && this.arenaManager.getArena(arena).getState() == GameState.WAITING) {
+            this.arenaManager.getArena(arena).setState(null, GameState.PLAYING);
+            player.sendMessage(ChatColor.GREEN + "Comenzaste la arena forzosamente!");
+          } else {
+            player.sendMessage(ChatColor.RED + "La arena no esta en modo edicion!");
+          }
         } else {
           player.sendMessage(ChatColor.RED + args[0] + " no es un argumento valido!");
         }
       } else {
-        player.sendMessage(ChatColor.RED + "Comando de SkyWars incorrecto!");
+        player.sendMessage(ChatColor.RED + args[0] + " no es un argumento valido!");
       }
     }
     return true;
