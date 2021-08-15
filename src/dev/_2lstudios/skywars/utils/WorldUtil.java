@@ -112,7 +112,7 @@ public class WorldUtil {
       return;
     }
 
-    Bukkit.unloadWorld(world, false);
+    Bukkit.unloadWorld(world, true);
   }
 
   /*
