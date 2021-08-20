@@ -219,7 +219,8 @@ public class GamePlayer {
           }
         }
       }
-
+      
+      setGameSpawn(null);
       this.arena.getPlayers().remove(this);
       this.arena.removeChestVote(getUUID());
       this.arena.removeTimeVote(getUUID());
@@ -227,6 +228,7 @@ public class GamePlayer {
 
     if (newArena != null) {
       if (newMode == GamePlayerMode.SPECTATOR) {
+        setArena(newArena);
         this.mode = newMode;
 
         if (player.getWorld() != newArena.getArenaWorld() || player.getLastDamageCause() == null
@@ -238,13 +240,12 @@ public class GamePlayer {
         update();
         giveItems(0);
         newArena.getPlayers().add(this);
-
-        setArena(newArena);
       } else {
         if (newArena.getState() == GameState.WAITING) {
           final ArenaSpawn arenaSpawn = newArena.getArenaWorld().getFirstSpawn();
 
           if (arenaSpawn != null) {
+            setArena(newArena);
             this.mode = newMode;
 
             setGameSpawn(arenaSpawn);
@@ -254,7 +255,6 @@ public class GamePlayer {
             clear(GameMode.ADVENTURE);
             update();
             giveItems(1);
-            setArena(newArena);
 
             newArena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " entro a la partida ("
                 + ChatColor.AQUA + newArena.getPlayers().getPlayers().size() + ChatColor.YELLOW + "/" + ChatColor.AQUA
