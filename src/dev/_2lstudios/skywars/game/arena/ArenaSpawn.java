@@ -10,14 +10,12 @@ import dev._2lstudios.skywars.tasks.CreateCageTask;
 
 public class ArenaSpawn {
   private final Vector vector;
-  
   private final String arenaName;
-  
   private UUID playerUUID;
   
   ArenaSpawn(Arena arena, Vector vector) {
     this.arenaName = arena.getName();
-    this.vector = vector.add(new Vector(0.5D, 0.5D, 0.5D));
+    this.vector = vector.add(new Vector(0.5, 0.5, 0.5));
   }
   
   public UUID getPlayerUUID() {
@@ -29,7 +27,7 @@ public class ArenaSpawn {
   }
   
   public Location getLocation() {
-    return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld());
+    return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld()).clone().add(0, 0.5, 0);
   }
   
   public void createCage(GameCage gameCage) {
