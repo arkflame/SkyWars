@@ -27,7 +27,7 @@ public class ArenaSpawn {
   }
   
   public Location getLocation() {
-    return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld()).clone().add(0, 0.5, 0);
+    return this.vector.toLocation(SkyWars.getSkyWarsManager().getArenaManager().getArena(this.arenaName).getWorld());
   }
   
   public void createCage(GameCage gameCage) {

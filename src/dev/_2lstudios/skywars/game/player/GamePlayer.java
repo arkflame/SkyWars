@@ -219,7 +219,7 @@ public class GamePlayer {
           }
         }
       }
-      
+
       setGameSpawn(null);
       this.arena.getPlayers().remove(this);
       this.arena.removeChestVote(getUUID());
@@ -250,7 +250,7 @@ public class GamePlayer {
 
             setGameSpawn(arenaSpawn);
             arenaSpawn.createCage(SkyWars.getSkyWarsManager().getCageManager().getCage(getSelectedCage()));
-            player.teleport(arenaSpawn.getLocation());
+            player.teleport(arenaSpawn.getLocation().add(0, 0.25, 0));
             newArena.getPlayers().add(this);
             clear(GameMode.ADVENTURE);
             update();
