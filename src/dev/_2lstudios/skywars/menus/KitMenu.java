@@ -13,11 +13,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
 import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
+import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameKit;
 import dev._2lstudios.skywars.game.GameMenu;
@@ -35,12 +37,16 @@ public class KitMenu implements GameMenu, Listener {
   private final InventoryUtil inventoryUtil;
 
   KitMenu(final SkyWarsManager skyWarsManager) {
+    final Plugin plugin = SkyWars.getInstance();
+
     this.kitManager = skyWarsManager.getKitManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Kits");
     this.openItem.setItemMeta(openItemMeta);
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   private Collection<ItemStack> generateItems(final Collection<GameKit> kits) {
