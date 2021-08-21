@@ -27,7 +27,9 @@ public class LeaveCommand implements CommandExecutor {
 
       if (arena != null) {
         if (arena.getState() == GameState.PLAYING && gamePlayer.getPlayerMode() == GamePlayerMode.PLAYER) {
+          if (!player.isDead() && player.getHealth() > 0) {
             player.setHealth(0);
+          }
         } else {
           if (gamePlayer.getPlayerMode() == GamePlayerMode.SPECTATOR) {
             gamePlayer.sendMessage(ChatColor.GREEN + "Saliste del modo espectador!");
