@@ -54,7 +54,7 @@ public class ShopMenu implements GameMenu {
         GameMenu kitMenu = this.menuManager.getMenu(MenuType.KIT);
         GameMenu cageMenu = this.menuManager.getMenu(MenuType.CAGE);
         if (itemStack.isSimilar(kitMenu.getOpenItem())) {
-          gamePlayer.getPlayer().openInventory(kitMenu.getInventory(gamePlayer));
+          kitMenu.getInventory(gamePlayer);
         } else if (itemStack.isSimilar(cageMenu.getOpenItem())) {
           gamePlayer.getPlayer().openInventory(cageMenu.getInventory(gamePlayer));
         } 
