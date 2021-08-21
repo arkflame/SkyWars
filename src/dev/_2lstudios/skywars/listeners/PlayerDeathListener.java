@@ -42,6 +42,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         gamePlayer.updateArena(arena, GamePlayerMode.SPECTATOR);
+        gamePlayer.update();
         arena.sendSound("ORB_PICKUP", 1.0F);
 
         BukkitUtil.sendTitle(player, ChatColor.translateAlternateColorCodes('&', "&c&lFIN DEL JUEGO"),

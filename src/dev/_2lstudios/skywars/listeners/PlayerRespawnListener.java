@@ -31,7 +31,6 @@ public class PlayerRespawnListener implements Listener {
       }
 
       gamePlayer.clear(GameMode.ADVENTURE);
-      gamePlayer.update();
       gamePlayer.giveItems(0);
     } else {
       event.setRespawnLocation(event.getPlayer().getLocation());
