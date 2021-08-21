@@ -6,7 +6,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import dev._2lstudios.skywars.game.GameState;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
@@ -26,17 +25,13 @@ public class LeaveCommand implements CommandExecutor {
       Arena arena = gamePlayer.getArena();
 
       if (arena != null) {
-        if (arena.getState() == GameState.PLAYING && gamePlayer.getPlayerMode() == GamePlayerMode.PLAYER) {
-          if (!player.isDead() && player.getHealth() > 0) {
-            player.setHealth(0);
-          }
+        if (gamePlayer.getPlayerMode() == GamePlayerMode.SPECTATOR) {
+          gamePlayer.sendMessage(ChatColor.GREEN + "Saliste del modo espectador!");
         } else {
-          if (gamePlayer.getPlayerMode() == GamePlayerMode.SPECTATOR) {
-            gamePlayer.sendMessage(ChatColor.GREEN + "Saliste del modo espectador!");
-          }
-
-          gamePlayer.updateArena(null, null);
+          gamePlayer.getPlayer().setHealth(0.0);
         }
+
+        gamePlayer.updateArena(null, null);
       } else {
         sender.sendMessage(ChatColor.RED + "No estas en ninguna arena!");
       }

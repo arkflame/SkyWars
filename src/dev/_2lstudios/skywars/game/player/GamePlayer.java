@@ -202,10 +202,6 @@ public class GamePlayer {
   public void updateArena(final Arena newArena, final GamePlayerMode newMode) {
     if (this.arena != null) {
       if (this.arena.getPlayers().getPlayers().size() > 1) {
-        if (arena.getState() == GameState.PLAYING && this.mode == GamePlayerMode.PLAYER && !player.isDead()
-            && player.getHealth() > 0) {
-          player.setHealth(0);
-        } else {
           if (arena.getState() == GameState.WAITING) {
             final GamePlayerParty party = getParty();
 
@@ -218,7 +214,6 @@ public class GamePlayer {
                 + ChatColor.AQUA + arena.getSpawns().size() + ChatColor.YELLOW + ")!");
           }
         }
-      }
 
       setGameSpawn(null);
       this.arena.getPlayers().remove(this);

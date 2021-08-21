@@ -90,12 +90,7 @@ public class SkyWarsCommand implements CommandExecutor {
           }
         }
       } else if (args[0].equalsIgnoreCase("leave")) {
-        Arena arena = gamePlayer.getArena();
-        if (arena != null) {
-          gamePlayer.updateArena(null, null);
-        } else {
-          player.sendMessage(ChatColor.RED + "No estas en ninguna arena!");
-        }
+        new LeaveCommand(playerManager).onCommand(sender, command, label, args);
       } else if (args[0].equalsIgnoreCase("list")) {
         player.sendMessage(ChatColor.BLUE + "Arenas Creadas:");
         for (Arena arena : this.arenaManager.getGameArenasAsList()) {
