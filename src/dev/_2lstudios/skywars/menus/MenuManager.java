@@ -22,13 +22,14 @@ public class MenuManager {
   }
 
   public MenuManager(SkyWarsManager skyWarsManager) {
+    addMenuNew(new KitMenu(skyWarsManager));
+
     addMenu(new CageMenu(skyWarsManager.getCageManager()));
     addMenu(new ChestMenu(skyWarsManager.getChestManager()));
     addMenu(new TimeMenu(skyWarsManager.getTimeManager()));
     addMenu(new VoteMenu(this));
     addMenu(new ShopMenu(this));
 
-    addMenuNew(new KitMenu(skyWarsManager));
     addMenuNew(new MapMenu(skyWarsManager));
     addMenuNew(new SpectatorMenu(skyWarsManager));
   }

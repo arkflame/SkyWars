@@ -33,7 +33,7 @@ public class InventoryClickListener implements Listener {
     if (humanEntity instanceof Player) {
       GamePlayer gamePlayer = this.playerManager.getPlayer((Player) humanEntity);
       if (gameMenu != null) {
-        if (gameMenu.getType() != MenuType.MAP) {
+        if (gameMenu.getType() != MenuType.MAP && gameMenu.getType() != MenuType.SPECTATOR && gameMenu.getType() != MenuType.KIT) {
           gameMenu.runAction(event.getSlot(), event.getCurrentItem(), gamePlayer);
           event.setCancelled(true);
         }
