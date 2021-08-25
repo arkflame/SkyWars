@@ -8,10 +8,14 @@ import org.bukkit.Material;
 import dev._2lstudios.skywars.game.GameCage;
 
 public class CageManager {
+  private final static GameCage AIR_CAGE = new GameCage("AIR", Material.AIR, Material.AIR, (byte) 0);
+  private final static GameCage WHITE_CAGE = new GameCage(ChatColor.GREEN + "Blanco", Material.STAINED_GLASS,
+      Material.STAINED_CLAY, (byte) 0);
+
   private final Map<String, GameCage> gameCages = new HashMap<>();
-  
+
   public CageManager() {
-    createCage(ChatColor.GREEN + "Blanco", Material.STAINED_GLASS, Material.STAINED_CLAY, 0);
+    createCage(WHITE_CAGE);
     createCage(ChatColor.GREEN + "Naranja", Material.STAINED_GLASS, Material.STAINED_CLAY, 1);
     createCage(ChatColor.GREEN + "Magenta", Material.STAINED_GLASS, Material.STAINED_CLAY, 2);
     createCage(ChatColor.GREEN + "Celeste", Material.STAINED_GLASS, Material.STAINED_CLAY, 3);
@@ -28,24 +32,28 @@ public class CageManager {
     createCage(ChatColor.GREEN + "Rojo", Material.STAINED_GLASS, Material.STAINED_CLAY, 14);
     createCage(ChatColor.GREEN + "Negro", Material.STAINED_GLASS, Material.STAINED_CLAY, 15);
   }
-  
-  public void createCage(String name, Material primaryMaterial, Material secondaryMaterial, int data) {
-    this.gameCages.put(name, new GameCage(name, primaryMaterial, secondaryMaterial, (byte)data));
+
+  public void createCage(final GameCage gameCage) {
+    this.gameCages.put(ChatColor.stripColor(gameCage.getDisplayName()), gameCage);
   }
-  
+
+  public void createCage(String name, Material primaryMaterial, Material secondaryMaterial, int data) {
+    createCage(new GameCage(name, primaryMaterial, secondaryMaterial, (byte) data));
+  }
+
   public Collection<GameCage> getCages() {
     return this.gameCages.values();
   }
-  
-  public GameCage getCage(String name) {
-    return this.gameCages.getOrDefault(name, new GameCage(ChatColor.GREEN + "Blanco", Material.STAINED_GLASS, Material.STAINED_CLAY, (byte)0));
-  }
-  
+
   public GameCage getDefaultCage() {
-    return new GameCage(ChatColor.GREEN + "Blanco", Material.STAINED_GLASS, Material.STAINED_CLAY, (byte) 0);
+    return WHITE_CAGE;
+  }
+
+  public GameCage getCage(String name) {
+    return this.gameCages.getOrDefault(name, getDefaultCage());
   }
 
   public GameCage getAirCage() {
-    return new GameCage("AIR", Material.AIR, Material.AIR, (byte) 0);
+    return AIR_CAGE;
   }
 }

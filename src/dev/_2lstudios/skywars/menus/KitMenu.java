@@ -85,8 +85,10 @@ public class KitMenu implements GameMenu, Listener {
   }
 
   @Override
-  public void runAction(final int paramInt, final ItemStack itemStack, final GamePlayer gamePlayer) {
-    // TODO Fix how menus are structured
+  public Inventory getInventory(GamePlayer gamePlayer) {
+    getInventory(gamePlayer, 1);
+
+    return null;
   }
 
   @Override
@@ -102,13 +104,6 @@ public class KitMenu implements GameMenu, Listener {
   @Override
   public MenuType getType() {
     return MenuType.KIT;
-  }
-
-  @Override
-  public Inventory getInventory(GamePlayer gamePlayer) {
-    getInventory(gamePlayer, 1);
-
-    return null;
   }
 
   @EventHandler(ignoreCancelled = true)
@@ -143,5 +138,10 @@ public class KitMenu implements GameMenu, Listener {
         }
       }
     }
+  }
+
+  @Override
+  public void runAction(final int paramInt, final ItemStack itemStack, final GamePlayer gamePlayer) {
+    // TODO: Fix how menus are structured
   }
 }
