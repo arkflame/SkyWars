@@ -13,11 +13,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
 import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
+import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameCage;
 import dev._2lstudios.skywars.game.GameMenu;
@@ -42,6 +44,9 @@ public class CageMenu implements GameMenu, Listener {
     ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Jaulas");
     this.openItem.setItemMeta(openItemMeta);
+
+    final Plugin plugin = SkyWars.getInstance();
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   private Collection<ItemStack> generateItems(final Collection<GameCage> gameCages) {
@@ -70,8 +75,7 @@ public class CageMenu implements GameMenu, Listener {
     final Collection<GameCage> cages = this.cageManager.getCages();
     final Collection<ItemStack> items = generateItems(cages);
 
-    InventoryAPI.getInstance().getInventoryUtil().createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID,
-        items);
+    inventoryUtil.createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID, items);
 
     return null;
   }
@@ -129,10 +133,5 @@ public class CageMenu implements GameMenu, Listener {
 
   public MenuType getType() {
     return MenuType.CAGE;
-  }
-
-  @Override
-  public void runAction(final int paramInt, final ItemStack itemStack, final GamePlayer gamePlayer) {
-    // TODO: Fix how menus are structured
   }
 }

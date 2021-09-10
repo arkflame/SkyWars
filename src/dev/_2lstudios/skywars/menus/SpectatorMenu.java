@@ -42,8 +42,6 @@ public class SpectatorMenu implements GameMenu, Listener {
   private final ItemStack openItem = new ItemStack(Material.COMPASS);
 
   SpectatorMenu(final SkyWarsManager skyWarsManager) {
-    final Plugin plugin = SkyWars.getInstance();
-
     this.arenaManager = skyWarsManager.getArenaManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
@@ -51,6 +49,7 @@ public class SpectatorMenu implements GameMenu, Listener {
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Espectador");
     this.openItem.setItemMeta(openItemMeta);
 
+    final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
@@ -107,17 +106,12 @@ public class SpectatorMenu implements GameMenu, Listener {
     return MenuType.SPECTATOR;
   }
 
-  @Override
-  public void runAction(int paramInt, ItemStack itemStack, GamePlayer gamePlayer) {
-    // TODO Fix how menus are structured
-  }
-
   public Inventory getInventory(GamePlayer gamePlayer, final int page) {
     final Collection<Arena> arenas = this.arenaManager.getGameArenasAsSet();
     final Collection<ItemStack> arenaItems = generateItems(arenas);
-    
-    InventoryAPI.getInstance().getInventoryUtil()
-        .createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID, arenaItems);
+
+    InventoryAPI.getInstance().getInventoryUtil().createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID,
+        arenaItems);
 
     return null;
   }

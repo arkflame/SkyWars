@@ -33,7 +33,7 @@ import dev._2lstudios.skywars.game.player.GamePlayerMode;
 
 public class MapMenu implements GameMenu, Listener {
   private static final String ID = "sw_mapmenu";
-  private static final String TITLE = ChatColor.DARK_GRAY + "SkyWars - Mapas";
+  private static final String TITLE = "SkyWars - Mapas";
 
   private final ArenaManager arenaManager;
   private final GamePlayerManager playerManager;
@@ -42,8 +42,6 @@ public class MapMenu implements GameMenu, Listener {
   private final ItemStack openItem = new ItemStack(Material.DAYLIGHT_DETECTOR);
 
   MapMenu(final SkyWarsManager skyWarsManager) {
-    final Plugin plugin = SkyWars.getInstance();
-
     this.arenaManager = skyWarsManager.getArenaManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
@@ -51,6 +49,7 @@ public class MapMenu implements GameMenu, Listener {
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Mapas");
     this.openItem.setItemMeta(openItemMeta);
 
+    final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
@@ -107,17 +106,12 @@ public class MapMenu implements GameMenu, Listener {
     return MenuType.MAP;
   }
 
-  @Override
-  public void runAction(int paramInt, ItemStack itemStack, GamePlayer gamePlayer) {
-    // TODO Fix how menus are structured
-  }
-
   public Inventory getInventory(GamePlayer gamePlayer, final int page) {
     final Collection<Arena> arenas = this.arenaManager.getGameArenasAsSet();
     final Collection<ItemStack> arenaItems = generateItems(arenas);
-    
-    InventoryAPI.getInstance().getInventoryUtil()
-        .createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID, arenaItems);
+
+    InventoryAPI.getInstance().getInventoryUtil().createDisplayInventory(TITLE, gamePlayer.getPlayer(), page, ID,
+        arenaItems);
 
     return null;
   }

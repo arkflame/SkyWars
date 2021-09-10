@@ -1,70 +1,99 @@
 package dev._2lstudios.skywars.menus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+
+import dev._2lstudios.inventoryapi.InventoryAPI;
+import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
+import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
+import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
+import dev._2lstudios.skywars.SkyWars;
+import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
-public class ShopMenu implements GameMenu {
+public class ShopMenu implements GameMenu, Listener {
+  private static final String ID = "sw_shopmenu";
+  private static final String TITLE = "SkyWars - Tienda";
+
   private final MenuManager menuManager;
-  
-  private final String title = ChatColor.DARK_GRAY + "SkyWars - Tienda";
-  
-  private final Inventory inventory = Bukkit.createInventory(null, 54, this.title);
-  
+  private final GamePlayerManager playerManager;
+  private final InventoryUtil inventoryUtil;
   private final ItemStack openItem = new ItemStack(Material.CHEST, 1);
-  
   private final ItemStack closeItem = new ItemStack(Material.ARROW, 1);
-  
-  public ShopMenu(MenuManager menuManager) {
-    this.menuManager = menuManager;
-    ItemMeta openItemMeta = this.openItem.getItemMeta();
-    ItemMeta closeItemMeta = this.closeItem.getItemMeta();
-    ItemStack particlesItem = new ItemStack(Material.BLAZE_POWDER, 1);
-    ItemMeta particlesItemMeta = particlesItem.getItemMeta();
+
+  public ShopMenu(final SkyWarsManager skyWarsManager) {
+    this.menuManager = skyWarsManager.getMenuManager();
+    this.playerManager = skyWarsManager.getPlayerManager();
+    this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+
+    final Plugin plugin = SkyWars.getInstance();
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
+  }
+
+  public ItemStack getOpenItem() {
+    return this.openItem;
+  }
+
+  public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
+    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
+    final ItemMeta openItemMeta = this.openItem.getItemMeta();
+    final ItemMeta closeItemMeta = this.closeItem.getItemMeta();
+    final ItemStack particlesItem = new ItemStack(Material.BLAZE_POWDER, 1);
+    final ItemMeta particlesItemMeta = particlesItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Tienda");
     closeItemMeta.setDisplayName(ChatColor.RED + "Cerrar");
     particlesItemMeta.setDisplayName(ChatColor.YELLOW + "Particulas");
     this.openItem.setItemMeta(openItemMeta);
     this.closeItem.setItemMeta(closeItemMeta);
     particlesItem.setItemMeta(particlesItemMeta);
-    this.inventory.setItem(10, menuManager.getMenu(MenuType.KIT).getOpenItem());
-    this.inventory.setItem(13, menuManager.getMenu(MenuType.CAGE).getOpenItem());
-    this.inventory.setItem(16, particlesItem);
-    this.inventory.setItem(49, this.closeItem);
+    inventory.setItem(10, menuManager.getMenu(MenuType.KIT).getOpenItem());
+    inventory.setItem(13, menuManager.getMenu(MenuType.CAGE).getOpenItem());
+    inventory.setItem(16, particlesItem);
+    inventory.setItem(49, this.closeItem);
+
+    return null;
   }
-  
-  public ItemStack getOpenItem() {
-    return this.openItem;
-  }
-  
+
+  @Override
   public Inventory getInventory(GamePlayer gamePlayer) {
-    return this.inventory;
+    getInventory(gamePlayer, 1);
+
+    return null;
   }
-  
-  public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
-    if (itemStack != null)
-      if (itemStack.isSimilar(this.closeItem)) {
+
+  @EventHandler(ignoreCancelled = true)
+  public void onInventoryAPIClick(final InventoryAPIClickEvent event) {
+    final Player player = event.getPlayer();
+    final GamePlayer gamePlayer = playerManager.getPlayer(player);
+    final ItemStack item = event.getEvent().getCurrentItem();
+
+    if (item != null)
+      if (item.isSimilar(this.closeItem)) {
         gamePlayer.getPlayer().closeInventory();
       } else {
-        GameMenu kitMenu = this.menuManager.getMenu(MenuType.KIT);
-        GameMenu cageMenu = this.menuManager.getMenu(MenuType.CAGE);
-        if (itemStack.isSimilar(kitMenu.getOpenItem())) {
+        final GameMenu kitMenu = this.menuManager.getMenu(MenuType.KIT);
+        final GameMenu cageMenu = this.menuManager.getMenu(MenuType.CAGE);
+        if (item.isSimilar(kitMenu.getOpenItem())) {
           kitMenu.getInventory(gamePlayer);
-        } else if (itemStack.isSimilar(cageMenu.getOpenItem())) {
+        } else if (item.isSimilar(cageMenu.getOpenItem())) {
           gamePlayer.getPlayer().openInventory(cageMenu.getInventory(gamePlayer));
-        } 
-      }  
+        }
+      }
   }
-  
+
   public String getTitle() {
-    return this.title;
+    return TITLE;
   }
-  
+
   public MenuType getType() {
     return MenuType.SHOP;
   }

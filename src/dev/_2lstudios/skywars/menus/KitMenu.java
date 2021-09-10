@@ -29,7 +29,7 @@ import dev._2lstudios.skywars.managers.KitManager;
 
 public class KitMenu implements GameMenu, Listener {
   private static final String ID = "sw_kitmenu";
-  private static final String TITLE = ChatColor.DARK_GRAY + "SkyWars - Kits";
+  private static final String TITLE = "SkyWars - Kits";
 
   private final KitManager kitManager;
   private final GamePlayerManager playerManager;
@@ -37,8 +37,6 @@ public class KitMenu implements GameMenu, Listener {
   private final InventoryUtil inventoryUtil;
 
   KitMenu(final SkyWarsManager skyWarsManager) {
-    final Plugin plugin = SkyWars.getInstance();
-
     this.kitManager = skyWarsManager.getKitManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
@@ -46,6 +44,7 @@ public class KitMenu implements GameMenu, Listener {
     this.openItem.setItemMeta(openItemMeta);
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
 
+    final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
@@ -138,10 +137,5 @@ public class KitMenu implements GameMenu, Listener {
         }
       }
     }
-  }
-
-  @Override
-  public void runAction(final int paramInt, final ItemStack itemStack, final GamePlayer gamePlayer) {
-    // TODO: Fix how menus are structured
   }
 }

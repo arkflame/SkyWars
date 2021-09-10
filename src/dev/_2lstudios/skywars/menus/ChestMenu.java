@@ -1,53 +1,79 @@
 package dev._2lstudios.skywars.menus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import dev._2lstudios.inventoryapi.InventoryAPI;
+import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
+import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
+import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
+import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.chest.ChestManager;
 import dev._2lstudios.skywars.chest.ChestType;
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
 public class ChestMenu implements GameMenu {
-  private final String title = ChatColor.DARK_GRAY + "Votacion de Cofres";
-  private final Inventory inventory = Bukkit.createInventory(null, 36, this.title);
+  private static final String ID = "sw_chestmenu";
+  private static final String TITLE = "SkyWars - Cofres";
+
   private final ItemStack openItem = new ItemStack(Material.CHEST);
   private final ChestManager chestManager;
+  private final GamePlayerManager playerManager;
+  private final InventoryUtil inventoryUtil;
 
-  ChestMenu(ChestManager chestManager) {
-    this.chestManager = chestManager;
-    ItemMeta openItemMeta = this.openItem.getItemMeta();
+  ChestMenu(final SkyWarsManager skyWarsManager) {
+    this.chestManager = skyWarsManager.getChestManager();
+    this.playerManager = skyWarsManager.getPlayerManager();
+    this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+    final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Cofres");
     this.openItem.setItemMeta(openItemMeta);
-    this.inventory.setItem(10, chestManager.getOpenItem(ChestType.BASIC));
-    this.inventory.setItem(13, chestManager.getOpenItem(ChestType.NORMAL));
-    this.inventory.setItem(16, chestManager.getOpenItem(ChestType.INSANE));
   }
 
+  public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
+    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
+
+    inventory.setItem(10, chestManager.getOpenItem(ChestType.BASIC));
+    inventory.setItem(13, chestManager.getOpenItem(ChestType.NORMAL));
+    inventory.setItem(16, chestManager.getOpenItem(ChestType.INSANE));
+
+    return null;
+  }
+
+  @Override
   public Inventory getInventory(GamePlayer gamePlayer) {
-    return this.inventory;
+    getInventory(gamePlayer, 1);
+
+    return null;
   }
 
-  public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
-    if (itemStack != null) {
-      ItemMeta itemMeta = itemStack.getItemMeta();
+  @EventHandler(ignoreCancelled = true)
+  public void onInventoryAPIClick(final InventoryAPIClickEvent event) {
+    final Player player = event.getPlayer();
+    final GamePlayer gamePlayer = playerManager.getPlayer(player);
+    final ItemStack item = event.getEvent().getCurrentItem();
+
+    if (item != null) {
+      final ItemMeta itemMeta = item.getItemMeta();
       if (itemMeta != null) {
-        String displayName = itemMeta.getDisplayName();
+        final String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          Arena arena = gamePlayer.getArena();
+          final Arena arena = gamePlayer.getArena();
           if (arena != null) {
-            Player player = gamePlayer.getPlayer();
             if (player.hasPermission("skywars.votechest")) {
-              if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.BASIC))) {
+              if (item.isSimilar(this.chestManager.getOpenItem(ChestType.BASIC))) {
                 arena.addChestVote(gamePlayer, ChestType.BASIC);
-              } else if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.NORMAL))) {
+              } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.NORMAL))) {
                 arena.addChestVote(gamePlayer, ChestType.NORMAL);
-              } else if (itemStack.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
+              } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
                 arena.addChestVote(gamePlayer, ChestType.INSANE);
               }
             } else {
@@ -62,7 +88,7 @@ public class ChestMenu implements GameMenu {
   }
 
   public String getTitle() {
-    return this.title;
+    return TITLE;
   }
 
   public ItemStack getOpenItem() {

@@ -1,52 +1,83 @@
 package dev._2lstudios.skywars.menus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
+import dev._2lstudios.inventoryapi.InventoryAPI;
+import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
+import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
+import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
+import dev._2lstudios.skywars.SkyWars;
+import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
+import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.time.TimeManager;
 import dev._2lstudios.skywars.time.TimeType;
 
-public class TimeMenu implements GameMenu {
-  private final String title = ChatColor.DARK_GRAY + "Votacion de Tiempo";
-  private final Inventory inventory = Bukkit.createInventory(null, 36, this.title);
+public class TimeMenu implements GameMenu, Listener {
+  private static final String ID = "sw_timemenu";
+  private static final String TITLE = "SkyWars - Tiempo";
+
   private final ItemStack openItem = new ItemStack(Material.WATCH);
   private final TimeManager timeManager;
+  private final GamePlayerManager playerManager;
+  private final InventoryUtil inventoryUtil;
 
-  TimeMenu(TimeManager timeManager) {
-    this.timeManager = timeManager;
-    ItemMeta openItemMeta = this.openItem.getItemMeta();
+  TimeMenu(final SkyWarsManager skyWarsManager) {
+    this.timeManager = skyWarsManager.getTimeManager();
+    this.playerManager = skyWarsManager.getPlayerManager();
+    this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+    final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
     this.openItem.setItemMeta(openItemMeta);
-    this.inventory.setItem(10, timeManager.getOpenItem(TimeType.MORNING));
-    this.inventory.setItem(12, timeManager.getOpenItem(TimeType.DAY));
-    this.inventory.setItem(14, timeManager.getOpenItem(TimeType.NOON));
-    this.inventory.setItem(16, timeManager.getOpenItem(TimeType.NIGHT));
+
+    final Plugin plugin = SkyWars.getInstance();
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
+  public Inventory getInventory(GamePlayer gamePlayer, final int page) {
+    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
+
+    inventory.setItem(10, timeManager.getOpenItem(TimeType.MORNING));
+    inventory.setItem(12, timeManager.getOpenItem(TimeType.DAY));
+    inventory.setItem(14, timeManager.getOpenItem(TimeType.NOON));
+    inventory.setItem(16, timeManager.getOpenItem(TimeType.NIGHT));
+
+    return null;
+  }
+
+  @Override
   public Inventory getInventory(GamePlayer gamePlayer) {
-    return this.inventory;
+    getInventory(gamePlayer, 1);
+
+    return null;
   }
 
-  public void runAction(int slot, ItemStack itemStack, GamePlayer gamePlayer) {
-    if (itemStack != null) {
-      ItemMeta itemMeta = itemStack.getItemMeta();
+  @EventHandler(ignoreCancelled = true)
+  public void onInventoryAPIClick(final InventoryAPIClickEvent event) {
+    final Player player = event.getPlayer();
+    final GamePlayer gamePlayer = playerManager.getPlayer(player);
+    final ItemStack item = event.getEvent().getCurrentItem();
+
+    if (item != null) {
+      final ItemMeta itemMeta = item.getItemMeta();
       if (itemMeta != null) {
-        String displayName = itemMeta.getDisplayName();
+        final String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          Arena arena = gamePlayer.getArena();
+          final Arena arena = gamePlayer.getArena();
           if (arena != null) {
-            Player player = gamePlayer.getPlayer();
             if (player.hasPermission("skywars.votetime")) {
-              for (TimeType timeType : TimeType.values()) {
-                if (this.timeManager.isOpenItem(timeType, itemStack)) {
+              for (final TimeType timeType : TimeType.values()) {
+                if (this.timeManager.isOpenItem(timeType, item)) {
                   arena.addTimeVote(player.getUniqueId(), timeType);
                   break;
                 }
@@ -63,7 +94,7 @@ public class TimeMenu implements GameMenu {
   }
 
   public String getTitle() {
-    return this.title;
+    return TITLE;
   }
 
   public ItemStack getOpenItem() {

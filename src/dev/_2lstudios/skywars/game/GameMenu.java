@@ -8,12 +8,10 @@ import dev._2lstudios.skywars.menus.MenuType;
 
 public interface GameMenu {
   Inventory getInventory(GamePlayer paramGamePlayer);
-  
-  void runAction(int paramInt, ItemStack paramItemStack, GamePlayer paramGamePlayer);
-  
+
   String getTitle();
-  
+
   ItemStack getOpenItem();
-  
+
   MenuType getType();
 }
