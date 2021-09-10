@@ -13,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
-import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
@@ -34,6 +33,9 @@ public class ShopMenu implements GameMenu, Listener {
     this.menuManager = skyWarsManager.getMenuManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+    final ItemMeta openItemMeta = this.openItem.getItemMeta();
+    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Tienda");
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -44,15 +46,12 @@ public class ShopMenu implements GameMenu, Listener {
   }
 
   public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
-    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
+    final Inventory inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID).getInventory();
     final ItemMeta closeItemMeta = this.closeItem.getItemMeta();
     final ItemStack particlesItem = new ItemStack(Material.BLAZE_POWDER, 1);
     final ItemMeta particlesItemMeta = particlesItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Tienda");
     closeItemMeta.setDisplayName(ChatColor.RED + "Cerrar");
     particlesItemMeta.setDisplayName(ChatColor.YELLOW + "Particulas");
-    this.openItem.setItemMeta(openItemMeta);
     this.closeItem.setItemMeta(closeItemMeta);
     particlesItem.setItemMeta(particlesItemMeta);
     inventory.setItem(10, menuManager.getMenu(MenuType.KIT).getOpenItem());
@@ -85,7 +84,7 @@ public class ShopMenu implements GameMenu, Listener {
         if (item.isSimilar(kitMenu.getOpenItem())) {
           kitMenu.getInventory(gamePlayer);
         } else if (item.isSimilar(cageMenu.getOpenItem())) {
-          gamePlayer.getPlayer().openInventory(cageMenu.getInventory(gamePlayer));
+          cageMenu.getInventory(gamePlayer);
         }
       }
   }

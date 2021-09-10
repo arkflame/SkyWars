@@ -14,7 +14,7 @@ public class MenuManager {
     this.gMenusByType.put(gameMenu.getType(), gameMenu);
   }
 
-  public MenuManager(SkyWarsManager skyWarsManager) {
+  public void setup(final SkyWarsManager skyWarsManager) {
     addMenuNew(new KitMenu(skyWarsManager));
     addMenuNew(new CageMenu(skyWarsManager));
     addMenuNew(new ChestMenu(skyWarsManager));

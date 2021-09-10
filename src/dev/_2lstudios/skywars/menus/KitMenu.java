@@ -39,10 +39,10 @@ public class KitMenu implements GameMenu, Listener {
   KitMenu(final SkyWarsManager skyWarsManager) {
     this.kitManager = skyWarsManager.getKitManager();
     this.playerManager = skyWarsManager.getPlayerManager();
+    this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Kits");
-    this.openItem.setItemMeta(openItemMeta);
-    this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

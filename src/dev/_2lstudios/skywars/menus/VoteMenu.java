@@ -13,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
-import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
@@ -35,14 +34,14 @@ public class VoteMenu implements GameMenu, Listener {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Votacion");
-    this.openItem.setItemMeta(openItemMeta);
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
-    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
+    final Inventory inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID).getInventory();
 
     inventory.setItem(10, menuManager.getMenu(MenuType.CHEST).getOpenItem());
     inventory.setItem(13, menuManager.getMenu(MenuType.TIME).getOpenItem());
@@ -67,9 +66,9 @@ public class VoteMenu implements GameMenu, Listener {
       final GameMenu chestMenu = this.menuManager.getMenu(MenuType.CHEST);
       final GameMenu timeMenu = this.menuManager.getMenu(MenuType.TIME);
       if (item.isSimilar(chestMenu.getOpenItem())) {
-        gamePlayer.getPlayer().openInventory(chestMenu.getInventory(gamePlayer));
+        chestMenu.getInventory(gamePlayer);
       } else if (item.isSimilar(timeMenu.getOpenItem())) {
-        gamePlayer.getPlayer().openInventory(timeMenu.getInventory(gamePlayer));
+        timeMenu.getInventory(gamePlayer);
       }
     }
   }

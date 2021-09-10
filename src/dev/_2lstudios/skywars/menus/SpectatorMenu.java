@@ -47,7 +47,7 @@ public class SpectatorMenu implements GameMenu, Listener {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Espectador");
-    this.openItem.setItemMeta(openItemMeta);
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

@@ -15,8 +15,12 @@ public class SkyWarsManager {
   private final TimeManager timeManager = new TimeManager();
   private final GamePlayerManager playerManager = new GamePlayerManager();
   private final ArenaManager arenaManager = new ArenaManager();
-  private final MenuManager menuManager = new MenuManager(this);
+  private final MenuManager menuManager = new MenuManager();
   
+  public SkyWarsManager() {
+    menuManager.setup(this);
+  }
+
   public ArenaManager getArenaManager() {
     return this.arenaManager;
   }

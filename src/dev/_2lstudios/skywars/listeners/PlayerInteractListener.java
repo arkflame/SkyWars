@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -74,13 +73,8 @@ public class PlayerInteractListener implements Listener {
                 }
               } else {
                 for (GameMenu gameMenu : this.menuManager.getGameMenus()) {
-                  if (itemStack.isSimilar(gameMenu.getOpenItem())) {
-                    final Inventory inventory = gameMenu.getInventory(gamePlayer);
-
-                    if (inventory != null) {
-                      player.openInventory(inventory);
-                    }
-                    
+                  if (gameMenu != null && itemStack.isSimilar(gameMenu.getOpenItem())) {
+                    gameMenu.getInventory(gamePlayer);
                     event.setCancelled(true);
                     break;
                   }

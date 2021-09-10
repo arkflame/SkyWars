@@ -13,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
-import dev._2lstudios.inventoryapi.inventory.InventoryWrapper;
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
@@ -38,14 +37,14 @@ public class TimeMenu implements GameMenu, Listener {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
-    this.openItem.setItemMeta(openItemMeta);
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public Inventory getInventory(GamePlayer gamePlayer, final int page) {
-    final InventoryWrapper inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID);
+    final Inventory inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID).getInventory();
 
     inventory.setItem(10, timeManager.getOpenItem(TimeType.MORNING));
     inventory.setItem(12, timeManager.getOpenItem(TimeType.DAY));

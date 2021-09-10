@@ -27,6 +27,8 @@ import dev._2lstudios.skywars.listeners.BlockBreakListener;
 import dev._2lstudios.skywars.listeners.BlockPlaceListener;
 import dev._2lstudios.skywars.listeners.EntityDamageByEntityListener;
 import dev._2lstudios.skywars.listeners.EntityDamageListener;
+import dev._2lstudios.skywars.listeners.InventoryClickListener;
+import dev._2lstudios.skywars.listeners.InventoryDragListener;
 import dev._2lstudios.skywars.listeners.PlayerDeathListener;
 import dev._2lstudios.skywars.listeners.PlayerDropItemListener;
 import dev._2lstudios.skywars.listeners.PlayerInteractListener;
@@ -116,6 +118,8 @@ public class SkyWars extends JavaPlugin {
     pluginManager.registerEvents(new BlockPlaceListener(playerManager), this);
     pluginManager.registerEvents(new EntityDamageByEntityListener(playerManager), this);
     pluginManager.registerEvents(new EntityDamageListener(playerManager), this);
+    pluginManager.registerEvents(new InventoryClickListener(playerManager), this);
+    pluginManager.registerEvents(new InventoryDragListener(playerManager), this);
     pluginManager.registerEvents(new PlayerDeathListener(playerManager), this);
     pluginManager.registerEvents(new PlayerDropItemListener(playerManager), this);
     pluginManager.registerEvents(new PlayerInteractListener(menuManager, arenaManager, playerManager), this);

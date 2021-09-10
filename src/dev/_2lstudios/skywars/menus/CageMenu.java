@@ -41,9 +41,9 @@ public class CageMenu implements GameMenu, Listener {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     this.cageManager = skyWarsManager.getCageManager();
     this.playerManager = skyWarsManager.getPlayerManager();
-    ItemMeta openItemMeta = this.openItem.getItemMeta();
+    final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Jaulas");
-    this.openItem.setItemMeta(openItemMeta);
+    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -53,7 +53,7 @@ public class CageMenu implements GameMenu, Listener {
     final Collection<ItemStack> items = new HashSet<>();
 
     for (final GameCage gameCage : gameCages) {
-      final ItemStack itemStack = new ItemStack(gameCage.getPrimaryMaterial());
+      final ItemStack itemStack = new ItemStack(gameCage.getPrimaryMaterial(), gameCage.getData());
       final ItemMeta itemMeta = itemStack.getItemMeta();
       final String displayName = gameCage.getDisplayName();
       final List<String> lore = new ArrayList<>();
@@ -81,7 +81,7 @@ public class CageMenu implements GameMenu, Listener {
   }
 
   @Override
-  public Inventory getInventory(GamePlayer gamePlayer) {
+  public Inventory getInventory(final GamePlayer gamePlayer) {
     getInventory(gamePlayer, 1);
 
     return null;
@@ -108,8 +108,8 @@ public class CageMenu implements GameMenu, Listener {
           } else if (item.isSimilar(inventoryUtil.getCloseItem())) {
             player.closeInventory();
           } else {
-            ArenaSpawn gameSpawn = gamePlayer.getGameSpawn();
-            String cageName = ChatColor.stripColor(item.getItemMeta().getDisplayName().toLowerCase());
+            final ArenaSpawn gameSpawn = gamePlayer.getGameSpawn();
+            final String cageName = ChatColor.stripColor(item.getItemMeta().getDisplayName().toLowerCase());
             gamePlayer.setSelectedCage(cageName);
             player.closeInventory();
             player.sendMessage(
