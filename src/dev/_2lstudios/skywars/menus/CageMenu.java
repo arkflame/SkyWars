@@ -53,7 +53,7 @@ public class CageMenu implements GameMenu, Listener {
     final Collection<ItemStack> items = new HashSet<>();
 
     for (final GameCage gameCage : gameCages) {
-      final ItemStack itemStack = new ItemStack(gameCage.getPrimaryMaterial(), gameCage.getData());
+      final ItemStack itemStack = new ItemStack(gameCage.getPrimaryMaterial(), 1, gameCage.getData());
       final ItemMeta itemMeta = itemStack.getItemMeta();
       final String displayName = gameCage.getDisplayName();
       final List<String> lore = new ArrayList<>();
