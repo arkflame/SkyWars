@@ -25,27 +25,34 @@ public class PlayerInteractListener implements Listener {
   private final ArenaManager arenaManager;
   private final GamePlayerManager playerManager;
 
-  public PlayerInteractListener(MenuManager menuManager, ArenaManager arenaManager, GamePlayerManager playerManager) {
+  public PlayerInteractListener(final MenuManager menuManager, final ArenaManager arenaManager, final GamePlayerManager playerManager) {
     this.menuManager = menuManager;
     this.arenaManager = arenaManager;
     this.playerManager = playerManager;
   }
 
   @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent event) {
-    Action action = event.getAction();
+  public void onPlayerInteract(final PlayerInteractEvent event) {
+    final Action action = event.getAction();
     if (action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK) {
-      Player player = event.getPlayer();
-      GamePlayer gamePlayer = this.playerManager.getPlayer(player);
+      final Player player = event.getPlayer();
+      final GamePlayer gamePlayer = this.playerManager.getPlayer(player);
+
+      if (gamePlayer.hasInteractCooldown()) {
+        return;
+      }
+
+      gamePlayer.updateInteractCooldown();
+
       if (gamePlayer == null) {
         event.setCancelled(true);
       } else {
-        ItemStack itemStack = event.getItem();
+        final ItemStack itemStack = event.getItem();
         if (gamePlayer.isSpectating()) {
-          Block block = event.getClickedBlock();
+          final Block block = event.getClickedBlock();
           if (block != null) {
-            Material blockType = block.getType();
-            String typeString = blockType.toString();
+            final Material blockType = block.getType();
+            final String typeString = blockType.toString();
             if (typeString.endsWith("CHEST") || typeString.endsWith("DOOR") || typeString.endsWith("GATE")
                 || typeString.endsWith("PLATE") || typeString.endsWith("LEVER") || typeString.endsWith("BUTTON")
                 || typeString.endsWith("STRING"))
@@ -53,12 +60,12 @@ public class PlayerInteractListener implements Listener {
           }
         }
         if (itemStack != null && itemStack.hasItemMeta()) {
-          ItemMeta itemMeta = itemStack.getItemMeta();
+          final ItemMeta itemMeta = itemStack.getItemMeta();
           if (itemMeta != null && itemMeta.hasDisplayName()) {
-            String displayName = itemMeta.getDisplayName();
+            final String displayName = itemMeta.getDisplayName();
             if (displayName != null && !displayName.isEmpty()) {
               if (itemStack.isSimilar(SkyWars.getRandomMapItem())) {
-                Arena arena = this.arenaManager.getMaxPlayerAvailableArena();
+                final Arena arena = this.arenaManager.getMaxPlayerAvailableArena();
                 if (arena != null) {
                   player.sendMessage(ChatColor.GREEN + "Entrando a una partida al azar!");
 
@@ -67,12 +74,12 @@ public class PlayerInteractListener implements Listener {
                   player.sendMessage(ChatColor.RED + "No se encontro una arena disponible!");
                 }
               } else if (itemStack.isSimilar(SkyWars.getLeaveItem())) {
-                Arena arena = gamePlayer.getArena();
+                final Arena arena = gamePlayer.getArena();
                 if (arena != null) {
                   gamePlayer.updateArena(null, null);
                 }
               } else {
-                for (GameMenu gameMenu : this.menuManager.getGameMenus()) {
+                for (final GameMenu gameMenu : this.menuManager.getGameMenus()) {
                   if (gameMenu != null && itemStack.isSimilar(gameMenu.getOpenItem())) {
                     gameMenu.getInventory(gamePlayer);
                     event.setCancelled(true);

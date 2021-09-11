@@ -30,6 +30,8 @@ public class GamePlayer {
   private String selectedKit = null;
   private String selectedCage = null;
 
+  private long lastInteract = 0;
+
   private int wins;
 
   GamePlayer(Player player) {
@@ -105,11 +107,11 @@ public class GamePlayer {
     if (this.spawn != null) {
       this.spawn.setPlayer(null);
     }
-    
+
     if (gameSpawn != null) {
       gameSpawn.setPlayer(this);
     }
-    
+
     this.spawn = gameSpawn;
   }
 
@@ -202,18 +204,18 @@ public class GamePlayer {
   public void updateArena(final Arena newArena, final GamePlayerMode newMode) {
     if (this.arena != null) {
       if (this.arena.getPlayers().getPlayers().size() > 1) {
-          if (arena.getState() == GameState.WAITING) {
-            final GamePlayerParty party = getParty();
+        if (arena.getState() == GameState.WAITING) {
+          final GamePlayerParty party = getParty();
 
-            if (party != null && party.getOwner() == this) {
-              party.updateArena(newArena, newMode);
-            }
-
-            arena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " salio de la partida ("
-                + ChatColor.AQUA + (arena.getPlayers().getPlayers().size() - 1) + ChatColor.YELLOW + "/"
-                + ChatColor.AQUA + arena.getSpawns().size() + ChatColor.YELLOW + ")!");
+          if (party != null && party.getOwner() == this) {
+            party.updateArena(newArena, newMode);
           }
+
+          arena.sendMessage(ChatColor.GRAY + player.getDisplayName() + ChatColor.YELLOW + " salio de la partida ("
+              + ChatColor.AQUA + (arena.getPlayers().getPlayers().size() - 1) + ChatColor.YELLOW + "/" + ChatColor.AQUA
+              + arena.getSpawns().size() + ChatColor.YELLOW + ")!");
         }
+      }
 
       setGameSpawn(null);
       this.arena.getPlayers().remove(this);
@@ -281,5 +283,13 @@ public class GamePlayer {
 
   public String getName() {
     return player.getName();
+  }
+
+  public boolean hasInteractCooldown() {
+    return System.currentTimeMillis() - lastInteract <= 1000;
+  }
+
+  public void updateInteractCooldown() {
+    lastInteract = System.currentTimeMillis();
   }
 }
