@@ -91,6 +91,10 @@ public class CageMenu implements GameMenu, Listener {
 
   @EventHandler(ignoreCancelled = true)
   public void onInventoryAPIClick(final InventoryAPIClickEvent event) {
+    if (!event.getInventoryWrapper().getId().equals(ID)) {
+      return;
+    }
+
     final InventoryWrapper inventoryWrapper = event.getInventoryWrapper();
 
     if (inventoryWrapper.getId().equals(ID)) {

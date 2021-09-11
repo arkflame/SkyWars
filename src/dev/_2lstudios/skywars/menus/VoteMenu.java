@@ -58,6 +58,10 @@ public class VoteMenu implements GameMenu, Listener {
 
   @EventHandler(ignoreCancelled = true)
   public void onInventoryAPIClick(final InventoryAPIClickEvent event) {
+    if (!event.getInventoryWrapper().getId().equals(ID)) {
+      return;
+    }
+    
     final Player player = event.getPlayer();
     final GamePlayer gamePlayer = playerManager.getPlayer(player);
     final ItemStack item = event.getEvent().getCurrentItem();
