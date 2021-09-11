@@ -33,12 +33,14 @@ public class KitMenu implements GameMenu, Listener {
 
   private final KitManager kitManager;
   private final GamePlayerManager playerManager;
+  private final MenuManager menuManager;
   private final ItemStack openItem = new ItemStack(Material.STORAGE_MINECART, 1);
   private final InventoryUtil inventoryUtil;
 
   KitMenu(final SkyWarsManager skyWarsManager) {
     this.kitManager = skyWarsManager.getKitManager();
     this.playerManager = skyWarsManager.getPlayerManager();
+    this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Kits");
@@ -124,7 +126,7 @@ public class KitMenu implements GameMenu, Listener {
           } else if (item.isSimilar(inventoryUtil.getNextItem(page))) {
             getInventory(gamePlayer, page + 1);
           } else if (item.isSimilar(inventoryUtil.getCloseItem())) {
-            player.closeInventory();
+            menuManager.getMenu(MenuType.SHOP).getInventory(gamePlayer);
           } else {
             String displayName = itemMeta.getDisplayName();
             String kitName = ChatColor.stripColor(displayName.toLowerCase());

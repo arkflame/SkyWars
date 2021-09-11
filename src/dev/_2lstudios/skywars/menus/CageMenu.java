@@ -35,12 +35,14 @@ public class CageMenu implements GameMenu, Listener {
   private final InventoryUtil inventoryUtil;
   private final CageManager cageManager;
   private final GamePlayerManager playerManager;
+  private final MenuManager menuManager;
   private final ItemStack openItem = new ItemStack(Material.STAINED_GLASS);
 
   public CageMenu(final SkyWarsManager skyWarsManager) {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     this.cageManager = skyWarsManager.getCageManager();
     this.playerManager = skyWarsManager.getPlayerManager();
+    this.menuManager = skyWarsManager.getMenuManager();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Jaulas");
     openItem.setItemMeta(openItemMeta);
@@ -106,7 +108,7 @@ public class CageMenu implements GameMenu, Listener {
           } else if (item.isSimilar(inventoryUtil.getNextItem(page))) {
             getInventory(gamePlayer, page + 1);
           } else if (item.isSimilar(inventoryUtil.getCloseItem())) {
-            player.closeInventory();
+            menuManager.getMenu(MenuType.SHOP).getInventory(gamePlayer);
           } else {
             final ArenaSpawn gameSpawn = gamePlayer.getGameSpawn();
             final String cageName = ChatColor.stripColor(item.getItemMeta().getDisplayName().toLowerCase());

@@ -26,11 +26,13 @@ public class ChestMenu implements GameMenu {
   private final ItemStack openItem = new ItemStack(Material.CHEST);
   private final ChestManager chestManager;
   private final GamePlayerManager playerManager;
+  private final MenuManager menuManager;
   private final InventoryUtil inventoryUtil;
 
   ChestMenu(final SkyWarsManager skyWarsManager) {
     this.chestManager = skyWarsManager.getChestManager();
     this.playerManager = skyWarsManager.getPlayerManager();
+    this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Cofres");
@@ -65,21 +67,26 @@ public class ChestMenu implements GameMenu {
       if (itemMeta != null) {
         final String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          final Arena arena = gamePlayer.getArena();
-          if (arena != null) {
-            if (player.hasPermission("skywars.votechest")) {
-              if (item.isSimilar(this.chestManager.getOpenItem(ChestType.BASIC))) {
-                arena.addChestVote(gamePlayer, ChestType.BASIC);
-              } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.NORMAL))) {
-                arena.addChestVote(gamePlayer, ChestType.NORMAL);
-              } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
-                arena.addChestVote(gamePlayer, ChestType.INSANE);
+
+          if (item.isSimilar(inventoryUtil.getCloseItem())) {
+            menuManager.getMenu(MenuType.VOTE).getInventory(gamePlayer);
+          } else {
+            final Arena arena = gamePlayer.getArena();
+            if (arena != null) {
+              if (player.hasPermission("skywars.votechest")) {
+                if (item.isSimilar(this.chestManager.getOpenItem(ChestType.BASIC))) {
+                  arena.addChestVote(gamePlayer, ChestType.BASIC);
+                } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.NORMAL))) {
+                  arena.addChestVote(gamePlayer, ChestType.NORMAL);
+                } else if (item.isSimilar(this.chestManager.getOpenItem(ChestType.INSANE))) {
+                  arena.addChestVote(gamePlayer, ChestType.INSANE);
+                }
+              } else {
+                player.sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &lTITAN&c para votar cofres!"));
               }
-            } else {
-              player.sendMessage(
-                  ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &lTITAN&c para votar cofres!"));
+              player.closeInventory();
             }
-            player.closeInventory();
           }
         }
       }

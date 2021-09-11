@@ -29,11 +29,13 @@ public class TimeMenu implements GameMenu, Listener {
   private final ItemStack openItem = new ItemStack(Material.WATCH);
   private final TimeManager timeManager;
   private final GamePlayerManager playerManager;
+  private final MenuManager menuManager;
   private final InventoryUtil inventoryUtil;
 
   TimeMenu(final SkyWarsManager skyWarsManager) {
     this.timeManager = skyWarsManager.getTimeManager();
     this.playerManager = skyWarsManager.getPlayerManager();
+    this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
@@ -72,20 +74,25 @@ public class TimeMenu implements GameMenu, Listener {
       if (itemMeta != null) {
         final String displayName = itemMeta.getDisplayName();
         if (displayName != null) {
-          final Arena arena = gamePlayer.getArena();
-          if (arena != null) {
-            if (player.hasPermission("skywars.votetime")) {
-              for (final TimeType timeType : TimeType.values()) {
-                if (this.timeManager.isOpenItem(timeType, item)) {
-                  arena.addTimeVote(player.getUniqueId(), timeType);
-                  break;
+
+          if (item.isSimilar(inventoryUtil.getCloseItem())) {
+            menuManager.getMenu(MenuType.VOTE).getInventory(gamePlayer);
+          } else {
+            final Arena arena = gamePlayer.getArena();
+            if (arena != null) {
+              if (player.hasPermission("skywars.votetime")) {
+                for (final TimeType timeType : TimeType.values()) {
+                  if (this.timeManager.isOpenItem(timeType, item)) {
+                    arena.addTimeVote(player.getUniqueId(), timeType);
+                    break;
+                  }
                 }
+              } else {
+                player.sendMessage(
+                    ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &d&lMEGA&c para votar cofres!"));
               }
-            } else {
-              player.sendMessage(
-                  ChatColor.translateAlternateColorCodes('&', "&cNecesitas rango &d&lMEGA&c para votar cofres!"));
+              player.closeInventory();
             }
-            player.closeInventory();
           }
         }
       }
