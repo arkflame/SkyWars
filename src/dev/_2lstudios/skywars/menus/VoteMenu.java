@@ -45,6 +45,7 @@ public class VoteMenu implements GameMenu, Listener {
 
     inventory.setItem(10, menuManager.getMenu(MenuType.CHEST).getOpenItem());
     inventory.setItem(13, menuManager.getMenu(MenuType.TIME).getOpenItem());
+    inventory.setItem(49, inventoryUtil.getCloseItem());
 
     return null;
   }
@@ -61,18 +62,26 @@ public class VoteMenu implements GameMenu, Listener {
     if (!event.getInventoryWrapper().getId().equals(ID)) {
       return;
     }
-    
+
     final Player player = event.getPlayer();
     final GamePlayer gamePlayer = playerManager.getPlayer(player);
     final ItemStack item = event.getEvent().getCurrentItem();
 
     if (item != null) {
-      final GameMenu chestMenu = this.menuManager.getMenu(MenuType.CHEST);
-      final GameMenu timeMenu = this.menuManager.getMenu(MenuType.TIME);
-      if (item.isSimilar(chestMenu.getOpenItem())) {
-        chestMenu.getInventory(gamePlayer);
-      } else if (item.isSimilar(timeMenu.getOpenItem())) {
-        timeMenu.getInventory(gamePlayer);
+
+      if (item.hasItemMeta()) {
+
+        if (item.isSimilar(inventoryUtil.getCloseItem())) {
+          player.closeInventory();
+        } else {
+          final GameMenu chestMenu = this.menuManager.getMenu(MenuType.CHEST);
+          final GameMenu timeMenu = this.menuManager.getMenu(MenuType.TIME);
+          if (item.isSimilar(chestMenu.getOpenItem())) {
+            chestMenu.getInventory(gamePlayer);
+          } else if (item.isSimilar(timeMenu.getOpenItem())) {
+            timeMenu.getInventory(gamePlayer);
+          }
+        }
       }
     }
   }

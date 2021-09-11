@@ -52,6 +52,7 @@ public class TimeMenu implements GameMenu, Listener {
     inventory.setItem(12, timeManager.getOpenItem(TimeType.DAY));
     inventory.setItem(14, timeManager.getOpenItem(TimeType.NOON));
     inventory.setItem(16, timeManager.getOpenItem(TimeType.NIGHT));
+    inventory.setItem(49, inventoryUtil.getCloseItem());
 
     return null;
   }

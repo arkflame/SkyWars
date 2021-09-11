@@ -27,7 +27,6 @@ public class ShopMenu implements GameMenu, Listener {
   private final GamePlayerManager playerManager;
   private final InventoryUtil inventoryUtil;
   private final ItemStack openItem = new ItemStack(Material.CHEST, 1);
-  private final ItemStack closeItem = new ItemStack(Material.ARROW, 1);
 
   public ShopMenu(final SkyWarsManager skyWarsManager) {
     this.menuManager = skyWarsManager.getMenuManager();
@@ -47,17 +46,14 @@ public class ShopMenu implements GameMenu, Listener {
 
   public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
     final Inventory inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID).getInventory();
-    final ItemMeta closeItemMeta = this.closeItem.getItemMeta();
     final ItemStack particlesItem = new ItemStack(Material.BLAZE_POWDER, 1);
     final ItemMeta particlesItemMeta = particlesItem.getItemMeta();
-    closeItemMeta.setDisplayName(ChatColor.RED + "Cerrar");
     particlesItemMeta.setDisplayName(ChatColor.YELLOW + "Particulas");
-    this.closeItem.setItemMeta(closeItemMeta);
     particlesItem.setItemMeta(particlesItemMeta);
     inventory.setItem(10, menuManager.getMenu(MenuType.KIT).getOpenItem());
     inventory.setItem(13, menuManager.getMenu(MenuType.CAGE).getOpenItem());
     inventory.setItem(16, particlesItem);
-    inventory.setItem(49, this.closeItem);
+    inventory.setItem(49, inventoryUtil.getCloseItem());
 
     return null;
   }
@@ -80,7 +76,7 @@ public class ShopMenu implements GameMenu, Listener {
     final ItemStack item = event.getEvent().getCurrentItem();
 
     if (item != null)
-      if (item.isSimilar(this.closeItem)) {
+      if (item.isSimilar(inventoryUtil.getCloseItem())) {
         gamePlayer.getPlayer().closeInventory();
       } else {
         final GameMenu kitMenu = this.menuManager.getMenu(MenuType.KIT);

@@ -4,13 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.inventoryapi.InventoryAPI;
 import dev._2lstudios.inventoryapi.events.InventoryAPIClickEvent;
 import dev._2lstudios.inventoryapi.inventory.InventoryUtil;
+import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.chest.ChestManager;
 import dev._2lstudios.skywars.chest.ChestType;
@@ -19,7 +22,7 @@ import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 
-public class ChestMenu implements GameMenu {
+public class ChestMenu implements GameMenu, Listener {
   private static final String ID = "sw_chestmenu";
   private static final String TITLE = "SkyWars - Cofres";
 
@@ -37,6 +40,9 @@ public class ChestMenu implements GameMenu {
     final ItemMeta openItemMeta = this.openItem.getItemMeta();
     openItemMeta.setDisplayName(ChatColor.YELLOW + "Cofres");
     openItem.setItemMeta(openItemMeta);
+
+    final Plugin plugin = SkyWars.getInstance();
+    plugin.getServer().getPluginManager().registerEvents(this, plugin);
   }
 
   public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
@@ -45,6 +51,7 @@ public class ChestMenu implements GameMenu {
     inventory.setItem(10, chestManager.getOpenItem(ChestType.BASIC));
     inventory.setItem(13, chestManager.getOpenItem(ChestType.NORMAL));
     inventory.setItem(16, chestManager.getOpenItem(ChestType.INSANE));
+    inventory.setItem(49, inventoryUtil.getCloseItem());
 
     return null;
   }

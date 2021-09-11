@@ -286,7 +286,7 @@ public class GamePlayer {
   }
 
   public boolean hasInteractCooldown() {
-    return System.currentTimeMillis() - lastInteract <= 1000;
+    return System.currentTimeMillis() - lastInteract <= 500;
   }
 
   public void updateInteractCooldown() {
