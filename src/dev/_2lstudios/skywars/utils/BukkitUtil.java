@@ -1,11 +1,13 @@
 package dev._2lstudios.skywars.utils;
 
 import java.util.Objects;
-import java.util.UUID;
-import org.bukkit.Bukkit;
+
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.skywars.SkyWars;
@@ -24,12 +26,22 @@ public class BukkitUtil {
     }
   }
 
-  public static Player getPlayerExact(UUID uuid) {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      if (player.getUniqueId() == uuid)
-        return player;
-    }
-    return null;
+  public static ItemStack createItem(final Material material, final String displayName, final int amount, final short damage) {
+    final ItemStack item = new ItemStack(material, amount, damage);
+    final ItemMeta itemMeta = item.getItemMeta();
+
+    itemMeta.setDisplayName(displayName);
+    item.setItemMeta(itemMeta);
+
+    return item;
+  }
+
+  public static ItemStack createItem(final Material material, final String displayName, final int amount) {
+    return createItem(material, displayName, 1, (short) 0);
+  }
+
+  public static ItemStack createItem(final Material material, final String displayName) {
+    return createItem(material, displayName, 1);
   }
 
   public static void runSync(Runnable runnable) {

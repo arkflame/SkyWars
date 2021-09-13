@@ -27,6 +27,7 @@ import dev._2lstudios.skywars.game.arena.ArenaSpawn;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.managers.CageManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class CageMenu implements GameMenu, Listener {
   private static final String ID = "sw_cagemenu";
@@ -36,16 +37,13 @@ public class CageMenu implements GameMenu, Listener {
   private final CageManager cageManager;
   private final GamePlayerManager playerManager;
   private final MenuManager menuManager;
-  private final ItemStack openItem = new ItemStack(Material.STAINED_GLASS);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.STAINED_GLASS, ChatColor.YELLOW + "Menu de Jaulas");
 
   public CageMenu(final SkyWarsManager skyWarsManager) {
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
     this.cageManager = skyWarsManager.getCageManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.menuManager = skyWarsManager.getMenuManager();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Jaulas");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

@@ -21,12 +21,13 @@ import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class ChestMenu implements GameMenu, Listener {
   private static final String ID = "sw_chestmenu";
   private static final String TITLE = "SkyWars - Cofres";
 
-  private final ItemStack openItem = new ItemStack(Material.CHEST);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.CHEST, ChatColor.YELLOW + "Cofres");
   private final ChestManager chestManager;
   private final GamePlayerManager playerManager;
   private final MenuManager menuManager;
@@ -37,9 +38,6 @@ public class ChestMenu implements GameMenu, Listener {
     this.playerManager = skyWarsManager.getPlayerManager();
     this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Cofres");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

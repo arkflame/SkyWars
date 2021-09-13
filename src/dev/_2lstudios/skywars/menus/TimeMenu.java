@@ -21,12 +21,13 @@ import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.time.TimeManager;
 import dev._2lstudios.skywars.time.TimeType;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class TimeMenu implements GameMenu, Listener {
   private static final String ID = "sw_timemenu";
   private static final String TITLE = "SkyWars - Tiempo";
 
-  private final ItemStack openItem = new ItemStack(Material.WATCH);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.WATCH, ChatColor.YELLOW + "Tiempo");
   private final TimeManager timeManager;
   private final GamePlayerManager playerManager;
   private final MenuManager menuManager;
@@ -37,9 +38,6 @@ public class TimeMenu implements GameMenu, Listener {
     this.playerManager = skyWarsManager.getPlayerManager();
     this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Tiempo");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

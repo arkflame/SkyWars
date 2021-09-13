@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import dev._2lstudios.inventoryapi.InventoryAPI;
@@ -18,6 +17,7 @@ import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class VoteMenu implements GameMenu, Listener {
   private static final String ID = "sw_votemenu";
@@ -26,15 +26,12 @@ public class VoteMenu implements GameMenu, Listener {
   private final MenuManager menuManager;
   private final GamePlayerManager playerManager;
   private final InventoryUtil inventoryUtil;
-  private final ItemStack openItem = new ItemStack(Material.PAPER);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.PAPER, ChatColor.YELLOW + "Votacion");
 
   public VoteMenu(final SkyWarsManager skyWarsManager) {
     this.menuManager = skyWarsManager.getMenuManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Votacion");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

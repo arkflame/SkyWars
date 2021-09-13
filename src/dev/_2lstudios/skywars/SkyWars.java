@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -37,6 +36,7 @@ import dev._2lstudios.skywars.listeners.PlayerQuitListener;
 import dev._2lstudios.skywars.listeners.PlayerRespawnListener;
 import dev._2lstudios.skywars.listeners.WorldUnloadListener;
 import dev._2lstudios.skywars.menus.MenuManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 import dev._2lstudios.skywars.utils.WorldUtil;
 
@@ -45,8 +45,8 @@ public class SkyWars extends JavaPlugin {
   private static SkyWarsManager skyWarsManager;
   private static ConfigurationUtil configurationUtil;
   private static WorldUtil worldUtil;
-  private static final ItemStack randomMapItem = new ItemStack(Material.ARROW, 1);
-  private static final ItemStack leaveItem = new ItemStack(Material.REDSTONE, 1);
+  private static final ItemStack randomMapItem = BukkitUtil.createItem(Material.ARROW, ChatColor.YELLOW + "Mapa Aleatorio");
+  private static final ItemStack leaveItem = BukkitUtil.createItem(Material.REDSTONE, ChatColor.RED + "Salir");
 
   public static Location getSpawn() {
     return Bukkit.getServer().getWorlds().get(0).getSpawnLocation();
@@ -88,17 +88,15 @@ public class SkyWars extends JavaPlugin {
     Server server = getServer();
     BukkitScheduler bukkitScheduler = server.getScheduler();
     PluginManager pluginManager = server.getPluginManager();
-    ItemMeta randomMapItemMeta = randomMapItem.getItemMeta();
-    ItemMeta leaveItemMeta = leaveItem.getItemMeta();
-    for (Player player : server.getOnlinePlayers())
+
+    for (Player player : server.getOnlinePlayers()) {
       playerManager.addGamePlayer(player);
-    randomMapItemMeta.setDisplayName(ChatColor.YELLOW + "Mapa Aleatorio");
-    randomMapItem.setItemMeta(randomMapItemMeta);
-    leaveItemMeta.setDisplayName(ChatColor.RED + "Salir");
-    leaveItem.setItemMeta(leaveItemMeta);
+    }
+
     configurationUtil.createConfiguration("%datafolder%/basic.yml");
     configurationUtil.createConfiguration("%datafolder%/normal.yml");
     configurationUtil.createConfiguration("%datafolder%/insane.yml");
+
     File mapsDataFolder = new File(getDataFolder() + "/maps/data/");
     if (mapsDataFolder.exists()) {
       byte b;

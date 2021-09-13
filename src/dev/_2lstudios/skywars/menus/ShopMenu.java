@@ -18,6 +18,7 @@ import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class ShopMenu implements GameMenu, Listener {
   private static final String ID = "sw_shopmenu";
@@ -26,15 +27,12 @@ public class ShopMenu implements GameMenu, Listener {
   private final MenuManager menuManager;
   private final GamePlayerManager playerManager;
   private final InventoryUtil inventoryUtil;
-  private final ItemStack openItem = new ItemStack(Material.CHEST, 1);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.CHEST, ChatColor.YELLOW + "Menu de Tiempo");
 
   public ShopMenu(final SkyWarsManager skyWarsManager) {
     this.menuManager = skyWarsManager.getMenuManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Tienda");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -46,13 +44,11 @@ public class ShopMenu implements GameMenu, Listener {
 
   public Inventory getInventory(final GamePlayer gamePlayer, final int page) {
     final Inventory inventory = inventoryUtil.createInventory(TITLE, gamePlayer.getPlayer(), page, ID).getInventory();
-    final ItemStack particlesItem = new ItemStack(Material.BLAZE_POWDER, 1);
-    final ItemMeta particlesItemMeta = particlesItem.getItemMeta();
-    particlesItemMeta.setDisplayName(ChatColor.YELLOW + "Particulas");
-    particlesItem.setItemMeta(particlesItemMeta);
+
     inventory.setItem(10, menuManager.getMenu(MenuType.KIT).getOpenItem());
-    inventory.setItem(13, menuManager.getMenu(MenuType.CAGE).getOpenItem());
-    inventory.setItem(16, particlesItem);
+    inventory.setItem(12, menuManager.getMenu(MenuType.CAGE).getOpenItem());
+    inventory.setItem(14, BukkitUtil.createItem(Material.BLAZE_POWDER, ChatColor.YELLOW + "Efectos"));
+    inventory.setItem(16, BukkitUtil.createItem(Material.ARROW, ChatColor.YELLOW + "Flechas"));
     inventory.setItem(49, inventoryUtil.getCloseItem());
 
     return null;

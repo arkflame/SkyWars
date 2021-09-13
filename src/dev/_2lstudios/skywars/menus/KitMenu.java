@@ -26,6 +26,7 @@ import dev._2lstudios.skywars.game.GameMenu;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.managers.KitManager;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class KitMenu implements GameMenu, Listener {
   private static final String ID = "sw_kitmenu";
@@ -34,7 +35,7 @@ public class KitMenu implements GameMenu, Listener {
   private final KitManager kitManager;
   private final GamePlayerManager playerManager;
   private final MenuManager menuManager;
-  private final ItemStack openItem = new ItemStack(Material.STORAGE_MINECART, 1);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.STORAGE_MINECART, ChatColor.YELLOW + "Menu de Kits");
   private final InventoryUtil inventoryUtil;
 
   KitMenu(final SkyWarsManager skyWarsManager) {
@@ -42,9 +43,6 @@ public class KitMenu implements GameMenu, Listener {
     this.playerManager = skyWarsManager.getPlayerManager();
     this.menuManager = skyWarsManager.getMenuManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Kits");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);

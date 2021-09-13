@@ -6,13 +6,15 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
 import dev._2lstudios.skywars.SkyWars;
 import dev._2lstudios.skywars.game.GameItem;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class ChestManager {
   private final Map<ChestType, ItemStack> openItems = new EnumMap<>(ChestType.class);
@@ -34,20 +36,11 @@ public class ChestManager {
   }
   
   private void reloadItems() {
-    ItemStack basicOpenItem = new ItemStack(Material.CHEST);
-    ItemStack normalOpenItem = new ItemStack(Material.CHEST);
-    ItemStack insaneOpenItem = new ItemStack(Material.CHEST);
-    ItemMeta basicOpenItemMeta = basicOpenItem.getItemMeta();
-    ItemMeta normalOpenItemMeta = normalOpenItem.getItemMeta();
-    ItemMeta insaneOpenItemMeta = insaneOpenItem.getItemMeta();
+    ItemStack basicOpenItem = BukkitUtil.createItem(Material.CHEST, ChatColor.GREEN + "Basico");
+    ItemStack normalOpenItem = BukkitUtil.createItem(Material.CHEST, ChatColor.YELLOW + "Normal");
+    ItemStack insaneOpenItem = BukkitUtil.createItem(Material.CHEST, ChatColor.RED + "Insano");
     int chanceIndex = 0;
     Collection<GameItem> gameItems = new HashSet<>();
-    basicOpenItemMeta.setDisplayName(ChatColor.GREEN + "Basico");
-    normalOpenItemMeta.setDisplayName(ChatColor.YELLOW + "Normal");
-    insaneOpenItemMeta.setDisplayName(ChatColor.RED + "Insano");
-    basicOpenItem.setItemMeta(basicOpenItemMeta);
-    normalOpenItem.setItemMeta(normalOpenItemMeta);
-    insaneOpenItem.setItemMeta(insaneOpenItemMeta);
     this.openItems.put(ChestType.BASIC, basicOpenItem);
     this.openItems.put(ChestType.NORMAL, normalOpenItem);
     this.openItems.put(ChestType.INSANE, insaneOpenItem);

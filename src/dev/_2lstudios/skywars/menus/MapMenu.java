@@ -30,6 +30,7 @@ import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.player.GamePlayer;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
 import dev._2lstudios.skywars.game.player.GamePlayerMode;
+import dev._2lstudios.skywars.utils.BukkitUtil;
 
 public class MapMenu implements GameMenu, Listener {
   private static final String ID = "sw_mapmenu";
@@ -39,15 +40,12 @@ public class MapMenu implements GameMenu, Listener {
   private final GamePlayerManager playerManager;
   private final InventoryUtil inventoryUtil;
 
-  private final ItemStack openItem = new ItemStack(Material.DAYLIGHT_DETECTOR);
+  private final ItemStack openItem = BukkitUtil.createItem(Material.DAYLIGHT_DETECTOR, ChatColor.YELLOW + "Menu de Mapas");
 
   MapMenu(final SkyWarsManager skyWarsManager) {
     this.arenaManager = skyWarsManager.getArenaManager();
     this.playerManager = skyWarsManager.getPlayerManager();
     this.inventoryUtil = InventoryAPI.getInstance().getInventoryUtil();
-    final ItemMeta openItemMeta = this.openItem.getItemMeta();
-    openItemMeta.setDisplayName(ChatColor.YELLOW + "Menu de Mapas");
-    openItem.setItemMeta(openItemMeta);
 
     final Plugin plugin = SkyWars.getInstance();
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -84,7 +82,7 @@ public class MapMenu implements GameMenu, Listener {
         setFireworkColor(arena, fireworkEffectMeta, Color.RED, ChatColor.RED);
       }
 
-      itemStack.setItemMeta((ItemMeta) fireworkEffectMeta);
+      itemStack.setItemMeta(fireworkEffectMeta);
       items.add(itemStack);
     }
 
