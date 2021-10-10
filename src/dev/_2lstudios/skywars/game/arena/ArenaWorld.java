@@ -123,14 +123,15 @@ public class ArenaWorld {
     }
 
     public void setTime(TimeType timeType) {
-        if (timeType == TimeType.MORNING) {
-            world.setTime(22009L);
-        } else if (timeType == TimeType.DAY) {
-            world.setTime(24000L);
-        } else if (timeType == TimeType.NOON) {
-            world.setTime(12000L);
-        } else if (timeType == TimeType.NIGHT) {
-            world.setTime(18000L);
+        switch (timeType) {
+            case MORNING:
+                world.setTime(22000L);
+            case DAY:
+                world.setTime(24000L);
+            case NOON:
+                world.setTime(12000L);
+            case NIGHT:
+                world.setTime(18000L);
         }
     }
 
