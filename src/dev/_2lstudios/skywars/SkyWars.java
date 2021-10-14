@@ -16,7 +16,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
-import dev._2lstudios.skywars.game.GameSidebar;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
@@ -42,6 +41,7 @@ import dev._2lstudios.skywars.utils.WorldUtil;
 public class SkyWars extends JavaPlugin {
   private static SkyWars instance;
   private static SkyWarsManager skyWarsManager;
+  private static SkyWarsSidebar skyWarsSidebar;
   private static ConfigurationUtil configurationUtil;
   private static WorldUtil worldUtil;
   private static final ItemStack randomMapItem = BukkitUtil.createItem(Material.ARROW, ChatColor.YELLOW + "Mapa Aleatorio");
@@ -81,6 +81,7 @@ public class SkyWars extends JavaPlugin {
     worldUtil = new WorldUtil(this);
     configurationUtil = new ConfigurationUtil(this);
     skyWarsManager = new SkyWarsManager();
+
     ArenaManager arenaManager = skyWarsManager.getArenaManager();
     MenuManager menuManager = skyWarsManager.getMenuManager();
     GamePlayerManager playerManager = skyWarsManager.getPlayerManager();
@@ -112,7 +113,7 @@ public class SkyWars extends JavaPlugin {
       new SkyWarsPlaceholderExpansion(this, playerManager).register();
   }
 
-    new GameSidebar(instance, configurationUtil, playerManager);
+    skyWarsSidebar = new SkyWarsSidebar(this, configurationUtil, playerManager);
 
     pluginManager.registerEvents(new BlockBreakListener(playerManager), this);
     pluginManager.registerEvents(new BlockPlaceListener(playerManager), this);
@@ -149,4 +150,8 @@ public class SkyWars extends JavaPlugin {
       }
     }
   }
+
+public static SkyWarsSidebar getSidebar() {
+    return skyWarsSidebar;
+}
 }

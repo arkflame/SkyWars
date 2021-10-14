@@ -271,6 +271,8 @@ public class GamePlayer {
       update();
       giveItems(0);
     }
+    
+    SkyWars.getSidebar().update(player);
   }
 
   public boolean isSpectating() {

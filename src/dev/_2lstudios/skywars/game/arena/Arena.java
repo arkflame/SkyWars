@@ -309,6 +309,8 @@ public class Arena {
           kitManager.getKit(kitName).giveItems(inventory);
         }
 
+        SkyWars.getSidebar().update(player);
+
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 80, 10));
         BukkitUtil.sendTitle(player, title, subtitle, 20, 20, 20);
       }
