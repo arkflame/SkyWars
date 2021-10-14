@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import dev._2lstudios.skywars.commands.LeaveCommand;
 import dev._2lstudios.skywars.commands.PartyCommand;
 import dev._2lstudios.skywars.commands.SkyWarsCommand;
-import dev._2lstudios.skywars.game.GameScoreboard;
+import dev._2lstudios.skywars.game.GameSidebar;
 import dev._2lstudios.skywars.game.arena.Arena;
 import dev._2lstudios.skywars.game.arena.ArenaManager;
 import dev._2lstudios.skywars.game.player.GamePlayerManager;
@@ -34,6 +34,7 @@ import dev._2lstudios.skywars.listeners.PlayerQuitListener;
 import dev._2lstudios.skywars.listeners.PlayerRespawnListener;
 import dev._2lstudios.skywars.listeners.WorldUnloadListener;
 import dev._2lstudios.skywars.menus.MenuManager;
+import dev._2lstudios.skywars.placeholderapi.SkyWarsPlaceholderExpansion;
 import dev._2lstudios.skywars.utils.BukkitUtil;
 import dev._2lstudios.skywars.utils.ConfigurationUtil;
 import dev._2lstudios.skywars.utils.WorldUtil;
@@ -107,7 +108,11 @@ public class SkyWars extends JavaPlugin {
       }
     }
 
-    new GameScoreboard(instance, configurationUtil, playerManager);
+    if( Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+      new SkyWarsPlaceholderExpansion(this, playerManager).register();
+  }
+
+    new GameSidebar(instance, configurationUtil, playerManager);
 
     pluginManager.registerEvents(new BlockBreakListener(playerManager), this);
     pluginManager.registerEvents(new BlockPlaceListener(playerManager), this);

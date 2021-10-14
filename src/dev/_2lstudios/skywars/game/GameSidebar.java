@@ -1,7 +1,5 @@
 package dev._2lstudios.skywars.game;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.Server;
@@ -17,15 +15,15 @@ import dev._2lstudios.skywars.utils.ConfigurationUtil;
 import dev._2lstudios.swiftboard.SwiftBoard;
 import dev._2lstudios.swiftboard.swift.SwiftSidebar;
 
-public class GameScoreboard implements Listener {
+public class GameSidebar implements Listener {
   private final GamePlayerManager playerManager;
   private final SwiftSidebar swiftSidebar;
-  private final Collection<String> lobbyScoreboard;
-  private final Collection<String> spectatorScoreboard;
-  private final Collection<String> pregameScoreboard;
-  private final Collection<String> ingameScoreboard;
+  private final List<String> lobbyScoreboard;
+  private final List<String> spectatorScoreboard;
+  private final List<String> pregameScoreboard;
+  private final List<String> ingameScoreboard;
 
-  public GameScoreboard(Plugin plugin, ConfigurationUtil configurationUtil, GamePlayerManager playerManager) {
+  public GameSidebar(Plugin plugin, ConfigurationUtil configurationUtil, GamePlayerManager playerManager) {
     YamlConfiguration yamlConfiguration = configurationUtil.getConfiguration("%datafolder%/scoreboards.yml");
     Server server = plugin.getServer();
 
@@ -47,9 +45,8 @@ public class GameScoreboard implements Listener {
     if (player != null && !player.isDead() && player.isOnline()) {
       GamePlayer gamePlayer = this.playerManager.getPlayer(player);
       if (gamePlayer != null) {
-        Collection<String> list;
+        final List<String> list;
         final Arena arena = gamePlayer.getArena();
-        final List<String> newList = new ArrayList<>();
 
         if (arena == null) {
           list = this.lobbyScoreboard;
@@ -63,25 +60,8 @@ public class GameScoreboard implements Listener {
           list = this.lobbyScoreboard;
         }
 
-        for (String line : list) {
-          newList.add(replacePlaceholders(arena, gamePlayer, line));
-        }
-
-        swiftSidebar.setLines(player, newList);
+        swiftSidebar.setLines(player, list);
       }
     }
-  }
-
-  private String replacePlaceholders(Arena arena, GamePlayer gamePlayer, String message) {
-    if (arena != null && gamePlayer != null) {
-      message = message.replace("%players%", String.valueOf(arena.getPlayers().getPlayers().size()))
-          .replace("%maxplayers%", String.valueOf(arena.getSpawns().size()))
-          .replace("%mostvotedchest%", arena.getMostVotedChest().getName()).replace("%map%", arena.getName())
-          .replace("%wins%", String.valueOf(gamePlayer.getWins()))
-          .replace("%kills%", String.valueOf(arena.getKills().getKills(gamePlayer).amount()));
-    } else if (gamePlayer != null) {
-      message = message.replace("%wins%", String.valueOf(gamePlayer.getWins()));
-    }
-    return message;
   }
 }
