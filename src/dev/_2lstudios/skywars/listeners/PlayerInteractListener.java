@@ -38,15 +38,15 @@ public class PlayerInteractListener implements Listener {
       final Player player = event.getPlayer();
       final GamePlayer gamePlayer = this.playerManager.getPlayer(player);
 
-      if (gamePlayer.hasInteractCooldown()) {
-        return;
-      }
-
-      gamePlayer.updateInteractCooldown();
-
       if (gamePlayer == null) {
         event.setCancelled(true);
       } else {
+        if (gamePlayer.hasInteractCooldown()) {
+          return;
+        }
+  
+        gamePlayer.updateInteractCooldown();
+
         final ItemStack itemStack = event.getItem();
         if (gamePlayer.isSpectating()) {
           final Block block = event.getClickedBlock();
