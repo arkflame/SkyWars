@@ -30,6 +30,13 @@
     </plugins>
   </build>
 
+  <repositories>
+    <repository>
+      <id>2lstudios</id>
+      <url>https://ci.2lstudios.dev/plugin/repository/everything/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>
@@ -40,10 +47,8 @@
     </dependency>
     <dependency>
       <groupId>dev._2lstudios</groupId>
-      <artifactId>scoreboard</artifactId>
-      <version>SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>C:\Users\LinsaFTW\Documents\Jars\Scoreboard.jar</systemPath>
+      <artifactId>SwiftBoard</artifactId>
+      <version>0.0.3</version>
     </dependency>
     <dependency>
       <groupId>dev._2lstudios</groupId>
