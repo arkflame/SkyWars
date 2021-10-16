@@ -81,7 +81,7 @@ public class SpectatorMenu implements GameMenu, Listener {
         setFireworkColor(arena, fireworkEffectMeta, Color.RED, ChatColor.RED);
       }
 
-      itemStack.setItemMeta((ItemMeta) fireworkEffectMeta);
+      itemStack.setItemMeta(fireworkEffectMeta);
       items.add(itemStack);
     }
 
