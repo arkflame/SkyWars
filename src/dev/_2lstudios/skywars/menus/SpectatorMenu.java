@@ -57,10 +57,9 @@ public class SpectatorMenu implements GameMenu, Listener {
     final FireworkEffect fireworkEffect = FireworkEffect.builder().withColor(color).build();
     fireworkEffectMeta.setDisplayName(chatColor + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
     fireworkEffectMeta.setEffect(fireworkEffect);
-    fireworkEffectMeta.setLore(Arrays.asList(new String[] {
-        ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN
-            + arena.getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(),
-        "", ChatColor.GREEN + "Click para unirte!" }));
+    fireworkEffectMeta.setLore(Arrays.asList(ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN
+        + arena.getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(),
+            "", ChatColor.GREEN + "Click para unirte!"));
   }
 
   private Collection<ItemStack> generateItems(final Collection<Arena> arenas) {
@@ -76,7 +75,7 @@ public class SpectatorMenu implements GameMenu, Listener {
 
       if (arena.getState() == GameState.WAITING && !players.isEmpty()) {
         setFireworkColor(arena, fireworkEffectMeta, Color.YELLOW, ChatColor.GREEN);
-      } else if (arena.getState() == GameState.WAITING && arena.getSpawns().size() > 1) {
+      } else if (arena.getState() == GameState.WAITING && !arena.getSpawns().isEmpty()) {
         setFireworkColor(arena, fireworkEffectMeta, Color.LIME, ChatColor.GREEN);
       } else {
         setFireworkColor(arena, fireworkEffectMeta, Color.RED, ChatColor.RED);

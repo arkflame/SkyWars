@@ -5,7 +5,7 @@ public enum TimeType {
 
   private final String name;
 
-  private TimeType(String name) {
+  TimeType(String name) {
     this.name = name;
   }
 

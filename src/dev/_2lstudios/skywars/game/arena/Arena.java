@@ -137,7 +137,7 @@ public class Arena {
 
   public void tickArena() {
     if (this.state == GameState.WAITING) {
-      if (arenaPlayers.getPlayers().size() > 1) {
+      if (!arenaPlayers.getPlayers().isEmpty()) {
         if (this.seconds < START_SECONDS) {
           final World world = arenaWorld.getWorld();
           int timeLeft = START_SECONDS - this.seconds;
@@ -204,15 +204,16 @@ public class Arena {
     Collection<GameItem> gameItems;
     int chanceIndex;
     ChestManager chestManager = SkyWars.getSkyWarsManager().getChestManager();
-    if (chestType == ChestType.INSANE) {
-      chanceIndex = chestManager.getInsaneChanceIndex();
-      gameItems = chestManager.getInsaneGameItems();
-    } else if (chestType == ChestType.BASIC) {
-      chanceIndex = chestManager.getBasicChanceIndex();
-      gameItems = chestManager.getBasicGameItems();
-    } else {
-      chanceIndex = chestManager.getNormalChanceIndex();
-      gameItems = chestManager.getNormalGameItems();
+    switch (chestType) {
+      case INSANE:
+        chanceIndex = chestManager.getInsaneChanceIndex();
+        gameItems = chestManager.getInsaneGameItems();
+      case BASIC:
+        chanceIndex = chestManager.getBasicChanceIndex();
+        gameItems = chestManager.getBasicGameItems();
+      default:
+        chanceIndex = chestManager.getNormalChanceIndex();
+        gameItems = chestManager.getNormalGameItems();
     }
     for (Location location : getChestLocations()) {
       Block block = location.getBlock();
@@ -231,7 +232,7 @@ public class Arena {
                   inventory.setItem(slot, gameItem.getItemStack());
                   break;
                 }
-                inventory.addItem(new ItemStack[] { gameItem.getItemStack() });
+                inventory.addItem(gameItem.getItemStack());
                 break;
               }
             }

@@ -50,7 +50,7 @@ public class BukkitUtil {
 
     if (plugin.isEnabled() && !server.isPrimaryThread()) {
       Objects.requireNonNull(runnable);
-      server.getScheduler().runTask(plugin, runnable::run);
+      server.getScheduler().runTask(plugin, runnable);
     } else {
       runnable.run();
     }
@@ -61,7 +61,7 @@ public class BukkitUtil {
     Server server = plugin.getServer();
 
     if (plugin.isEnabled() && server.isPrimaryThread()) {
-      server.getScheduler().runTaskAsynchronously(plugin, runnable::run);
+      server.getScheduler().runTaskAsynchronously(plugin, runnable);
     } else {
       runnable.run();
     }

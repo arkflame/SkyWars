@@ -16,7 +16,7 @@ public class GameKit {
   private final String name;
   private final ItemStack icon = new ItemStack(Material.STONE);
   private final Collection<ItemStack> items = new ArrayList<>();
-  private Collection<String> lore = new ArrayList<>();
+  private final Collection<String> lore = new ArrayList<>();
   
   public GameKit(String name) {
     this.name = name;
@@ -66,7 +66,7 @@ public class GameKit {
       itemStack.setDurability((short)data);
       for (index = 0; index < enchantments.size(); index++) {
         if (enchantments.get(index) != null && levels.get(index) != null)
-          itemStack.addEnchantment(enchantments.get(index), ((Integer)levels.get(index)).intValue()); 
+          itemStack.addEnchantment(enchantments.get(index), levels.get(index));
       } 
       this.items.add(itemStack);
     } 
@@ -86,7 +86,7 @@ public class GameKit {
   
   public void giveItems(PlayerInventory inventory) {
     for (ItemStack itemStack : this.items) {
-      inventory.addItem(new ItemStack[] { itemStack });
+      inventory.addItem(itemStack);
     } 
   }
 }
