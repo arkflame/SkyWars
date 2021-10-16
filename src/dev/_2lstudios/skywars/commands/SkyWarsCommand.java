@@ -94,7 +94,7 @@ public class SkyWarsCommand implements CommandExecutor {
       } else if (args[0].equalsIgnoreCase("list")) {
         player.sendMessage(ChatColor.BLUE + "Arenas Creadas:");
         for (Arena arena : this.arenaManager.getGameArenasAsList()) {
-          if (arena.getState() == GameState.EDITING || arena.getSpawns().size() == 0) {
+          if (arena.getState() == GameState.EDITING || arena.getSpawns().isEmpty()) {
             player.sendMessage(ChatColor.RED + arena.getName());
             continue;
           }
@@ -104,11 +104,7 @@ public class SkyWarsCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("create") && args.length == 2) {
           String arenaName = args[1];
           if (this.arenaManager.getArena(arenaName) == null) {
-            BukkitUtil.runSync(() -> {
-              this.arenaManager.addGameArena(() -> {
-                player.sendMessage(ChatColor.GREEN + "Arena " + arenaName + " creada correctamente!");
-              }, arenaName);
-            });
+            BukkitUtil.runSync(() -> this.arenaManager.addGameArena(() -> player.sendMessage(ChatColor.GREEN + "Arena " + arenaName + " creada correctamente!"), arenaName));
           } else {
             player.sendMessage(ChatColor.RED + "La arena ya existe!");
           }

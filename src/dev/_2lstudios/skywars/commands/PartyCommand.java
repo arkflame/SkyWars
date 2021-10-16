@@ -173,7 +173,7 @@ public class PartyCommand implements CommandExecutor {
             StringBuilder partyPlayersString = new StringBuilder();
 
             for (GamePlayer member : party.getMembers())
-              partyPlayersString.append("&a" + member.getPlayer().getName() + "&7, ");
+              partyPlayersString.append("&a").append(member.getPlayer().getName()).append("&7, ");
             partyPlayersString.delete(partyPlayersString.length() - 2, partyPlayersString.length());
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aInformacion de la Party:\n&9Lider: &a"
                 + party.getOwner().getPlayer().getName() + "\n&9Miembros: " + partyPlayersString));

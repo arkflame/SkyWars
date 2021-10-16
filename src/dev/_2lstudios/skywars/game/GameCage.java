@@ -22,7 +22,7 @@ public class GameCage {
       if (itemMeta != null) {
         itemMeta.setDisplayName(displayName);
         this.itemStack.setItemMeta(itemMeta);
-        this.itemStack.setDurability((short)data);
+        this.itemStack.setDurability(data);
       } 
     } 
   }

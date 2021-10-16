@@ -28,11 +28,10 @@ public class ArenaTimeVotes {
         TimeType mostVoted = TimeType.DAY;
         int mostVotedNumber = 0;
         for (TimeVote timeVote : this.timeVotes)
-            votes.put(timeVote.getType(), Integer
-                    .valueOf(((Integer) votes.getOrDefault(timeVote.getType(), Integer.valueOf(0))).intValue() + 1));
+            votes.put(timeVote.getType(), votes.getOrDefault(timeVote.getType(), 0) + 1);
         for (Map.Entry<TimeType, Integer> voteEntry : votes.entrySet()) {
             TimeType timeType = voteEntry.getKey();
-            int number = ((Integer) voteEntry.getValue()).intValue();
+            int number = voteEntry.getValue();
             if (number > mostVotedNumber) {
                 mostVoted = timeType;
                 mostVotedNumber = number;

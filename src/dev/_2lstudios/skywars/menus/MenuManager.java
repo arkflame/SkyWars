@@ -8,7 +8,7 @@ import dev._2lstudios.skywars.SkyWarsManager;
 import dev._2lstudios.skywars.game.GameMenu;
 
 public class MenuManager {
-  private Map<MenuType, GameMenu> gMenusByType = new EnumMap<>(MenuType.class);
+  private final Map<MenuType, GameMenu> gMenusByType = new EnumMap<>(MenuType.class);
 
   public void addMenuNew(GameMenu gameMenu) {
     this.gMenusByType.put(gameMenu.getType(), gameMenu);

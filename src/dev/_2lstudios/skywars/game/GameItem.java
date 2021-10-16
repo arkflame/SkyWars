@@ -3,11 +3,11 @@ package dev._2lstudios.skywars.game;
 import org.bukkit.inventory.ItemStack;
 
 public class GameItem {
-  private int minChance;
+  private final int minChance;
   
-  private int maxChance;
+  private final int maxChance;
   
-  private ItemStack itemStack;
+  private final ItemStack itemStack;
   
   public GameItem(int minChance, int maxChance, ItemStack itemStack) {
     this.minChance = minChance;

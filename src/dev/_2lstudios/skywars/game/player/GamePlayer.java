@@ -203,7 +203,7 @@ public class GamePlayer {
 
   public void updateArena(final Arena newArena, final GamePlayerMode newMode) {
     if (this.arena != null) {
-      if (this.arena.getPlayers().getPlayers().size() > 1) {
+      if (!this.arena.getPlayers().getPlayers().isEmpty()) {
         if (arena.getState() == GameState.WAITING) {
           final GamePlayerParty party = getParty();
 

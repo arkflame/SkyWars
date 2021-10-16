@@ -26,10 +26,10 @@ public class ArenaChestVotes {
         int mostVotedNumber = 0;
         for (ChestType chestType : chestVotes.values())
             votes.put(chestType,
-                    Integer.valueOf(((Integer) votes.getOrDefault(chestType, Integer.valueOf(0))).intValue() + 1));
+                    votes.getOrDefault(chestType, 0) + 1);
         for (Entry<ChestType, Integer> entry : votes.entrySet()) {
             ChestType chestType = entry.getKey();
-            int number = ((Integer) entry.getValue()).intValue();
+            int number = entry.getValue();
             if (number > mostVotedNumber) {
                 mostVoted = chestType;
                 mostVotedNumber = number;

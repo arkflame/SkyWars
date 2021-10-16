@@ -85,21 +85,22 @@ public class ChestManager {
         itemStack.setDurability((short)data);
         for (index = 0; index < enchantments.size(); index++) {
           if (enchantments.get(index) != null && levels.get(index) != null)
-            itemStack.addEnchantment(enchantments.get(index), ((Integer)levels.get(index)).intValue()); 
+            itemStack.addEnchantment(enchantments.get(index), levels.get(index));
         } 
         gameItems.add(new GameItem(chanceIndex, chanceIndex + chance, itemStack));
         chanceIndex += chance;
-      } 
-      if (chestType == ChestType.BASIC) {
-        this.basicChanceIndex = chanceIndex;
-        this.basicGameItems = new HashSet<>(gameItems);
-      } else if (chestType == ChestType.NORMAL) {
-        this.normalChanceIndex = chanceIndex;
-        this.normalGameItems = new HashSet<>(gameItems);
-      } else if (chestType == ChestType.INSANE) {
-        this.insaneChanceIndex = chanceIndex;
-        this.insaneGameItems = new HashSet<>(gameItems);
-      } 
+      }
+      switch (chestType) {
+        case BASIC:
+          this.basicChanceIndex = chanceIndex;
+          this.basicGameItems = new HashSet<>(gameItems);
+        case NORMAL:
+          this.normalChanceIndex = chanceIndex;
+          this.normalGameItems = new HashSet<>(gameItems);
+        case INSANE:
+          this.insaneChanceIndex = chanceIndex;
+          this.insaneGameItems = new HashSet<>(gameItems);
+      }
       chanceIndex = 0;
       gameItems.clear();
     } 
