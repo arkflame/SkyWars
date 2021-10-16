@@ -17,7 +17,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -141,7 +140,7 @@ public class Arena {
         if (this.seconds < START_SECONDS) {
           final World world = arenaWorld.getWorld();
           int timeLeft = START_SECONDS - this.seconds;
-          boolean showTime = !(this.seconds % 5 != 0 && this.seconds <= 15);
+          boolean showTime = this.seconds % 5 == 0 || !(this.seconds <= 15);
           for (Player player : world.getPlayers()) {
             player.setLevel(timeLeft);
             if (showTime) {

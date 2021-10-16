@@ -57,10 +57,9 @@ public class MapMenu implements GameMenu, Listener {
     final FireworkEffect fireworkEffect = FireworkEffect.builder().withColor(color).build();
     fireworkEffectMeta.setDisplayName(chatColor + arenaName.substring(0, 1).toUpperCase() + arenaName.substring(1));
     fireworkEffectMeta.setEffect(fireworkEffect);
-    fireworkEffectMeta.setLore(Arrays.asList(new String[] {
-        ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN
-            + arena.getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(),
-        "", ChatColor.GREEN + "Click para unirte!" }));
+    fireworkEffectMeta.setLore(Arrays.asList(ChatColor.GRAY + "Solo Normal", "", ChatColor.GRAY + "Jugadores: " + ChatColor.GREEN
+        + arena.getPlayers().getPlayers().size() + "/" + arena.getSpawns().size(),
+            "", ChatColor.GREEN + "Click para unirte!"));
   }
 
   private Collection<ItemStack> generateItems(final Collection<Arena> arenas) {

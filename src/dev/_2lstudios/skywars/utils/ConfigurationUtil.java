@@ -29,18 +29,16 @@ public class ConfigurationUtil {
     File configFile = new File(file.replace("%datafolder%", dataFolder.toPath().toString()));
     String configFileName = configFile.getName();
     if (!configFile.exists()) {
-      try {
-        InputStream inputStream = this.plugin.getClass().getClassLoader().getResourceAsStream(configFileName);
+      try (InputStream inputStream = this.plugin.getClass().getClassLoader().getResourceAsStream(configFileName)) {
         File parentFile = configFile.getParentFile();
         if (parentFile != null)
           parentFile.mkdirs(); 
         if (inputStream != null) {
-          Files.copy(inputStream, configFile.toPath(), new java.nio.file.CopyOption[0]);
+          Files.copy(inputStream, configFile.toPath());
           logger.info("File '" + configFile + "' had been created!");
         } else {
           configFile.createNewFile();
         } 
-        inputStream.close();
       } catch (Exception e) {
         logger.info("An exception was caught while creating '" + configFileName + "'!");
       } 
