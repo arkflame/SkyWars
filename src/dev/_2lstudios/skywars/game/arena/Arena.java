@@ -207,12 +207,15 @@ public class Arena {
       case INSANE:
         chanceIndex = chestManager.getInsaneChanceIndex();
         gameItems = chestManager.getInsaneGameItems();
+        break;
       case BASIC:
         chanceIndex = chestManager.getBasicChanceIndex();
         gameItems = chestManager.getBasicGameItems();
+        break;
       default:
         chanceIndex = chestManager.getNormalChanceIndex();
         gameItems = chestManager.getNormalGameItems();
+        break;
     }
     for (Location location : getChestLocations()) {
       Block block = location.getBlock();

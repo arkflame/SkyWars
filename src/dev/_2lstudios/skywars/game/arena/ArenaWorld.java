@@ -77,7 +77,7 @@ public class ArenaWorld {
     }
 
     public Collection<Location> getChestLocations() {
-        Collection<Location> chestsLocations = new HashSet<>();
+        Collection<Location> chestsLocations = new HashSet<>(this.chests.size());
 
         for (Vector vector : this.chests) {
             chestsLocations.add(vector.toLocation(world));
@@ -126,12 +126,16 @@ public class ArenaWorld {
         switch (timeType) {
             case MORNING:
                 world.setTime(22000L);
+                break;
             case DAY:
                 world.setTime(24000L);
+                break;
             case NOON:
                 world.setTime(12000L);
+                break;
             case NIGHT:
                 world.setTime(18000L);
+                break;
         }
     }
 

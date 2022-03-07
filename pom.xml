@@ -44,10 +44,10 @@
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>
-      <artifactId>sportpaper</artifactId>
+      <artifactId>spigot-api</artifactId>
       <version>1.8.8-R0.1-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>C:\Users\LinsaFTW\Documents\Jars\sportpaper-1.8.8.jar</systemPath>
+      <systemPath>${project.basedir}/libs/FlamePaper.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>dev._2lstudios</groupId>
@@ -62,11 +62,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>dev._2lstudios</groupId>
-      <artifactId>inventoryapi</artifactId>
+      <groupId>inventoryapi</groupId>
+      <artifactId>InventoryAPI</artifactId>
       <version>SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>C:\Users\LinsaFTW\Documents\Jars\InventoryAPI.jar</systemPath>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

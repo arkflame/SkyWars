@@ -48,24 +48,18 @@ public class SkyWarsPlaceholderExpansion extends PlaceholderExpansion {
             final Arena arena = gamePlayer.getArena();
 
             if (arena != null) {
-                if (identifier.equalsIgnoreCase("players")) {
-                    return String.valueOf(arena.getPlayers().getPlayers().size());
-                }
+                switch (identifier.toUpperCase()) {
+                    case "PLAYERS":
+                        return String.valueOf(arena.getPlayers().getPlayers().size());
+                    case "MAXPLAYERS":
+                        return String.valueOf(arena.getSpawns().size());
+                    case "MAP":
+                        return arena.getName();
+                    case "VOTEDCHEST":
+                        return arena.getMostVotedChest().getName();
+                    case "KILLS":
+                        return String.valueOf(arena.getKills().getKills(gamePlayer).amount());
 
-                if (identifier.equalsIgnoreCase("maxplayers")) {
-                    return String.valueOf(arena.getSpawns().size());
-                }
-
-                if (identifier.equalsIgnoreCase("map")) {
-                    return arena.getName();
-                }
-
-                if (identifier.equalsIgnoreCase("votedchest")) {
-                    return arena.getMostVotedChest().getName();
-                }
-
-                if (identifier.equalsIgnoreCase("kills")) {
-                    return String.valueOf(arena.getKills().getKills(gamePlayer).amount());
                 }
             }
         }

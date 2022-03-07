@@ -13,7 +13,7 @@ public class ArenaPlayers {
   private final Map<UUID, GamePlayer> players = new ConcurrentHashMap<>();
 
   private Collection<GamePlayer> getPlayers(GamePlayerMode filterMode) {
-    final Collection<GamePlayer> filteredPlayers = new HashSet<>();
+    final Collection<GamePlayer> filteredPlayers = new HashSet<>(players.size());
 
     for (final GamePlayer gamePlayer : players.values()) {
       if (gamePlayer.getPlayerMode() == filterMode) {
