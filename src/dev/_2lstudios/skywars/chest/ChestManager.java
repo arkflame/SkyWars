@@ -94,12 +94,15 @@ public class ChestManager {
         case BASIC:
           this.basicChanceIndex = chanceIndex;
           this.basicGameItems = new HashSet<>(gameItems);
+          break;
         case NORMAL:
           this.normalChanceIndex = chanceIndex;
           this.normalGameItems = new HashSet<>(gameItems);
+          break;
         case INSANE:
           this.insaneChanceIndex = chanceIndex;
           this.insaneGameItems = new HashSet<>(gameItems);
+          break;
       }
       chanceIndex = 0;
       gameItems.clear();

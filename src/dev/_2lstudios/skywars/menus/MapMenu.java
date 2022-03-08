@@ -71,7 +71,7 @@ public class MapMenu implements GameMenu, Listener {
       final Collection<GamePlayer> players = arena.getPlayers().getPlayers();
       final int size = players.size();
 
-      itemStack.setAmount(size > 0 ? size : 1);
+      itemStack.setAmount(!players.isEmpty() ? size : 1);
 
       if (arena.getState() == GameState.WAITING && !players.isEmpty()) {
         setFireworkColor(arena, fireworkEffectMeta, Color.YELLOW, ChatColor.GREEN);

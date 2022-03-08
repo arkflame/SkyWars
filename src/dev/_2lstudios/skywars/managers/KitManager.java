@@ -10,13 +10,13 @@ public class KitManager {
   private final Map<String, GameKit> kitsMap = new HashMap<>();
   
   public KitManager() {
-    for (String kitName : SkyWars.getConfigurationUtil().getConfiguration("%datafolder%/kits.yml").getStringList("kits"))
-      addKit(kitName); 
+    for (String kitName : SkyWars.getConfigurationUtil().getConfiguration("%datafolder%/kits.yml").getStringList("kits")) {
+      addKit(kitName);
+    }
   }
   
   public void addKit(String kitName) {
-    if (!this.kitsMap.containsKey(kitName))
-      this.kitsMap.put(kitName, new GameKit(kitName)); 
+    this.kitsMap.computeIfAbsent(kitName, GameKit::new);
   }
   
   public GameKit getKit(String kitName) {

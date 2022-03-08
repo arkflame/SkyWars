@@ -22,8 +22,7 @@ public class BukkitUtil {
     try {
       Sound sound = Sound.valueOf(soundName);
       player.playSound(player.getLocation(), sound, i, i1);
-    } catch (Exception exception) {
-    }
+    } catch (Exception ignored) {}
   }
 
   public static ItemStack createItem(final Material material, final String displayName, final int amount, final short damage) {
